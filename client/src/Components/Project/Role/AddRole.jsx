@@ -87,6 +87,8 @@ const AddRole = () => {
     user: "Users",
   };
 
+  console.log(permissions);
+
   return (
     <div className="page-wrapper custom-role" style={{ paddingBottom: "1rem" }}>
       <div className="content">
@@ -115,7 +117,7 @@ const AddRole = () => {
                         className="form-check-input ml-2"
                         id={`${master}.access`}
                         name={`${master}.access`}
-                        checked={permissions[master].access}
+                        checked={permissions[master]?.access || false}
                         onChange={handleChange}
                       />
                       <label className="form-check-label" htmlFor={`${master}.access`} style={{ marginLeft: '5px' }}>Access</label>
@@ -128,7 +130,7 @@ const AddRole = () => {
                             className="form-check-input"
                             id={`${master}.${action}`}
                             name={`${master}.${action}`}
-                            checked={permissions[master][action]}
+                            checked={permissions[master]?.[action] || false}
                             onChange={handleChange}
                           />
                           <label className="form-check-label" htmlFor={`${master}.${action}`}>{action.charAt(0).toUpperCase() + action.slice(1)}</label>
