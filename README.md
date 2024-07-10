@@ -1,1 +1,1 @@
-This is a CRM build using MERN STACK.
+This is a CRM web application build using MERN STACK.
