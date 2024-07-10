@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 import connectDatabase from "./database/connectDatabase.js";
 import testRoute from "./routes/test.route.js";
 import userRoute from "./routes/user.route.js";
@@ -12,6 +13,8 @@ import projectRoute from "./routes/project.route.js";
 import teamRoute from "./routes/team.route.js";
 import projectTimingRoute from "./routes/projectTiming.route.js";
 import roleRoute from "./routes/role.route.js";
+
+const __dirname = path.resolve();
 
 // configuration
 dotenv.config();
@@ -46,6 +49,14 @@ server.use("/api/v1/project", projectRoute);
 server.use("/api/v1/projectTiming", projectTimingRoute);
 // role route
 server.use("/api/v1/role", roleRoute);
+
+// Middleware for serving client static files
+server.use(express.static(path.join(__dirname, "/client/dist")), (req, res, next) => next());
+
+// Route for serving client index.html
+server.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
+});
 
 // environment variable
 const port = process.env.PORT || 8080;
