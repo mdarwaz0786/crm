@@ -1,0 +1,24 @@
+{
+  "name": "crms",
+  "version": "1.0.0",
+  "description": "crms",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "client":"npm run dev --prefix ./client",
+    "server":"nodemon ./server/server.js",
+    "dev":"concurrently \"npm run client\" \"npm run server\""
+  },
+  "keywords": ["crms"],
+  "author": "Arwaz",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.4",
+    "nodemon": "^3.1.4"
+  }
+}
