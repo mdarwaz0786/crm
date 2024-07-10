@@ -40,9 +40,9 @@ const Sidebar = () => {
                       <i className="ti ti-layout-2" /><span>Dashboard</span><span className="menu-arrow" />
                     </a>
                     <ul>
-                      <li><a href="index.html">Deals Dashboard</a></li>
-                      <li><a href="leads-dashboard.html">Leads Dashboard</a></li>
-                      <li><a href="project-dashboard.html">Project Dashboard</a></li>
+                      <li><Link to="/">Deals Dashboard</Link></li>
+                      <li><Link to="/">Leads Dashboard</Link></li>
+                      <li><Link to="/">Project Dashboard</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">

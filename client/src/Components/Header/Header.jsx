@@ -7,13 +7,13 @@ const Header = () => {
       <div className="header">
         {/* Logo */}
         <div className="header-left active">
-          <a href="index.html" className="logo logo-normal">
+          <Link to="/" className="logo logo-normal">
             <img src="assets/img/logo.svg" alt="Logo" />
             <img src="assets/img/white-logo.svg" className="white-logo" alt="Logo" />
-          </a>
-          <a href="index.html" className="logo-small">
+          </Link>
+          <Link to="/" className="logo-small">
             <img src="assets/img/logo-small.svg" alt="Logo" />
-          </a>
+          </Link>
           <a id="toggle_btn" href="javascript:void(0);">
             <i className="ti ti-arrow-bar-to-left" />
           </a>
