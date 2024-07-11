@@ -1,15 +1,16 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from '../../../Preloader.jsx';
 
 
 const AddProjectTiming = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { validToken } = useAuth();
+  const { validToken, user, isLoading } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -36,6 +37,14 @@ const AddProjectTiming = () => {
       toast.error("Error while creating project timing");
     }
   };
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (!user?.role?.permissions?.projectTiming?.create) {
+    return <Navigate to="/project-timing" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

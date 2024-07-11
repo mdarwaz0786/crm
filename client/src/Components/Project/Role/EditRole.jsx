@@ -2,8 +2,9 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 
 const EditRole = () => {
@@ -22,7 +23,7 @@ const EditRole = () => {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken } = useAuth();
+  const { validToken, user, isLoading } = useAuth();
 
   const fetchSingleRole = async (id) => {
     try {
@@ -98,6 +99,14 @@ const EditRole = () => {
     project: "Projects",
     user: "Users",
   };
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (!user?.role?.permissions?.role?.update) {
+    return <Navigate to="/role" />;
+  }
 
   return (
     <div className="page-wrapper custom-role" style={{ paddingBottom: "1rem" }}>

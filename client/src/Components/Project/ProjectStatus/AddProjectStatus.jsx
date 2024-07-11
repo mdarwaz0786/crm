@@ -1,14 +1,15 @@
 import { useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 const AddProjectStatus = () => {
   const [status, setStatus] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { validToken } = useAuth();
+  const { validToken, user, isLoading } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -36,6 +37,14 @@ const AddProjectStatus = () => {
       toast.error("Error while creating project status");
     }
   };
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (!user?.role?.permissions?.projectStatus?.create) {
+    return <Navigate to="/project-status" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

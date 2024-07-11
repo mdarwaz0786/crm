@@ -2,13 +2,14 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from './../../../Preloader.jsx';
 
 const Customer = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState("");
-  const { validToken } = useAuth();
+  const { validToken, user, isLoading } = useAuth();
   let i = 1;
 
   const fetchAllData = async () => {
@@ -45,6 +46,14 @@ const Customer = () => {
       toast.error("Error while deleting customer");
     }
   };
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (!user?.role?.permissions?.customer?.access) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <>

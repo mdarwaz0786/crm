@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "../../context/authContext.jsx";
+import Preloader from "../../Preloader.jsx";
 
 const EditUser = () => {
   const [role, setRole] = useState([]);
@@ -14,7 +15,7 @@ const EditUser = () => {
   const [password, setPassword] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken } = useAuth();
+  const { validToken, user, isLoading } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
@@ -96,6 +97,14 @@ const EditUser = () => {
       toast.error("Error while updating user");
     }
   };
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (!user?.role?.permissions?.user?.update) {
+    return <Navigate to="/user" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

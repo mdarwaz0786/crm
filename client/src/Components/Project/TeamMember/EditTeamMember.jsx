@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 
 const EditTeamMember = () => {
@@ -17,7 +18,7 @@ const EditTeamMember = () => {
   const [selectedReportingTo, setSelectedReportingTo] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken } = useAuth();
+  const { validToken, user, isLoading } = useAuth();
 
   const fetchAllTeamMember = async () => {
     try {
@@ -116,6 +117,14 @@ const EditTeamMember = () => {
   const handleRemove = (value) => {
     setSelectedReportingTo(selectedReportingTo?.filter((item) => item !== value));
   };
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (!user?.role?.permissions?.team?.update) {
+    return <Navigate to="/team-member" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

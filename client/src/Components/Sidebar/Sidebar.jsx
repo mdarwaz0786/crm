@@ -73,13 +73,13 @@ const Sidebar = () => {
                       <i className="ti ti-file-invoice" /><span>Master</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="/customer">Customer</Link></li>
-                      <li><Link to="/team-member">Team Member</Link></li>
-                      <li><Link to="/role">Role</Link></li>
-                      <li><Link to="/project-type">Project Type</Link></li>
-                      <li><Link to="/project-status">Project Status</Link></li>
-                      <li><Link to="/project-category">Project Category</Link></li>
-                      <li><Link to="/project-timing">Project Timing</Link></li>
+                      {user?.role?.permissions?.customer?.access ? <li><Link to="/customer">Customer</Link></li> : ""}
+                      {user?.role?.permissions?.team?.access ? <li><Link to="/team-member">Team Member</Link></li> : ""}
+                      {user?.role?.permissions?.role?.access ? <li><Link to="/role">Role</Link></li> : ""}
+                      {user?.role?.permissions?.projectType?.access ? <li><Link to="/project-type">Project Type</Link></li> : ""}
+                      {user?.role?.permissions?.projectStatus?.access ? <li><Link to="/project-status">Project Status</Link></li> : ""}
+                      {user?.role?.permissions?.projectCategory?.access ? <li><Link to="/project-category">Project Category</Link></li> : ""}
+                      {user?.role?.permissions?.projectTiming?.access ? <li><Link to="/project-timing">Project Timing</Link></li> : ""}
                     </ul>
                   </li>
                 </ul>
@@ -87,12 +87,8 @@ const Sidebar = () => {
               <li>
                 <h6 className="submenu-hdr">CRM</h6>
                 <ul>
-                  <li>
-                    <Link to="/project"><i className="ti ti-atom-2" /><span>Projects</span></Link>
-                  </li>
-                  <li>
-                    <Link to="/user"><i className="ti ti-user" /><span>Users</span></Link>
-                  </li>
+                  {user?.role?.permissions?.project?.access ? <li><Link to="/project"><i className="ti ti-atom-2" /><span>Projects</span></Link> </li> : ""}
+                  {user?.role?.permissions?.user?.access ? <li><Link to="/user"><i className="ti ti-user" /><span>Users</span></Link></li> : ""}
                   <li>
                     <a href="contacts.html"><i className="ti ti-user-up" /><span>Contacts</span></a>
                   </li>

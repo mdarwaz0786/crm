@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from "../../context/authContext.jsx";
+import Preloader from "../../Preloader.jsx";
 
 
 const EditProject = () => {
@@ -30,7 +31,7 @@ const EditProject = () => {
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken } = useAuth();
+  const { validToken, user, isLoading } = useAuth();
 
   const fetchAllCustomer = async () => {
     try {
@@ -279,6 +280,14 @@ const EditProject = () => {
   const handleRemoveLeader = (value) => {
     setSelectedLeader(selectedLeader?.filter((item) => item !== value));
   };
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (!user?.role?.permissions?.project?.update) {
+    return <Navigate to="/project" />;
+  }
 
   return (
     <>

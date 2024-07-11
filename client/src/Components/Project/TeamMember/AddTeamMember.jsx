@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 
 const AddTeamMember = () => {
@@ -18,7 +19,7 @@ const AddTeamMember = () => {
   const [reportingTo, setReportingTo] = useState([]);
   const [selectedReportingTo, setSelectedReportingTo] = useState([]);
   const navigate = useNavigate();
-  const { validToken } = useAuth();
+  const { validToken, user, isLoading } = useAuth();
 
   const fetchAllTeamMember = async () => {
     try {
@@ -103,6 +104,13 @@ const AddTeamMember = () => {
     setSelectedReportingTo(selectedReportingTo?.filter((item) => item !== value));
   };
 
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (!user?.role?.permissions?.team?.create) {
+    return <Navigate to="/team-member" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

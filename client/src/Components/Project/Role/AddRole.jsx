@@ -1,8 +1,9 @@
 import { useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 const AddRole = () => {
   const [name, setName] = useState("");
@@ -18,7 +19,7 @@ const AddRole = () => {
     user: { access: false, create: false, read: false, update: false, delete: false },
   });
 
-  const { validToken } = useAuth();
+  const { validToken, user, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -87,7 +88,13 @@ const AddRole = () => {
     user: "Users",
   };
 
-  console.log(permissions);
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (!user?.role?.permissions?.role?.create) {
+    return <Navigate to="/role" />;
+  }
 
   return (
     <div className="page-wrapper custom-role" style={{ paddingBottom: "1rem" }}>

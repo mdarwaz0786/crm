@@ -1,16 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 const EditProjectType = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken } = useAuth();
+  const { validToken, user, isLoading } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
@@ -56,6 +57,14 @@ const EditProjectType = () => {
       toast.error("Error while updating project type");
     }
   };
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (!user?.role?.permissions?.projectType?.update) {
+    return <Navigate to="/project-type" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

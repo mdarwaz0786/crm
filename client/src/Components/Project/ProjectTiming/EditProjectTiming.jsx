@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from '../../../Preloader.jsx';
 
 
 const EditProjectTiming = () => {
@@ -11,7 +12,7 @@ const EditProjectTiming = () => {
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken } = useAuth();
+  const { validToken, user, isLoading } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
@@ -57,6 +58,14 @@ const EditProjectTiming = () => {
       toast.error("Error while updating project timing");
     }
   };
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (!user?.role?.permissions?.projectTiming?.update) {
+    return <Navigate to="/project-timing" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
