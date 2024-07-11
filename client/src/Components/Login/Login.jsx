@@ -52,7 +52,6 @@ const Login = () => {
                 <label className="col-form-label">Password <span className="text-danger">*</span></label>
                 <div className="pass-group">
                   <input type="password" className="pass-input form-control" name="password" value={password} onChange={(e) => { setPassword(e.target.value) }} required />
-                  <span className="ti toggle-password ti-eye-off" />
                 </div>
               </div>
               <div className="form-wrap">
