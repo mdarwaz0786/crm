@@ -2,23 +2,19 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, Navigate } from 'react-router-dom';
-import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from './../../../Preloader.jsx';
+import { Link } from 'react-router-dom';
+// import { useAuth } from "../../../context/authContext.jsx";
+// import Preloader from './../../../Preloader.jsx';
 
 const Customer = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState("");
-  const { validToken, user, isLoading } = useAuth();
+  // const { validToken, team, isLoading } = useAuth();
   let i = 1;
 
   const fetchAllData = async () => {
     try {
-      const response = await axios.get("/api/v1/customer/all-customer", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/customer/all-customer");
       if (response?.data?.success) {
         setData(response?.data?.customer);
         setTotal(response?.data?.totalCount);
@@ -34,26 +30,24 @@ const Customer = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/v1/customer/delete-customer/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
-      toast.success("Customer deleted successfully");
-      fetchAllData();
+      const response = await axios.delete(`/api/v1/customer/delete-customer/${id}`);
+      if (response?.data?.success) {
+        toast.success("Customer deleted successfully");
+        fetchAllData();
+      }
     } catch (error) {
       console.log("Error while deleting customer:", error.message);
       toast.error("Error while deleting customer");
     }
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  }
+  // if (isLoading) {
+  //   return <Preloader />;
+  // }
 
-  if (!user?.role?.permissions?.customer?.access) {
-    return <Navigate to="/" />;
-  }
+  // if (!team?.role?.permissions?.customer?.access) {
+  //   return <Navigate to="/" />;
+  // }
 
   return (
     <>

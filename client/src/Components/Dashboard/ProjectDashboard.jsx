@@ -2,7 +2,6 @@ const ProjectDashboard = () => {
   return (
     <>
       <div className="main-wrapper">
-        {/* Page Wrapper */}
         <div className="page-wrapper">
           <div className="content">
             <div className="row">
@@ -356,11 +355,11 @@ const ProjectDashboard = () => {
                       <div className="form-wrap">
                         <label className="col-form-label">Responsible Persons <span className="text-danger">*</span></label>
                         <select className="multiple-img" multiple="multiple">
-                          <option data-image="assets/img/profiles/avatar-19.jpg" selected>Darlee Robertson</option>
-                          <option data-image="assets/img/profiles/avatar-20.jpg">Sharon Roy</option>
-                          <option data-image="assets/img/profiles/avatar-21.jpg">Vaughan</option>
-                          <option data-image="assets/img/profiles/avatar-23.jpg">Jessica</option>
-                          <option data-image="assets/img/profiles/avatar-16.jpg">Carol Thomas</option>
+                          <option data-image="/assets/img/profiles/avatar-19.jpg" selected>Darlee Robertson</option>
+                          <option data-image="/assets/img/profiles/avatar-20.jpg">Sharon Roy</option>
+                          <option data-image="/assets/img/profiles/avatar-21.jpg">Vaughan</option>
+                          <option data-image="/assets/img/profiles/avatar-23.jpg">Jessica</option>
+                          <option data-image="/assets/img/profiles/avatar-16.jpg">Carol Thomas</option>
                         </select>
                       </div>
                     </div>
@@ -368,11 +367,11 @@ const ProjectDashboard = () => {
                       <div className="form-wrap">
                         <label className="col-form-label">Team Leader  <span className="text-danger">*</span></label>
                         <select className="multiple-img" multiple="multiple">
-                          <option data-image="assets/img/profiles/avatar-19.jpg">Darlee Robertson</option>
-                          <option data-image="assets/img/profiles/avatar-20.jpg" selected>Sharon Roy</option>
-                          <option data-image="assets/img/profiles/avatar-21.jpg">Vaughan</option>
-                          <option data-image="assets/img/profiles/avatar-23.jpg">Jessica</option>
-                          <option data-image="assets/img/profiles/avatar-16.jpg">Carol Thomas</option>
+                          <option data-image="/assets/img/profiles/avatar-19.jpg">Darlee Robertson</option>
+                          <option data-image="/assets/img/profiles/avatar-20.jpg" selected>Sharon Roy</option>
+                          <option data-image="/assets/img/profiles/avatar-21.jpg">Vaughan</option>
+                          <option data-image="/assets/img/profiles/avatar-23.jpg">Jessica</option>
+                          <option data-image="/assets/img/profiles/avatar-16.jpg">Carol Thomas</option>
                         </select>
                       </div>
                     </div>
@@ -553,9 +552,7 @@ const ProjectDashboard = () => {
             </div>
           </div>
         </div>
-        {/* /Add Event Modal */}
       </div>
-
     </>
   );
 };

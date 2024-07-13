@@ -1,15 +1,15 @@
 import { useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
+import { Link, useNavigate } from 'react-router-dom';
+// import { useAuth } from "../../../context/authContext.jsx";
+// import Preloader from "../../../Preloader.jsx";
 
 const AddProjectStatus = () => {
   const [status, setStatus] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { validToken, user, isLoading } = useAuth();
+  // const { validToken, user, isLoading } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -21,11 +21,7 @@ const AddProjectStatus = () => {
         return toast.error("Enter description");
       }
 
-      const response = await axios.post("/api/v1/projectStatus/create-projectStatus", { status, description }, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.post("/api/v1/projectStatus/create-projectStatus", { status, description });
       if (response?.data?.success) {
         setStatus("");
         setDescription("");
@@ -38,13 +34,13 @@ const AddProjectStatus = () => {
     }
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  }
+  // if (isLoading) {
+  //   return <Preloader />;
+  // }
 
-  if (!user?.role?.permissions?.projectStatus?.create) {
-    return <Navigate to="/project-status" />;
-  }
+  // if (!user?.role?.permissions?.projectStatus?.create) {
+  //   return <Navigate to="/project-status" />;
+  // }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

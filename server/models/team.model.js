@@ -13,6 +13,7 @@ const teamSchema = new mongoose.Schema(
     },
     username: {
       type: String,
+      unique: true,
     },
     password: {
       type: String,
@@ -24,7 +25,12 @@ const teamSchema = new mongoose.Schema(
       type: String,
     },
     designation: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Designation",
+    },
+    role: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Role",
     },
     reportingTo: [{
       type: mongoose.Schema.Types.ObjectId,

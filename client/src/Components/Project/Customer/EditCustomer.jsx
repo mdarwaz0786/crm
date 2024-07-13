@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
+import { Link, useNavigate, useParams } from 'react-router-dom';
+// import { useAuth } from "../../../context/authContext.jsx";
+// import Preloader from "../../../Preloader.jsx";
 
 
 const EditCustomer = () => {
@@ -14,19 +14,17 @@ const EditCustomer = () => {
   const [address, setAddress] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, user, isLoading } = useAuth();
+  // const { validToken, team, isLoading } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
-      const response = await axios.get(`/api/v1/customer/single-customer/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
-      setName(response?.data?.customer?.name);
-      setEmail(response?.data?.customer?.email);
-      setMobile(response?.data?.customer?.mobile);
-      setAddress(response?.data?.customer?.address);
+      const response = await axios.get(`/api/v1/customer/single-customer/${id}`);
+      if (response?.data?.success) {
+        setName(response?.data?.customer?.name);
+        setEmail(response?.data?.customer?.email);
+        setMobile(response?.data?.customer?.mobile);
+        setAddress(response?.data?.customer?.address);
+      }
     } catch (error) {
       console.log("Error while fetching single customer:", error.message);
     }
@@ -39,24 +37,7 @@ const EditCustomer = () => {
   const handleUpdate = async (e, id) => {
     e.preventDefault();
     try {
-      if (!name) {
-        return toast.error("Enter name");
-      }
-      if (!email) {
-        return toast.error("Enter email");
-      }
-      if (!mobile) {
-        return toast.error("Enter mobile");
-      }
-      if (!address) {
-        return toast.error("Enter address");
-      }
-
-      const response = await axios.put(`/api/v1/customer/update-customer/${id}`, { name, email, mobile, address }, {
-        headers: {
-          Authorization: `${validToken}`,
-        }
-      });
+      const response = await axios.put(`/api/v1/customer/update-customer/${id}`, { name, email, mobile, address });
       if (response?.data?.success) {
         setName("");
         setEmail("");
@@ -71,13 +52,13 @@ const EditCustomer = () => {
     }
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  }
+  // if (isLoading) {
+  //   return <Preloader />;
+  // }
 
-  if (!user?.role?.permissions?.customer?.update) {
-    return <Navigate to="/customer" />;
-  }
+  // if (!team?.role?.permissions?.customer?.update) {
+  //   return <Navigate to="/customer" />;
+  // }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

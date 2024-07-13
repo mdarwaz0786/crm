@@ -2,26 +2,24 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
+import { Link, useNavigate, useParams } from 'react-router-dom';
+// import { useAuth } from "../../../context/authContext.jsx";
+// import Preloader from "../../../Preloader.jsx";
 
 const EditProjectStatus = () => {
   const [status, setStatus] = useState("");
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, user, isLoading } = useAuth();
+  // const { validToken, user, isLoading } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
-      const response = await axios.get(`/api/v1/projectStatus/single-projectStatus/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
-      setStatus(response?.data?.projectStatus?.status);
-      setDescription(response?.data?.projectStatus?.description);
+      const response = await axios.get(`/api/v1/projectStatus/single-projectStatus/${id}`);
+      if (response?.data?.success) {
+        setStatus(response?.data?.projectStatus?.status);
+        setDescription(response?.data?.projectStatus?.description);
+      }
     } catch (error) {
       console.log("Error while fetching single project status:", error.message);
     }
@@ -34,18 +32,7 @@ const EditProjectStatus = () => {
   const handleUpdate = async (e, id) => {
     e.preventDefault();
     try {
-      if (!status) {
-        return toast.error("Enter status");
-      }
-      if (!description) {
-        return toast.error("Enter description");
-      }
-
-      const response = await axios.put(`/api/v1/projectStatus/update-projectStatus/${id}`, { status, description }, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.put(`/api/v1/projectStatus/update-projectStatus/${id}`, { status, description });
       if (response?.data?.success) {
         setStatus("");
         setDescription("");
@@ -58,13 +45,13 @@ const EditProjectStatus = () => {
     }
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  }
+  // if (isLoading) {
+  //   return <Preloader />;
+  // }
 
-  if (!user?.role?.permissions?.projectStatus?.update) {
-    return <Navigate to="/" />;
-  }
+  // if (!user?.role?.permissions?.projectStatus?.update) {
+  //   return <Navigate to="/" />;
+  // }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

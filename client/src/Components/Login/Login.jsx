@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext.jsx";
 import axios from "axios";
 import { toast } from 'react-toastify';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { storeToken } = useAuth();
@@ -13,18 +13,18 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/v1/user/login-user", { email, password });
+      const response = await axios.post("/api/v1/team/login-team", { username, password });
       if (response?.data?.success) {
         storeToken(response?.data?.token);
-        setEmail("");
+        setUsername("");
         setPassword("");
         toast.success("Login successful");
         navigate('/');
         window.location.reload();
       }
     } catch (error) {
-      console.log("error while login user:", error.message);
-      toast.error("Error while login user");
+      console.log("error while login team member:", error.message);
+      toast.error("Error while login team member");
     }
   };
 
@@ -42,9 +42,9 @@ const Login = () => {
                 <p>Access the CRMS panel using your email and passcode.</p>
               </div>
               <div className="form-wrap">
-                <label className="col-form-label">Email Address <span className="text-danger">*</span></label>
+                <label className="col-form-label">Uername <span className="text-danger">*</span></label>
                 <div className="form-wrap-icon">
-                  <input type="text" className="form-control" name="email" value={email} onChange={(e) => { setEmail(e.target.value) }} required />
+                  <input type="text" className="form-control" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
                   <i className="ti ti-mail" />
                 </div>
               </div>
@@ -56,9 +56,6 @@ const Login = () => {
               </div>
               <div className="form-wrap">
                 <button type="submit" className="btn btn-primary" onClick={(e) => handleLogin(e)}>Sign In</button>
-              </div>
-              <div className="login-form">
-                <h6>New on our platform?<Link to="/signup" className="hover-a"> Create an account</Link></h6>
               </div>
             </div>
           </div>

@@ -6,8 +6,7 @@ import { useEffect, useState } from 'react';
 // import { useAuth } from "../../../context/authContext.jsx";
 // import Preloader from '../../../Preloader.jsx';
 
-
-const EditProjectTiming = () => {
+const EditDesignation = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const { id } = useParams();
@@ -16,13 +15,13 @@ const EditProjectTiming = () => {
 
   const fetchSingleData = async (id) => {
     try {
-      const response = await axios.get(`/api/v1/projectTiming/single-projectTiming/${id}`);
+      const response = await axios.get(`/api/v1/designation/single-designation/${id}`);
       if (response?.data?.success) {
-        setName(response?.data?.projectTiming?.name);
-        setDescription(response?.data?.projectTiming?.description);
+        setName(response?.data?.designation?.name);
+        setDescription(response?.data?.designation?.description);
       }
     } catch (error) {
-      console.log("Error while fetching single project timing:", error.message);
+      console.log("Error while fetching single designation:", error.message);
     }
   };
 
@@ -33,16 +32,16 @@ const EditProjectTiming = () => {
   const handleUpdate = async (e, id) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`/api/v1/projectTiming/update-projectTiming/${id}`, { name, description });
+      const response = await axios.put(`/api/v1/designation/update-designation/${id}`, { name, description });
       if (response?.data?.success) {
         setName("");
         setDescription("");
-        toast.success("Project timing updated successfully");
-        navigate("/project-timing");
+        toast.success("Designation updated successfully");
+        navigate("/designation");
       }
     } catch (error) {
-      console.log("Error while updating project timing:", error.message);
-      toast.error("Error while updating project timing");
+      console.log("Error while updating designation:", error.message);
+      toast.error("Error while updating designation");
     }
   };
 
@@ -50,16 +49,16 @@ const EditProjectTiming = () => {
   //   return <Preloader />;
   // }
 
-  // if (!user?.role?.permissions?.projectTiming?.update) {
-  //   return <Navigate to="/project-timing" />;
+  // if (!user?.role?.permissions?.projectCategory?.update) {
+  //   return <Navigate to="/project-category" />;
   // }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h4>Edit Project Timing</h4>
-          <Link to="/project-timing"><button className="btn btn-primary">Back</button></Link>
+          <h4>Edit Designation</h4>
+          <Link to="/designation"><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
           <div className="col-md-12">
@@ -76,7 +75,7 @@ const EditProjectTiming = () => {
           </div>
         </div>
         <div className="submit-button text-end">
-          <Link to="/project-timing" className="btn btn-light sidebar-close">Cancel</Link>
+          <Link to="/designation" className="btn btn-light sidebar-close">Cancel</Link>
           <Link to="#" className="btn btn-primary" onClick={(e) => handleUpdate(e, id)}>Update</Link>
         </div>
       </div>
@@ -84,4 +83,4 @@ const EditProjectTiming = () => {
   );
 };
 
-export default EditProjectTiming;
+export default EditDesignation;

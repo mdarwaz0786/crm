@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from '../../../Preloader.jsx';
+// import { useAuth } from "../../../context/authContext.jsx";
+// import Preloader from '../../../Preloader.jsx';
 
 const AddProjectCategory = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { validToken, user, isLoading } = useAuth();
+  // const { validToken, user, isLoading } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -21,11 +21,7 @@ const AddProjectCategory = () => {
         return toast.error("Enter description");
       }
 
-      const response = await axios.post("/api/v1/projectCategory/create-projectCategory", { name, description }, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.post("/api/v1/projectCategory/create-projectCategory", { name, description });
       if (response?.data?.success) {
         setName("");
         setDescription("");
@@ -38,13 +34,13 @@ const AddProjectCategory = () => {
     }
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  }
+  // if (isLoading) {
+  //   return <Preloader />;
+  // }
 
-  if (!user?.role?.permissions?.projectCategory?.create) {
-    return <Navigate to="/project-category" />;
-  }
+  // if (!user?.role?.permissions?.projectCategory?.create) {
+  //   return <Navigate to="/project-category" />;
+  // }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

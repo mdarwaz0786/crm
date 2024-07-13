@@ -4,7 +4,6 @@ import cors from "cors";
 import path from "path";
 import connectDatabase from "./database/connectDatabase.js";
 import testRoute from "./routes/test.route.js";
-import userRoute from "./routes/user.route.js";
 import customerRoute from "./routes/customer.route.js";
 import projectTypeRoute from "./routes/projectType.route.js";
 import projectCategoryRoute from "./routes/projectCategory.route.js";
@@ -13,6 +12,7 @@ import projectRoute from "./routes/project.route.js";
 import teamRoute from "./routes/team.route.js";
 import projectTimingRoute from "./routes/projectTiming.route.js";
 import roleRoute from "./routes/role.route.js";
+import designationRoute from "./routes/designation.route.js";
 
 const __dirname = path.resolve();
 
@@ -31,8 +31,6 @@ server.use(cors());
 
 // test route
 server.use("/api/v1", testRoute);
-// user route
-server.use("/api/v1/user", userRoute);
 // customer route
 server.use("/api/v1/customer", customerRoute);
 // projectType route
@@ -41,7 +39,7 @@ server.use("/api/v1/projectType", projectTypeRoute);
 server.use("/api/v1/projectCategory", projectCategoryRoute);
 // projectStatus route
 server.use("/api/v1/projectStatus", projectStatusRoute);
-// team member route
+// team route
 server.use("/api/v1/team", teamRoute);
 // project route
 server.use("/api/v1/project", projectRoute);
@@ -49,6 +47,8 @@ server.use("/api/v1/project", projectRoute);
 server.use("/api/v1/projectTiming", projectTimingRoute);
 // role route
 server.use("/api/v1/role", roleRoute);
+// designation route
+server.use("/api/v1/designation", designationRoute);
 
 // Middleware for serving client static files
 server.use(express.static(path.join(__dirname, "/client/dist")), (req, res, next) => next());

@@ -1,12 +1,9 @@
 import mongoose from "mongoose";
 
-const PermissionSchema = new mongoose.Schema(
+// Field permission schema
+const FieldPermissionSchema = new mongoose.Schema(
   {
-    access: {
-      type: Boolean,
-      default: false,
-    },
-    create: {
+    update: {
       type: Boolean,
       default: false,
     },
@@ -14,7 +11,25 @@ const PermissionSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    update: {
+    show: {
+      type: Boolean,
+      default: false,
+    },
+  },
+);
+
+// Customer permission Schema
+const CustomerPermissionSchema = new mongoose.Schema(
+  {
+    access: {
+      type: Boolean,
+      default: false,
+    },
+    export: {
+      type: Boolean,
+      default: false,
+    },
+    create: {
       type: Boolean,
       default: false,
     },
@@ -22,24 +37,266 @@ const PermissionSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    fields: {
+      name: { type: FieldPermissionSchema, default: () => ({}) },
+      email: { type: FieldPermissionSchema, default: () => ({}) },
+      mobile: { type: FieldPermissionSchema, default: () => ({}) },
+      address: { type: FieldPermissionSchema, default: () => ({}) },
+    },
   },
 );
 
+// Designation permission Schema
+const DesignationPermissionSchema = new mongoose.Schema(
+  {
+    access: {
+      type: Boolean,
+      default: false,
+    },
+    export: {
+      type: Boolean,
+      default: false,
+    },
+    create: {
+      type: Boolean,
+      default: false,
+    },
+    delete: {
+      type: Boolean,
+      default: false,
+    },
+    fields: {
+      name: { type: FieldPermissionSchema, default: () => ({}) },
+      description: { type: FieldPermissionSchema, default: () => ({}) },
+    },
+  },
+);
+
+// Project permission Schema
+const ProjectPermissionSchema = new mongoose.Schema(
+  {
+    access: {
+      type: Boolean,
+      default: false,
+    },
+    export: {
+      type: Boolean,
+      default: false,
+    },
+    create: {
+      type: Boolean,
+      default: false,
+    },
+    delete: {
+      type: Boolean,
+      default: false,
+    },
+    fields: {
+      name: { type: FieldPermissionSchema, default: () => ({}) },
+      projectId: { type: FieldPermissionSchema, default: () => ({}) },
+      type: { type: FieldPermissionSchema, default: () => ({}) },
+      customer: { type: FieldPermissionSchema, default: () => ({}) },
+      category: { type: FieldPermissionSchema, default: () => ({}) },
+      timing: { type: FieldPermissionSchema, default: () => ({}) },
+      price: { type: FieldPermissionSchema, default: () => ({}) },
+      responsible: { type: FieldPermissionSchema, default: () => ({}) },
+      leader: { type: FieldPermissionSchema, default: () => ({}) },
+      start: { type: FieldPermissionSchema, default: () => ({}) },
+      due: { type: FieldPermissionSchema, default: () => ({}) },
+      priority: { type: FieldPermissionSchema, default: () => ({}) },
+      status: { type: FieldPermissionSchema, default: () => ({}) },
+      description: { type: FieldPermissionSchema, default: () => ({}) },
+    },
+  },
+);
+
+// Project category permission Schema
+const ProjectCategoryPermissionSchema = new mongoose.Schema(
+  {
+    access: {
+      type: Boolean,
+      default: false,
+    },
+    export: {
+      type: Boolean,
+      default: false,
+    },
+    create: {
+      type: Boolean,
+      default: false,
+    },
+    delete: {
+      type: Boolean,
+      default: false,
+    },
+    fields: {
+      name: { type: FieldPermissionSchema, default: () => ({}) },
+      description: { type: FieldPermissionSchema, default: () => ({}) },
+    },
+  },
+);
+
+// Project Status permission Schema
+const ProjectStatusPermissionSchema = new mongoose.Schema(
+  {
+    access: {
+      type: Boolean,
+      default: false,
+    },
+    export: {
+      type: Boolean,
+      default: false,
+    },
+    create: {
+      type: Boolean,
+      default: false,
+    },
+    delete: {
+      type: Boolean,
+      default: false,
+    },
+    fields: {
+      status: { type: FieldPermissionSchema, default: () => ({}) },
+      description: { type: FieldPermissionSchema, default: () => ({}) },
+    },
+  },
+);
+
+// Project timing permission Schema
+const ProjectTimingPermissionSchema = new mongoose.Schema(
+  {
+    access: {
+      type: Boolean,
+      default: false,
+    },
+    export: {
+      type: Boolean,
+      default: false,
+    },
+    create: {
+      type: Boolean,
+      default: false,
+    },
+    delete: {
+      type: Boolean,
+      default: false,
+    },
+    fields: {
+      name: { type: FieldPermissionSchema, default: () => ({}) },
+      description: { type: FieldPermissionSchema, default: () => ({}) },
+    },
+  },
+);
+
+// Project type permission Schema
+const ProjectTypePermissionSchema = new mongoose.Schema(
+  {
+    access: {
+      type: Boolean,
+      default: false,
+    },
+    export: {
+      type: Boolean,
+      default: false,
+    },
+    create: {
+      type: Boolean,
+      default: false,
+    },
+    delete: {
+      type: Boolean,
+      default: false,
+    },
+    fields: {
+      name: { type: FieldPermissionSchema, default: () => ({}) },
+      description: { type: FieldPermissionSchema, default: () => ({}) },
+    },
+  },
+);
+
+// Team permission Schema
+const TeamPermissionSchema = new mongoose.Schema(
+  {
+    access: {
+      type: Boolean,
+      default: false,
+    },
+    export: {
+      type: Boolean,
+      default: false,
+    },
+    create: {
+      type: Boolean,
+      default: false,
+    },
+    delete: {
+      type: Boolean,
+      default: false,
+    },
+    fields: {
+      name: { type: FieldPermissionSchema, default: () => ({}) },
+      email: { type: FieldPermissionSchema, default: () => ({}) },
+      mobile: { type: FieldPermissionSchema, default: () => ({}) },
+      username: { type: FieldPermissionSchema, default: () => ({}) },
+      password: { type: FieldPermissionSchema, default: () => ({}) },
+      joining: { type: FieldPermissionSchema, default: () => ({}) },
+      dob: { type: FieldPermissionSchema, default: () => ({}) },
+      designation: { type: FieldPermissionSchema, default: () => ({}) },
+      reportingTo: { type: FieldPermissionSchema, default: () => ({}) },
+    },
+  },
+);
+
+// Role permission Schema
+const RolePermissionSchema = new mongoose.Schema(
+  {
+    access: {
+      type: Boolean,
+      default: false,
+    },
+    export: {
+      type: Boolean,
+      default: false,
+    },
+    create: {
+      type: Boolean,
+      default: false,
+    },
+    delete: {
+      type: Boolean,
+      default: false,
+    },
+    fields: {
+      name: { type: FieldPermissionSchema, default: () => ({}) },
+      customer: { type: FieldPermissionSchema, default: () => ({}) },
+      team: { type: FieldPermissionSchema, default: () => ({}) },
+      role: { type: FieldPermissionSchema, default: () => ({}) },
+      projectType: { type: FieldPermissionSchema, default: () => ({}) },
+      projectStatus: { type: FieldPermissionSchema, default: () => ({}) },
+      projectCategory: { type: FieldPermissionSchema, default: () => ({}) },
+      projectTiming: { type: FieldPermissionSchema, default: () => ({}) },
+      project: { type: FieldPermissionSchema, default: () => ({}) },
+      Designation: { type: FieldPermissionSchema, default: () => ({}) },
+    },
+  },
+);
+
+// role schema
 const RoleSchema = new mongoose.Schema(
   {
     name: {
       type: String,
     },
     permissions: {
-      customer: { type: PermissionSchema, default: () => ({}) },
-      team: { type: PermissionSchema, default: () => ({}) },
-      role: { type: PermissionSchema, default: () => ({}) },
-      projectType: { type: PermissionSchema, default: () => ({}) },
-      projectStatus: { type: PermissionSchema, default: () => ({}) },
-      projectCategory: { type: PermissionSchema, default: () => ({}) },
-      projectTiming: { type: PermissionSchema, default: () => ({}) },
-      project: { type: PermissionSchema, default: () => ({}) },
-      user: { type: PermissionSchema, default: () => ({}) },
+      customer: { type: CustomerPermissionSchema, default: () => ({}) },
+      team: { type: TeamPermissionSchema, default: () => ({}) },
+      role: { type: RolePermissionSchema, default: () => ({}) },
+      projectType: { type: ProjectTypePermissionSchema, default: () => ({}) },
+      projectStatus: { type: ProjectStatusPermissionSchema, default: () => ({}) },
+      projectCategory: { type: ProjectCategoryPermissionSchema, default: () => ({}) },
+      projectTiming: { type: ProjectTimingPermissionSchema, default: () => ({}) },
+      project: { type: ProjectPermissionSchema, default: () => ({}) },
+      Designation: { type: DesignationPermissionSchema, default: () => ({}) },
     },
   },
   {

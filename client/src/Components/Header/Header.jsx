@@ -8,15 +8,15 @@ const Header = () => {
         {/* Logo */}
         <div className="header-left active">
           <Link to="/" className="logo logo-normal">
-            <img src="assets/img/logo.svg" alt="Logo" />
-            <img src="assets/img/white-logo.svg" className="white-logo" alt="Logo" />
+            <img src="/assets/img/logo.svg" alt="Logo" />
+            <img src="/assets/img/white-logo.svg" className="white-logo" alt="Logo" />
           </Link>
           <Link to="/" className="logo-small">
-            <img src="assets/img/logo-small.svg" alt="Logo" />
+            <img src="/assets/img/logo-small.svg" alt="Logo" />
           </Link>
-          <a id="toggle_btn" href="javascript:void(0);">
+          <Link id="toggle_btn" to="#">
             <i className="ti ti-arrow-bar-to-left" />
-          </a>
+          </Link>
         </div>
         {/* /Logo */}
 
@@ -243,7 +243,7 @@ const Header = () => {
                       <a href="activities.html">
                         <div className="media d-flex">
                           <span className="avatar flex-shrink-0">
-                            <img src="assets/img/profiles/avatar-02.jpg" alt="Profile" />
+                            <img src="/assets/img/profiles/avatar-02.jpg" alt="Profile" />
                             <span className="badge badge-info rounded-pill" />
                           </span>
                           <div className="media-body flex-grow-1">
@@ -257,7 +257,7 @@ const Header = () => {
                       <a href="activities.html">
                         <div className="media d-flex">
                           <span className="avatar flex-shrink-0">
-                            <img src="assets/img/profiles/avatar-03.jpg" alt="Profile" />
+                            <img src="/assets/img/profiles/avatar-03.jpg" alt="Profile" />
                           </span>
                           <div className="media-body flex-grow-1">
                             <p className="noti-details">Denise Nedry replied to Anna Srzand</p>
@@ -272,7 +272,7 @@ const Header = () => {
                       <a href="activities.html">
                         <div className="media d-flex">
                           <span className="avatar flex-shrink-0">
-                            <img alt src="assets/img/profiles/avatar-06.jpg" />
+                            <img alt src="/assets/img/profiles/avatar-06.jpg" />
                           </span>
                           <div className="media-body flex-grow-1">
                             <p className="noti-details">John Hammond attached a file to Isla Nublar SOC2 compliance report</p>

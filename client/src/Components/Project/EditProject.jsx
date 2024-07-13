@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import { useAuth } from "../../context/authContext.jsx";
 import Preloader from "../../Preloader.jsx";
 
-
 const EditProject = () => {
   const [customer, setCustomer] = useState([]);
   const [projectType, setProjectType] = useState([]);
@@ -31,15 +30,11 @@ const EditProject = () => {
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, user, isLoading } = useAuth();
+  const { team, isLoading } = useAuth();
 
   const fetchAllCustomer = async () => {
     try {
-      const response = await axios.get("/api/v1/customer/all-customer", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/customer/all-customer");
       if (response?.data?.success) {
         setCustomer(response?.data?.customer);
       }
@@ -50,11 +45,7 @@ const EditProject = () => {
 
   const fetchAllProjectCatgory = async () => {
     try {
-      const response = await axios.get("/api/v1/projectCategory/all-projectCategory", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/projectCategory/all-projectCategory");
       if (response?.data?.success) {
         setProjectCategory(response?.data?.projectCategory);
       }
@@ -65,11 +56,7 @@ const EditProject = () => {
 
   const fetchAllProjectTiming = async () => {
     try {
-      const response = await axios.get("/api/v1/projectTiming/all-projectTiming", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/projectTiming/all-projectTiming");
       if (response?.data?.success) {
         setProjectTiming(response?.data?.projectTiming);
       }
@@ -80,11 +67,7 @@ const EditProject = () => {
 
   const fetchAllTeamMember = async () => {
     try {
-      const response = await axios.get("/api/v1/team/all-team", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/team/all-team");
       if (response?.data?.success) {
         setTeamMember(response?.data?.team);
       }
@@ -95,11 +78,7 @@ const EditProject = () => {
 
   const fetchAllProjectStatus = async () => {
     try {
-      const response = await axios.get("/api/v1/projectStatus/all-projectStatus", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/projectStatus/all-projectStatus");
       if (response?.data?.success) {
         setProjectStatus(response?.data?.projectStatus);
       }
@@ -110,11 +89,7 @@ const EditProject = () => {
 
   const fetchAllProjectType = async () => {
     try {
-      const response = await axios.get("/api/v1/projectType/all-projectType", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/projectType/all-projectType");
       if (response?.data?.success) {
         setProjectType(response?.data?.projectType);
       }
@@ -135,26 +110,23 @@ const EditProject = () => {
 
   const fetchSingleProject = async (id) => {
     try {
-      const response = await axios.get(`/api/v1/project/single-project/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
-
-      setName(response?.data?.project?.name);
-      setProjectId(response?.data?.project?.projectId);
-      setSelectedProjectType(response?.data?.project?.type?._id);
-      setSelectedCustomer(response?.data?.project?.customer?._id);
-      setSelectedProjectCategory(response?.data?.project?.category?._id);
-      setSelectedProjectTiming(response?.data?.project?.timing?._id);
-      setPrice(response?.data?.project?.price);
-      setSelectedResponsible(response?.data?.project?.responsible?.map((r) => r._id));
-      setSelectedLeader(response?.data?.project?.leader?.map((l) => l?._id));
-      setStart(response?.data?.project?.start);
-      setDue(response?.data?.project?.due);
-      setPriority(response?.data?.project?.priority);
-      setSelectedProjectStatus(response?.data?.project?.status?._id);
-      setDescription(response?.data?.project?.description);
+      const response = await axios.get(`/api/v1/project/single-project/${id}`);
+      if (response?.data?.success) {
+        setName(response?.data?.project?.name);
+        setProjectId(response?.data?.project?.projectId);
+        setSelectedProjectType(response?.data?.project?.type?._id);
+        setSelectedCustomer(response?.data?.project?.customer?._id);
+        setSelectedProjectCategory(response?.data?.project?.category?._id);
+        setSelectedProjectTiming(response?.data?.project?.timing?._id);
+        setPrice(response?.data?.project?.price);
+        setSelectedResponsible(response?.data?.project?.responsible?.map((r) => r._id));
+        setSelectedLeader(response?.data?.project?.leader?.map((l) => l?._id));
+        setStart(response?.data?.project?.start);
+        setDue(response?.data?.project?.due);
+        setPriority(response?.data?.project?.priority);
+        setSelectedProjectStatus(response?.data?.project?.status?._id);
+        setDescription(response?.data?.project?.description);
+      }
     } catch (error) {
       console.log("Error while fetching single project:", error.message);
     }
@@ -167,72 +139,22 @@ const EditProject = () => {
   const handleUpdate = async (e, id) => {
     e.preventDefault();
     try {
-      if (!name) {
-        return toast.error("Enter name");
-      }
-      if (!projectId) {
-        return toast.error("Enter project id");
-      }
-      if (!selectedProjectType) {
-        return toast.error("Enter project type");
-      }
-      if (!selectedCustomer) {
-        return toast.error("Enter Customer");
-      }
-      if (!selectedProjectCategory) {
-        return toast.error("Enter category");
-      }
-      if (!selectedProjectTiming) {
-        return toast.error("Enter project timing");
-      }
-      if (!price) {
-        return toast.error("Enter price");
-      }
-      if (selectedResponsible?.length === 0) {
-        return toast.error("Enter responsible person");
-      }
-      if (selectedLeader?.length === 0) {
-        return toast.error("Enter team leader");
-      }
-      if (!start) {
-        return toast.error("Enter start date");
-      }
-      if (!due) {
-        return toast.error("Enter due date");
-      }
-      if (!priority) {
-        return toast.error("Enter priority");
-      }
-      if (!selectedProjectStatus) {
-        return toast.error("Enter status");
-      }
-      if (!description) {
-        return toast.error("Enter description");
-      }
-
-      const response = await axios.put(`/api/v1/project/update-project/${id}`,
-        {
-          name,
-          projectId,
-          type: selectedProjectType,
-          customer: selectedCustomer,
-          category: selectedProjectCategory,
-          timing: selectedProjectTiming,
-          price,
-          responsible: selectedResponsible,
-          leader: selectedLeader,
-          start,
-          due,
-          priority,
-          status: selectedProjectStatus,
-          description,
-        },
-        {
-          headers: {
-            Authorization: `${validToken}`,
-          },
-        }
-      );
+      const response = await axios.put(`/api/v1/project/update-project/${id}`, {
+        name,
+        projectId,
+        type: selectedProjectType,
+        customer: selectedCustomer,
+        category: selectedProjectCategory,
+        timing: selectedProjectTiming,
+        price,
+        responsible: selectedResponsible,
+        leader: selectedLeader,
+        start,
+        due,
+        priority,
+        status: selectedProjectStatus,
+        description,
+      });
 
       if (response?.data?.success) {
         setName("");
@@ -285,7 +207,7 @@ const EditProject = () => {
     return <Preloader />;
   }
 
-  if (!user?.role?.permissions?.project?.update) {
+  if (!team?.role?.permissions?.project?.fields?.name?.update) {
     return <Navigate to="/project" />;
   }
 
@@ -362,12 +284,18 @@ const EditProject = () => {
                 </select>
               </div>
             </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label" htmlFor="price">Price <span className="text-danger">*</span></label>
-                <input className="form-control" type="text" name="price" id="price" value={price} onChange={(e) => setPrice(e.target.value)} required />
-              </div>
-            </div>
+            {
+              team?.role?.permissions?.project?.fields?.price?.show ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label" htmlFor="price">Price <span className="text-danger">*</span></label>
+                    <input className="form-control" type="text" name="price" id="price" value={price} onChange={(e) => setPrice(e.target.value)} required readOnly={team?.role?.permissions?.project?.fields?.price?.read} />
+                  </div>
+                </div>
+              ) : (
+                ""
+              )
+            }
             <div className="col-md-6">
               <div className="form-wrap">
                 <label className="col-form-label">Responsible Persons <span className="text-danger">*</span></label>

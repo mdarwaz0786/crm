@@ -2,16 +2,16 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
+// import { useAuth } from "../../../context/authContext.jsx";
+// import Preloader from "../../../Preloader.jsx";
 
 
 const TeamMember = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState("");
-  const { validToken, user, isLoading } = useAuth();
+  // const { validToken, isLoading } = useAuth();
   let i = 1;
 
   const formatDate = (dateString) => {
@@ -21,11 +21,7 @@ const TeamMember = () => {
 
   const fetchAllData = async () => {
     try {
-      const response = await axios.get("/api/v1/team/all-team", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/team/all-team");
       if (response?.data?.success) {
         setData(response?.data?.team);
         setTotal(response?.data?.totalCount);
@@ -41,26 +37,24 @@ const TeamMember = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/v1/team/delete-team/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
-      toast.success("Team deleted successfully");
-      fetchAllData();
+      const response = await axios.delete(`/api/v1/team/delete-team/${id}`);
+      if (response?.data?.succes) {
+        toast.success("Team member deleted successfully");
+        fetchAllData();
+      }
     } catch (error) {
       console.log("Error while deleting team:", error.message);
       toast.error("Error while deleting team");
     }
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  }
+  // if (isLoading) {
+  //   return <Preloader />;
+  // }
 
-  if (!user?.role?.permissions?.team?.access) {
-    return <Navigate to="/" />;
-  }
+  // if (!user?.role?.permissions?.team?.access) {
+  //   return <Navigate to="/" />;
+  // }
 
   return (
     <>
@@ -247,6 +241,7 @@ const TeamMember = () => {
                           <th>Name</th>
                           <th>Email</th>
                           <th>Mobile</th>
+                          <th>Role</th>
                           <th>Designation</th>
                           <th>Joining Date</th>
                           <th>Action</th>
@@ -263,7 +258,8 @@ const TeamMember = () => {
                               <td>{d?.name}</td>
                               <td>{d?.email}</td>
                               <td>{d?.mobile}</td>
-                              <td>{d?.designation}</td>
+                              <td>{d?.role?.name}</td>
+                              <td>{d?.designation?.name}</td>
                               <td>{formatDate(d?.joining)}</td>
                               <td>
                                 <div className="table-action">

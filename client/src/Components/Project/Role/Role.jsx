@@ -2,24 +2,20 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, Navigate } from 'react-router-dom';
-import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
+import { Link } from 'react-router-dom';
+// import { useAuth } from "../../../context/authContext.jsx";
+// import Preloader from "../../../Preloader.jsx";
 
 
 const Role = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
-  const { validToken, user, isLoading } = useAuth();
+  // const { validToken, user, isLoading } = useAuth();
   let i = 1;
 
   const fetchAllData = async () => {
     try {
-      const response = await axios.get("/api/v1/role/all-role", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/role/all-role");
       if (response?.data?.success) {
         setData(response?.data?.role);
         setTotal(response?.data?.totalCount);
@@ -35,26 +31,24 @@ const Role = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/v1/role/delete-role/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
-      toast.success("Project type deleted successfully");
-      fetchAllData();
+      const response = await axios.delete(`/api/v1/role/delete-role/${id}`);
+      if (response?.data?.success) {
+        toast.success("Role deleted successfully");
+        fetchAllData();
+      }
     } catch (error) {
       console.log("Error while deleting role:", error.message);
       toast.error("Error while deleting role");
     }
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  }
+  // if (isLoading) {
+  //   return <Preloader />;
+  // }
 
-  if (!user?.role?.permissions?.role?.access) {
-    return <Navigate to="/" />;
-  }
+  // if (!user?.role?.permissions?.role?.access) {
+  //   return <Navigate to="/" />;
+  // }
 
   return (
     <>
@@ -238,15 +232,6 @@ const Role = () => {
                           </th>
                           <th>#</th>
                           <th>Name</th>
-                          <th>Customer</th>
-                          <th>Team Member</th>
-                          <th>Role</th>
-                          <th>Project Type</th>
-                          <th>Project Status</th>
-                          <th>Project Category</th>
-                          <th>Project Timing</th>
-                          <th>Projects</th>
-                          <th>Users</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -259,69 +244,6 @@ const Role = () => {
                               </td>
                               <td>{i++}</td>
                               <td>{d?.name}</td>
-                              <td>
-                                <p>Access: {d?.permissions?.customer?.access ? 'True' : 'False'}</p>
-                                <p>Create: {d?.permissions?.customer?.create ? 'True' : 'False'}</p>
-                                <p>Read: {d?.permissions?.customer?.read ? 'True' : 'False'}</p>
-                                <p>Update: {d?.permissions?.customer?.update ? 'True' : 'False'}</p>
-                                <p>Delete: {d?.permissions?.customer?.delete ? 'True' : 'False'}</p>
-                              </td>
-                              <td>
-                                <p>Access: {d?.permissions?.team?.access ? 'True' : 'False'}</p>
-                                <p>Create: {d?.permissions?.team?.create ? 'True' : 'False'}</p>
-                                <p>Read: {d?.permissions?.team?.read ? 'True' : 'False'}</p>
-                                <p>Update: {d?.permissions?.team?.update ? 'True' : 'False'}</p>
-                                <p>Delete: {d?.permissions?.team?.delete ? 'True' : 'False'}</p>
-                              </td>
-                              <td>
-                                <p>Access: {d?.permissions?.role?.access ? 'True' : 'False'}</p>
-                                <p>Create: {d?.permissions?.role?.create ? 'True' : 'False'}</p>
-                                <p>Read: {d?.permissions?.role?.read ? 'True' : 'False'}</p>
-                                <p>Update: {d?.permissions?.role?.update ? 'True' : 'False'}</p>
-                                <p>Delete: {d?.permissions?.role?.delete ? 'True' : 'False'}</p>
-                              </td>
-                              <td>
-                                <p>Access: {d?.permissions?.projectType?.access ? 'True' : 'False'}</p>
-                                <p>Create: {d?.permissions?.projectType?.create ? 'True' : 'False'}</p>
-                                <p>Read: {d?.permissions?.projectType?.read ? 'True' : 'False'}</p>
-                                <p>Update: {d?.permissions?.projectType?.update ? 'True' : 'False'}</p>
-                                <p>Delete: {d?.permissions?.projectType?.delete ? 'True' : 'False'}</p>
-                              </td>
-                              <td>
-                                <p>Access: {d?.permissions?.projectStatus?.access ? 'True' : 'False'}</p>
-                                <p>Create: {d?.permissions?.projectStatus?.create ? 'True' : 'False'}</p>
-                                <p>Read: {d?.permissions?.projectStatus?.read ? 'True' : 'False'}</p>
-                                <p>Update: {d?.permissions?.projectStatus?.update ? 'True' : 'False'}</p>
-                                <p>Delete: {d?.permissions?.projectStatus?.delete ? 'True' : 'False'}</p>
-                              </td>
-                              <td>
-                                <p>Access: {d?.permissions?.projectCategory?.access ? 'True' : 'False'}</p>
-                                <p>Create: {d?.permissions?.projectCategory?.create ? 'True' : 'False'}</p>
-                                <p>Read: {d?.permissions?.projectCategory?.read ? 'True' : 'False'}</p>
-                                <p>Update: {d?.permissions?.projectCategory?.update ? 'True' : 'False'}</p>
-                                <p>Delete: {d?.permissions?.projectCategory?.delete ? 'True' : 'False'}</p>
-                              </td>
-                              <td>
-                                <p>Access: {d?.permissions?.projectTiming?.access ? 'True' : 'False'}</p>
-                                <p>Create: {d?.permissions?.projectTiming?.create ? 'True' : 'False'}</p>
-                                <p>Read: {d?.permissions?.projectTiming?.read ? 'True' : 'False'}</p>
-                                <p>Update: {d?.permissions?.projectTiming?.update ? 'True' : 'False'}</p>
-                                <p>Delete: {d?.permissions?.projectTiming?.delete ? 'True' : 'False'}</p>
-                              </td>
-                              <td>
-                                <p>Access: {d?.permissions?.project?.access ? 'True' : 'False'}</p>
-                                <p>Create: {d?.permissions?.project?.create ? 'True' : 'False'}</p>
-                                <p>Read: {d?.permissions?.project?.read ? 'True' : 'False'}</p>
-                                <p>Update: {d?.permissions?.project?.update ? 'True' : 'False'}</p>
-                                <p>Delete: {d?.permissions?.project?.delete ? 'True' : 'False'}</p>
-                              </td>
-                              <td>
-                                <p>Access: {d?.permissions?.user?.access ? 'True' : 'False'}</p>
-                                <p>Create: {d?.permissions?.user?.create ? 'True' : 'False'}</p>
-                                <p>Read: {d?.permissions?.user?.read ? 'True' : 'False'}</p>
-                                <p>Update: {d?.permissions?.user?.update ? 'True' : 'False'}</p>
-                                <p>Delete: {d?.permissions?.user?.delete ? 'True' : 'False'}</p>
-                              </td>
                               <td>
                                 <div className="table-action">
                                   <Link to="#" className="action-icon" data-bs-toggle="dropdown" aria-expanded="false">

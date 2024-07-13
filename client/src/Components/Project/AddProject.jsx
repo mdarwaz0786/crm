@@ -30,15 +30,11 @@ const AddProject = () => {
   const [priority, setPriority] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { validToken, user, isLoading } = useAuth();
+  const { team, isLoading } = useAuth();
 
   const fetchAllCustomer = async () => {
     try {
-      const response = await axios.get("/api/v1/customer/all-customer", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/customer/all-customer");
       if (response?.data?.success) {
         setCustomer(response?.data?.customer);
       }
@@ -49,11 +45,7 @@ const AddProject = () => {
 
   const fetchAllProjectCatgory = async () => {
     try {
-      const response = await axios.get("/api/v1/projectCategory/all-projectCategory", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/projectCategory/all-projectCategory");
       if (response?.data?.success) {
         setProjectCategory(response?.data?.projectCategory);
       }
@@ -64,11 +56,7 @@ const AddProject = () => {
 
   const fetchAllProjectTiming = async () => {
     try {
-      const response = await axios.get("/api/v1/projectTiming/all-projectTiming", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/projectTiming/all-projectTiming");
       if (response?.data?.success) {
         setProjectTiming(response?.data?.projectTiming);
       }
@@ -79,11 +67,7 @@ const AddProject = () => {
 
   const fetchAllTeamMember = async () => {
     try {
-      const response = await axios.get("/api/v1/team/all-team", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/team/all-team");
       if (response?.data?.success) {
         setTeamMember(response?.data?.team);
       }
@@ -94,11 +78,7 @@ const AddProject = () => {
 
   const fetchAllProjectStatus = async () => {
     try {
-      const response = await axios.get("/api/v1/projectStatus/all-projectStatus", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/projectStatus/all-projectStatus");
       if (response?.data?.success) {
         setProjectStatus(response?.data?.projectStatus);
       }
@@ -109,11 +89,7 @@ const AddProject = () => {
 
   const fetchAllProjectType = async () => {
     try {
-      const response = await axios.get("/api/v1/projectType/all-projectType", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/projectType/all-projectType");
       if (response?.data?.success) {
         setProjectType(response?.data?.projectType);
       }
@@ -177,29 +153,22 @@ const AddProject = () => {
         return toast.error("Enter description");
       }
 
-      const response = await axios.post("/api/v1/project/create-project",
-        {
-          name,
-          projectId,
-          type: selectedProjectType,
-          customer: selectedCustomer,
-          category: selectedProjectCategory,
-          timing: selectedProjectTiming,
-          price,
-          responsible: selectedResponsible,
-          leader: selectedLeader,
-          start,
-          due,
-          priority,
-          status: selectedProjectStatus,
-          description,
-        },
-        {
-          headers: {
-            Authorization: `${validToken}`,
-          },
-        }
-      );
+      const response = await axios.post("/api/v1/project/create-project", {
+        name,
+        projectId,
+        type: selectedProjectType,
+        customer: selectedCustomer,
+        category: selectedProjectCategory,
+        timing: selectedProjectTiming,
+        price,
+        responsible: selectedResponsible,
+        leader: selectedLeader,
+        start,
+        due,
+        priority,
+        status: selectedProjectStatus,
+        description,
+      });
 
       if (response?.data?.success) {
         setName("");
@@ -252,7 +221,7 @@ const AddProject = () => {
     return <Preloader />;
   }
 
-  if (!user?.role?.permissions?.project?.create) {
+  if (!team?.role?.permissions?.project?.create) {
     return <Navigate to="/project" />;
   }
 

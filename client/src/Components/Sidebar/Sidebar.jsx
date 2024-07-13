@@ -3,7 +3,8 @@ import { useAuth } from "../../context/authContext.jsx";
 import usericon from "../../Assets/user-icon.png";
 
 const Sidebar = () => {
-  const { isLoggedIn, user } = useAuth();
+  const { team, isLoggedIn } = useAuth();
+  console.log("team:", team);
 
   return (
     <div className="main-wrapper">
@@ -18,8 +19,8 @@ const Sidebar = () => {
                     {
                       isLoggedIn ? (
                         <>
-                          <h5>{user?.name}</h5>
-                          <h6>{user?.role?.name === "Admin" ? "" : user?.role?.name}</h6>
+                          <h5>{team?.name}</h5>
+                          <h6>{team?.role?.name}</h6>
                         </>
                       ) : (
                         <>
@@ -36,7 +37,7 @@ const Sidebar = () => {
                 <h6 className="submenu-hdr">Main Menu</h6>
                 <ul>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-layout-2" /><span>Dashboard</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -46,11 +47,11 @@ const Sidebar = () => {
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);"><i className="ti ti-brand-airtable" /><span>Application</span><span className="menu-arrow" /></a>
+                    <a href="#"><i className="ti ti-brand-airtable" /><span>Application</span><span className="menu-arrow" /></a>
                     <ul>
                       <li><a href="chat.html">Chat</a></li>
                       <li className="submenu submenu-two">
-                        <a href="javascript:void(0);">Call<span className="menu-arrow inside-submenu" /></a>
+                        <a href="#">Call<span className="menu-arrow inside-submenu" /></a>
                         <ul>
                           <li><a href="video-call.html">Video Call</a></li>
                           <li><a href="audio-call.html">Audio Call</a></li>
@@ -73,13 +74,14 @@ const Sidebar = () => {
                       <i className="ti ti-file-invoice" /><span>Master</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      {user?.role?.permissions?.customer?.access ? <li><Link to="/customer">Customer</Link></li> : ""}
-                      {user?.role?.permissions?.team?.access ? <li><Link to="/team-member">Team Member</Link></li> : ""}
-                      {user?.role?.permissions?.role?.access ? <li><Link to="/role">Role</Link></li> : ""}
-                      {user?.role?.permissions?.projectType?.access ? <li><Link to="/project-type">Project Type</Link></li> : ""}
-                      {user?.role?.permissions?.projectStatus?.access ? <li><Link to="/project-status">Project Status</Link></li> : ""}
-                      {user?.role?.permissions?.projectCategory?.access ? <li><Link to="/project-category">Project Category</Link></li> : ""}
-                      {user?.role?.permissions?.projectTiming?.access ? <li><Link to="/project-timing">Project Timing</Link></li> : ""}
+                      {team?.role?.permissions?.customer?.access ? <li><Link to="/customer">Customer</Link></li> : ""}
+                      {team?.role?.permissions?.team?.access ? <li><Link to="/team-member">Team Member</Link></li> : ""}
+                      {team?.role?.permissions?.role?.access ? <li><Link to="/role">Role</Link></li> : ""}
+                      {team?.role?.permissions?.designation?.access ? <li><Link to="/designation">Designation</Link></li> : ""}
+                      {team?.role?.permissions?.projectType?.access ? <li><Link to="/project-type">Project Type</Link></li> : ""}
+                      {team?.role?.permissions?.projectStatus?.access ? <li><Link to="/project-status">Project Status</Link></li> : ""}
+                      {team?.role?.permissions?.projectCategory?.access ? <li><Link to="/project-category">Project Category</Link></li> : ""}
+                      {team?.role?.permissions?.projectTiming?.access ? <li><Link to="/project-timing">Project Timing</Link></li> : ""}
                     </ul>
                   </li>
                 </ul>
@@ -87,8 +89,7 @@ const Sidebar = () => {
               <li>
                 <h6 className="submenu-hdr">CRM</h6>
                 <ul>
-                  {user?.role?.permissions?.project?.access ? <li><Link to="/project"><i className="ti ti-atom-2" /><span>Projects</span></Link> </li> : ""}
-                  {user?.role?.permissions?.user?.access ? <li><Link to="/user"><i className="ti ti-user" /><span>Users</span></Link></li> : ""}
+                  {team?.role?.permissions?.project?.access ? <li><Link to="/project"><i className="ti ti-atom-2" /><span>Projects</span></Link></li> : ""}
                   <li>
                     <a href="contacts.html"><i className="ti ti-user-up" /><span>Contacts</span></a>
                   </li>
@@ -137,7 +138,7 @@ const Sidebar = () => {
                 <h6 className="submenu-hdr">Reports</h6>
                 <ul>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-file-invoice" /><span>Reports</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -176,7 +177,7 @@ const Sidebar = () => {
                 <h6 className="submenu-hdr">Membership</h6>
                 <ul>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-file-invoice" /><span>Membership</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -192,7 +193,7 @@ const Sidebar = () => {
                 <ul>
                   <li><a href="pages.html"><i className="ti ti-page-break" /><span>Pages</span></a></li>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-map-pin-pin" /><span>Location</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -217,7 +218,7 @@ const Sidebar = () => {
                 <h6 className="submenu-hdr">Settings</h6>
                 <ul>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-settings-cog" /><span>General Settings</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -228,7 +229,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-world-cog" /><span>Website Settings</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -241,7 +242,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-apps" /><span>App Settings</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -251,7 +252,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-device-laptop" /><span>System Settings</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -261,7 +262,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-moneybag" /><span>Financial Settings</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -272,7 +273,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-flag-cog" /><span>Other Settings</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -286,7 +287,7 @@ const Sidebar = () => {
                 <h6 className="submenu-hdr">Pages</h6>
                 <ul>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-lock-square-rounded" /><span>Authentication</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -300,7 +301,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-error-404" /><span>Error Pages</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -318,7 +319,7 @@ const Sidebar = () => {
                 <h6 className="submenu-hdr">UI Interface</h6>
                 <ul>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-adjustments-check" /><span>Base UI</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -355,7 +356,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-box-align-bottom" /><span>Advanced UI</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -372,7 +373,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);"><i className="ti ti-chart-donut-2" />
+                    <a href="#"><i className="ti ti-chart-donut-2" />
                       <span>Charts</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -385,7 +386,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);"><i className="ti ti-icons" />
+                    <a href="#"><i className="ti ti-icons" />
                       <span>Icons</span><span className="menu-arrow" />
                     </a>
                     <ul>
@@ -402,12 +403,12 @@ const Sidebar = () => {
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);">
+                    <a href="#">
                       <i className="ti ti-forms" /><span>Forms</span><span className="menu-arrow" />
                     </a>
                     <ul>
                       <li className="submenu submenu-two">
-                        <a href="javascript:void(0);">Form Elements<span className="menu-arrow inside-submenu" /></a>
+                        <a href="#">Form Elements<span className="menu-arrow inside-submenu" /></a>
                         <ul>
                           <li><a href="form-basic-inputs.html">Basic Inputs</a></li>
                           <li><a href="form-checkbox-radios.html">Checkbox &amp; Radios</a></li>
@@ -419,7 +420,7 @@ const Sidebar = () => {
                         </ul>
                       </li>
                       <li className="submenu submenu-two">
-                        <a href="javascript:void(0);">Layouts<span className="menu-arrow inside-submenu" /></a>
+                        <a href="#">Layouts<span className="menu-arrow inside-submenu" /></a>
                         <ul>
                           <li><a href="form-horizontal.html">Horizontal Form</a></li>
                           <li><a href="form-vertical.html">Vertical Form</a></li>
@@ -432,7 +433,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);"><i className="ti ti-table" /><span>Tables</span><span className="menu-arrow" /></a>
+                    <a href="#"><i className="ti ti-table" /><span>Tables</span><span className="menu-arrow" /></a>
                     <ul>
                       <li><a href="tables-basic.html">Basic Tables </a></li>
                       <li><a href="data-tables.html">Data Table </a></li>
@@ -443,20 +444,20 @@ const Sidebar = () => {
               <li>
                 <h6 className="submenu-hdr">Help</h6>
                 <ul>
-                  <li><a href="javascript:void(0);"><i className="ti ti-file-type-doc" /><span>Documentation</span></a></li>
-                  <li><a href="javascript:void(0);"><i className="ti ti-arrow-capsule" /><span>Changelog v2.0.3</span></a>
+                  <li><a href="#"><i className="ti ti-file-type-doc" /><span>Documentation</span></a></li>
+                  <li><a href="#"><i className="ti ti-arrow-capsule" /><span>Changelog v2.0.3</span></a>
                   </li>
                   <li className="submenu">
-                    <a href="javascript:void(0);"><i className="ti ti-brand-databricks" /><span>Multi Level</span><span className="menu-arrow" /></a>
+                    <a href="#"><i className="ti ti-brand-databricks" /><span>Multi Level</span><span className="menu-arrow" /></a>
                     <ul>
-                      <li><a href="javascript:void(0);">Level 1.1</a></li>
-                      <li className="submenu submenu-two"><a href="javascript:void(0);">Level 1.2<span className="menu-arrow inside-submenu" /></a>
+                      <li><a href="#">Level 1.1</a></li>
+                      <li className="submenu submenu-two"><a href="#">Level 1.2<span className="menu-arrow inside-submenu" /></a>
                         <ul>
-                          <li><a href="javascript:void(0);">Level 2.1</a></li>
-                          <li className="submenu submenu-two submenu-three"><a href="javascript:void(0);">Level 2.2<span className="menu-arrow inside-submenu inside-submenu-two" /></a>
+                          <li><a href="#">Level 2.1</a></li>
+                          <li className="submenu submenu-two submenu-three"><a href="#">Level 2.2<span className="menu-arrow inside-submenu inside-submenu-two" /></a>
                             <ul>
-                              <li><a href="javascript:void(0);">Level 3.1</a></li>
-                              <li><a href="javascript:void(0);">Level 3.2</a></li>
+                              <li><a href="#">Level 3.1</a></li>
+                              <li><a href="#">Level 3.2</a></li>
                             </ul>
                           </li>
                         </ul>

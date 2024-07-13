@@ -2,26 +2,22 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, Navigate } from 'react-router-dom';
-import { useAuth } from "../../context/authContext.jsx";
-import Preloader from "../../Preloader.jsx";
+import { Link } from 'react-router-dom';
+// import { useAuth } from "../../../context/authContext.jsx";
+// import Preloader from "../../../Preloader.jsx";
 
-const User = () => {
+
+const Designation = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState("");
-  const { validToken, user, isLoading } = useAuth();
+  // const { validToken, team, isLoading } = useAuth();
   let i = 1;
 
   const fetchAllData = async () => {
     try {
-      const response = await axios.get("/api/v1/user/all-user", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
-
+      const response = await axios.get("/api/v1/designation/all-designation");
       if (response?.data?.success) {
-        setData(response?.data?.user);
+        setData(response?.data?.designation);
         setTotal(response?.data?.totalCount);
       }
     } catch (error) {
@@ -35,26 +31,24 @@ const User = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/v1/user/delete-user/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
-      toast.success("User deleted successfully");
-      fetchAllData();
+      const response = await axios.delete(`/api/v1/designation/delete-designation/${id}`);
+      if (response?.data?.success) {
+        toast.success("Designation deleted successfully");
+        fetchAllData();
+      }
     } catch (error) {
-      console.log("Error while deleting customer:", error.message);
-      toast.error("Error while deleting customer");
+      console.log("Error while deleting designation:", error.message);
+      toast.error("Error while deleting designation");
     }
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  }
+  // if (isLoading) {
+  //   return <Preloader />;
+  // }
 
-  if (!user?.role?.permissions?.user?.access) {
-    return <Navigate to="/" />;
-  }
+  // if (!team?.role?.permissions?.designation?.access) {
+  //   return <Navigate to="/" />;
+  // }
 
   return (
     <>
@@ -67,7 +61,7 @@ const User = () => {
               <div className="page-header">
                 <div className="row align-items-center">
                   <div className="col-4">
-                    <h4 className="page-title">Users<span className="count-title">{total}</span></h4>
+                    <h4 className="page-title">Designations<span className="count-title">{total}</span></h4>
                   </div>
                   <div className="col-8 text-end">
                     <div className="head-icons">
@@ -91,7 +85,7 @@ const User = () => {
                       <div className="col-md-5 col-sm-4">
                         <div className="form-wrap icon-form">
                           <span className="form-icon"><i className="ti ti-search" /></span>
-                          <input type="text" className="form-control" placeholder="Search User" />
+                          <input type="text" className="form-control" placeholder="Search Designation" />
                         </div>
                       </div>
                       <div className="col-md-7 col-sm-8">
@@ -122,9 +116,9 @@ const User = () => {
                               </div>
                             </li>
                             <li>
-                              <Link to="/signup" className="btn btn-primary">
+                              <Link to="/add-designation" className="btn btn-primary">
                                 <i className="ti ti-square-rounded-plus" />
-                                Add New User
+                                Add New Designation
                               </Link>
                             </li>
                           </ul>
@@ -174,7 +168,7 @@ const User = () => {
                                 <div className="accordion" id="accordionExample">
                                   <div className="filter-set-content">
                                     <div className="filter-set-content-head">
-                                      <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Customer</Link>
+                                      <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Designation</Link>
                                     </div>
                                     <div className="filter-set-contents accordion-collapse collapse show" id="collapseTwo" data-bs-parent="#accordionExample">
                                       <div className="filter-content-list">
@@ -229,7 +223,7 @@ const User = () => {
                   {/* /Filter */}
 
 
-                  {/* Customer List */}
+                  {/* Project Category List */}
                   <div className="table-responsive custom-table">
                     <table className="table table-bordered table-striped custom-border">
                       <thead className="thead-light">
@@ -239,10 +233,7 @@ const User = () => {
                           </th>
                           <th>#</th>
                           <th>Name</th>
-                          <th>Email</th>
-                          <th>Password</th>
-                          <th>Mobile</th>
-                          <th>role</th>
+                          <th>Description</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -255,19 +246,16 @@ const User = () => {
                               </td>
                               <td>{i++}</td>
                               <td>{d?.name}</td>
-                              <td>{d?.email}</td>
-                              <td>{d?.password}</td>
-                              <td>{d?.mobile}</td>
-                              <td>{d?.role?.name ? d?.role?.name : "None"}</td>
+                              <td>{d?.description}</td>
                               <td>
                                 <div className="table-action">
                                   <Link to="#" className="action-icon" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i className="fa fa-ellipsis-v"></i>
                                   </Link>
                                   <div className="dropdown-menu dropdown-menu-right">
-                                    <Link to={`/edit-user/${d?._id}`} className="dropdown-item">
+                                    <Link to={`/edit-designation/${d?._id}`} className="dropdown-item">
                                       <i className="ti ti-edit text-blue"></i>
-                                      Update
+                                      Edit
                                     </Link>
                                     <Link to="#" className="dropdown-item" onClick={() => handleDelete(d?._id)}>
                                       <i className="ti ti-trash text-danger"></i>
@@ -332,7 +320,7 @@ const User = () => {
                       </div>
                     </div>
                   </div>
-                  {/* /Customer List */}
+                  {/* /Project Category List */}
                 </div>
               </div>
             </div>
@@ -344,4 +332,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Designation;

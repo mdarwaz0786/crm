@@ -8,7 +8,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [user, setUser] = useState("");
+  const [team, setTeam] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const validToken = `Bearer ${token}`
@@ -20,33 +20,33 @@ export const AuthProvider = ({ children }) => {
 
   let isLoggedIn = !!token;
 
-  const logOutUser = () => {
+  const logOutTeam = () => {
     setToken("");
     return localStorage.removeItem("token");
   };
 
-  const loggedInUser = async () => {
+  const loggedInTeam = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get("/api/v1/user/logged-in-user", {
+      const response = await axios.get("/api/v1/team/loggedin-team", {
         headers: {
           Authorization: validToken,
         },
       });
-      setUser(response?.data?.user);
+      setTeam(response?.data?.team);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.log("error while fetching logged in user data");
+      console.log("Error while fetching logged in team member");
     }
   };
 
   useEffect(() => {
-    loggedInUser();
+    loggedInTeam();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ storeToken, logOutUser, isLoggedIn, user, isLoading, validToken }}>
+    <AuthContext.Provider value={{ storeToken, logOutTeam, isLoggedIn, team, isLoading, validToken }}>
       {children}
     </AuthContext.Provider>
   );

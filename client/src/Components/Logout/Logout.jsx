@@ -5,11 +5,11 @@ import { useAuth } from "../../context/authContext.jsx";
 import { toast } from 'react-toastify';
 
 const Logout = () => {
-  const { logOutUser } = useAuth();
+  const { logOutTeam } = useAuth();
 
   useEffect(() => {
-    logOutUser();
-    toast.success("logout successful");
+    logOutTeam();
+    toast.success("Logout successful");
   }, []);
 
   return <Navigate to="/login" />;

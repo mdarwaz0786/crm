@@ -1,27 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
+// import { useAuth } from "../../../context/authContext.jsx";
+// import Preloader from "../../../Preloader.jsx";
 
 const EditProjectType = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, user, isLoading } = useAuth();
+  // const { validToken, user, isLoading } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
-      const response = await axios.get(`/api/v1/projectType/single-projectType/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
-      setName(response?.data?.projectType?.name);
-      setDescription(response?.data?.projectType?.description);
+      const response = await axios.get(`/api/v1/projectType/single-projectType/${id}`);
+      if (response?.data?.success) {
+        setName(response?.data?.projectType?.name);
+        setDescription(response?.data?.projectType?.description);
+      }
     } catch (error) {
       console.log("Error while fetching single project type:", error.message);
     }
@@ -34,18 +32,7 @@ const EditProjectType = () => {
   const handleUpdate = async (e, id) => {
     e.preventDefault();
     try {
-      if (!name) {
-        return toast.error("Enter name");
-      }
-      if (!description) {
-        return toast.error("Enter description");
-      }
-
-      const response = await axios.put(`/api/v1/projectType/update-projectType/${id}`, { name, description }, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.put(`/api/v1/projectType/update-projectType/${id}`, { name, description });
       if (response?.data?.success) {
         setName("");
         setDescription("");
@@ -58,13 +45,13 @@ const EditProjectType = () => {
     }
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  }
+  // if (isLoading) {
+  //   return <Preloader />;
+  // }
 
-  if (!user?.role?.permissions?.projectType?.update) {
-    return <Navigate to="/project-type" />;
-  }
+  // if (!user?.role?.permissions?.projectType?.update) {
+  //   return <Navigate to="/project-type" />;
+  // }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

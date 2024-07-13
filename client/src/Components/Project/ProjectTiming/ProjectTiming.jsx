@@ -2,24 +2,20 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, Navigate } from 'react-router-dom';
-import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
+import { Link } from 'react-router-dom';
+// import { useAuth } from "../../../context/authContext.jsx";
+// import Preloader from "../../../Preloader.jsx";
 
 
 const ProjectTiming = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState("");
-  const { validToken, user, isLoading } = useAuth();
+  // const { validToken, user, isLoading } = useAuth();
   let i = 1;
 
   const fetchAllData = async () => {
     try {
-      const response = await axios.get("/api/v1/projectTiming/all-projectTiming", {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+      const response = await axios.get("/api/v1/projectTiming/all-projectTiming");
       if (response?.data?.success) {
         setData(response?.data?.projectTiming);
         setTotal(response?.data?.totalCount);
@@ -35,26 +31,24 @@ const ProjectTiming = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/v1/projectTiming/delete-projectTiming/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
-      toast.success("Project timing deleted successfully");
-      fetchAllData();
+      const response = await axios.delete(`/api/v1/projectTiming/delete-projectTiming/${id}`);
+      if (response?.data?.success) {
+        toast.success("Project timing deleted successfully");
+        fetchAllData();
+      }
     } catch (error) {
       console.log("Error while deleting project timing:", error.message);
       toast.error("Error while deleting project timing");
     }
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  }
+  // if (isLoading) {
+  //   return <Preloader />;
+  // }
 
-  if (!user?.role?.permissions?.projectTiming?.access) {
-    return <Navigate to="/" />;
-  }
+  // if (!user?.role?.permissions?.projectTiming?.access) {
+  //   return <Navigate to="/" />;
+  // }
 
   return (
     <>

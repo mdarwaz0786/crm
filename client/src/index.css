@@ -57,18 +57,18 @@
 
 .form-check-input {
   border: 1px solid rgb(224, 221, 221);
-  width: 1.1rem;
-  height: 1.1rem;
+  width: 1.01rem;
+  height: 1.01rem;
+}
+
+.form-check-input:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .form-check-input:checked {
   background-color: #0d6efd;
   border-color: #0d6efd;
-}
-
-.form-check-input:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .form-check {
@@ -78,7 +78,7 @@
 }
 
 .form-check-input {
-  margin-right: 0.5rem;
+  margin-right: 0.2rem;
 }
 
 .d-flex {
@@ -94,11 +94,27 @@
 }
 
 .mr-2 {
-  margin-right: 0.5rem;
-  font-size: 1.1rem;
+  margin-right: 1.5rem;
 }
 
 .ml-2 {
   margin-left: 0.2rem;
   margin-bottom: 0.4rem;
+}
+
+.custom-role .modal-content {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.custom-role .modal-body {
+  padding: 1.5rem;
+}
+
+.custom-role .form-check-label {
+  font-size: 0.9rem;
+}
+
+.custom-role .form-check {
+  margin-right: 1rem;
 }
