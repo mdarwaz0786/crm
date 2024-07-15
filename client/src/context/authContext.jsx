@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.log("Error while fetching logged in team member");
+      console.log("Error while fetching logged in team member:", error.message);
     }
   };
 

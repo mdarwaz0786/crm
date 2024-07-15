@@ -30,7 +30,7 @@ const EditProject = () => {
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { team, isLoading } = useAuth();
+  const { team, isLoading, validToken } = useAuth();
 
   const fetchAllCustomer = async () => {
     try {
@@ -110,7 +110,11 @@ const EditProject = () => {
 
   const fetchSingleProject = async (id) => {
     try {
-      const response = await axios.get(`/api/v1/project/single-project/${id}`);
+      const response = await axios.get(`/api/v1/project/single-project/${id}`, {
+        headers: {
+          Authorization: `${validToken}`
+        }
+      });
       if (response?.data?.success) {
         setName(response?.data?.project?.name);
         setProjectId(response?.data?.project?.projectId);
@@ -139,22 +143,29 @@ const EditProject = () => {
   const handleUpdate = async (e, id) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`/api/v1/project/update-project/${id}`, {
-        name,
-        projectId,
-        type: selectedProjectType,
-        customer: selectedCustomer,
-        category: selectedProjectCategory,
-        timing: selectedProjectTiming,
-        price,
-        responsible: selectedResponsible,
-        leader: selectedLeader,
-        start,
-        due,
-        priority,
-        status: selectedProjectStatus,
-        description,
-      });
+      const response = await axios.put(`/api/v1/project/update-project/${id}`,
+        {
+          name,
+          projectId,
+          type: selectedProjectType,
+          customer: selectedCustomer,
+          category: selectedProjectCategory,
+          timing: selectedProjectTiming,
+          price,
+          responsible: selectedResponsible,
+          leader: selectedLeader,
+          start,
+          due,
+          priority,
+          status: selectedProjectStatus,
+          description,
+        },
+        {
+          headers: {
+            Authorization: `${validToken}`
+          }
+        }
+      );
 
       if (response?.data?.success) {
         setName("");
@@ -207,7 +218,7 @@ const EditProject = () => {
     return <Preloader />;
   }
 
-  if (!team?.role?.permissions?.project?.fields?.name?.update) {
+  if (!team?.role?.permissions?.project?.update) {
     return <Navigate to="/project" />;
   }
 
@@ -216,76 +227,112 @@ const EditProject = () => {
       <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
         <div className="content">
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h4>Edit Project</h4>
+            <h4>Update Project</h4>
             <Link to="/project"><button className="btn btn-primary">Back</button></Link>
           </div>
           <div className="row">
-            <div className="col-md-12">
-              <div className="form-wrap">
-                <label className="col-form-label" htmlFor="name">Project Name <span className="text-danger">*</span></label>
-                <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label" htmlFor="projectId">Project ID<span className="text-danger"> *</span></label>
-                <input className="form-control" type="text" name="projectId" id="projectId" value={projectId} onChange={(e) => setProjectId(e.target.value)} required />
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label">Project Type <span className="text-danger">*</span></label>
-                <select className="form-select" name="type" value={selectedProjectType} onChange={(e) => setSelectedProjectType(e.target.value)}>
-                  <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                  {
-                    projectType?.map((p) => (
-                      <option key={p?._id} value={p?._id}>{p?.name}</option>
-                    ))
-                  }
-                </select>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label">Client <span className="text-danger">*</span></label>
-                <select className="form-select" name="customer" value={selectedCustomer} onChange={(e) => setSelectedCustomer(e.target.value)}>
-                  <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                  {
-                    customer?.map((c) => (
-                      <option key={c?._id} value={c?._id}>{c?.name}</option>
-                    ))
-                  }
-                </select>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label">Category <span className="text-danger">*</span></label>
-                <select className="form-select" name="category" value={selectedProjectCategory} onChange={(e) => setSelectedProjectCategory(e.target.value)}>
-                  <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                  {
-                    projectCategory?.map((p) => (
-                      <option key={p?._id} value={p?._id}>{p?.name}</option>
-                    ))
-                  }
-                </select>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label">Project Timing  <span className="text-danger">*</span></label>
-                <select className="form-select" name="timing" value={selectedProjectTiming} onChange={(e) => setSelectedProjectTiming(e.target.value)}>
-                  <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                  {
-                    projectTiming?.map((p) => (
-                      <option key={p?._id} value={p?._id}>{p?.name}</option>
-                    ))
-                  }
-                </select>
-              </div>
-            </div>
             {
-              team?.role?.permissions?.project?.fields?.price?.show ? (
+              (team?.role?.permissions?.project?.fields?.name?.show) ? (
+                <div className="col-md-12">
+                  <div className="form-wrap">
+                    <label className="col-form-label" htmlFor="name">Project Name <span className="text-danger">*</span></label>
+                    <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required readOnly={team?.role?.permissions?.project?.fields?.name?.read} />
+                  </div>
+                </div>
+              ) : (
+                null
+              )
+            }
+            {
+              (team?.role?.permissions?.project?.fields?.projectId?.show) ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label" htmlFor="projectId">Project ID<span className="text-danger"> *</span></label>
+                    <input className="form-control" type="text" name="projectId" id="projectId" value={projectId} onChange={(e) => setProjectId(e.target.value)} required readOnly={team?.role?.permissions?.project?.fields?.projectId?.read} />
+                  </div>
+                </div>
+              ) : (
+                null
+              )
+            }
+            {
+              (team?.role?.permissions?.project?.fields?.type?.show) ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label">Project Type <span className="text-danger">*</span></label>
+                    <select className="form-select" name="type" value={selectedProjectType} onChange={(e) => setSelectedProjectType(e.target.value)} required disabled={team?.role?.permissions?.project?.fields?.type?.read}>
+                      <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
+                      {
+                        projectType?.map((p) => (
+                          <option key={p?._id} value={p?._id} >{p?.name}</option>
+                        ))
+                      }
+                    </select>
+                  </div>
+                </div>
+              ) : (
+                null
+              )
+            }
+            {
+              (team?.role?.permissions?.project?.fields?.customer?.show) ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label">Customer <span className="text-danger">*</span></label>
+                    <select className="form-select" name="customer" value={selectedCustomer} onChange={(e) => setSelectedCustomer(e.target.value)} required disabled={team?.role?.permissions?.project?.fields?.customer?.read}>
+                      <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
+                      {
+                        customer?.map((c) => (
+                          <option key={c?._id} value={c?._id}>{c?.name}</option>
+                        ))
+                      }
+                    </select>
+                  </div>
+                </div>
+              ) : (
+                null
+              )
+            }
+            {
+              (team?.role?.permissions?.project?.fields?.category?.show) ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label">Category <span className="text-danger">*</span></label>
+                    <select className="form-select" name="category" value={selectedProjectCategory} onChange={(e) => setSelectedProjectCategory(e.target.value)} required disabled={team?.role?.permissions?.project?.fields?.category?.read}>
+                      <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
+                      {
+                        projectCategory?.map((p) => (
+                          <option key={p?._id} value={p?._id}>{p?.name}</option>
+                        ))
+                      }
+                    </select>
+                  </div>
+                </div>
+              ) : (
+                null
+              )
+            }
+            {
+              (team?.role?.permissions?.project?.fields?.timing?.show) ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label">Project Timing  <span className="text-danger">*</span></label>
+                    <select className="form-select" name="timing" value={selectedProjectTiming} onChange={(e) => setSelectedProjectTiming(e.target.value)} required disabled={team?.role?.permissions?.project?.fields?.timing?.read}>
+                      <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
+                      {
+                        projectTiming?.map((p) => (
+                          <option key={p?._id} value={p?._id}>{p?.name}</option>
+                        ))
+                      }
+                    </select>
+                  </div>
+                </div>
+              ) : (
+                null
+              )
+            }
+            {
+              (team?.role?.permissions?.project?.fields?.price?.show) ? (
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="price">Price <span className="text-danger">*</span></label>
@@ -293,97 +340,139 @@ const EditProject = () => {
                   </div>
                 </div>
               ) : (
-                ""
+                null
               )
             }
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label">Responsible Persons <span className="text-danger">*</span></label>
-                <select className="form-select" name="responsible" value="" onChange={handleSelectChangeResponsible}>
-                  <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                  {
-                    teamMember?.map((t) => (
-                      <option key={t?._id} value={t?._id}>{t?.name}</option>
-                    ))
-                  }
-                </select>
-                <div className="selected-container">
-                  {
-                    selectedResponsible?.map((responsible, index) => (
-                      <span key={index} className="selected-item">
-                        {teamMember?.find((t) => t?._id === responsible)?.name}
-                        <button type="button" className="remove-btn" onClick={() => handleRemoveResponsible(responsible)}>{"x"}</button>
-                      </span>
-                    ))
-                  }
+            {
+              (team?.role?.permissions?.project?.fields?.responsible?.show) ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label">Responsible Persons <span className="text-danger">*</span></label>
+                    <select className="form-select" name="responsible" value="" onChange={handleSelectChangeResponsible} required disabled={team?.role?.permissions?.project?.fields?.responsible?.read}>
+                      <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
+                      {
+                        teamMember?.map((t) => (
+                          <option key={t?._id} value={t?._id}>{t?.name}</option>
+                        ))
+                      }
+                    </select>
+                    <div className="selected-container">
+                      {
+                        selectedResponsible?.map((responsible, index) => (
+                          <span key={index} className="selected-item">
+                            {teamMember?.find((t) => t?._id === responsible)?.name}
+                            <button type="button" className="remove-btn" onClick={() => handleRemoveResponsible(responsible)} disabled={team?.role?.permissions?.project?.fields?.responsible?.read}>{"x"}</button>
+                          </span>
+                        ))
+                      }
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label">Team Leader  <span className="text-danger">*</span></label>
-                <select className="form-select" name="leader" value="" onChange={handleSelectChangeLeader}>
-                  <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                  {
-                    teamMember?.map((t) => (
-                      <option key={t?._id} value={t?._id}>{t?.name}</option>
-                    ))
-                  }
-                </select>
-                <div className="selected-container">
-                  {
-                    selectedLeader?.map((leader, index) => (
-                      <span key={index} className="selected-item">
-                        {teamMember?.find((t) => t?._id === leader)?.name}
-                        <button type="button" className="remove-btn" onClick={() => handleRemoveLeader(leader)}>{"x"}</button>
-                      </span>
-                    ))
-                  }
+              ) : (
+                null
+              )
+            }
+            {
+              (team?.role?.permissions?.project?.fields?.leader?.show) ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label">Team Leader  <span className="text-danger">*</span></label>
+                    <select className="form-select" name="leader" value="" onChange={handleSelectChangeLeader} required disabled={team?.role?.permissions?.project?.fields?.leader?.read}>
+                      <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
+                      {
+                        teamMember?.map((t) => (
+                          <option key={t?._id} value={t?._id}>{t?.name}</option>
+                        ))
+                      }
+                    </select>
+                    <div className="selected-container">
+                      {
+                        selectedLeader?.map((leader, index) => (
+                          <span key={index} className="selected-item">
+                            {teamMember?.find((t) => t?._id === leader)?.name}
+                            <button type="button" className="remove-btn" onClick={() => handleRemoveLeader(leader)} disabled={team?.role?.permissions?.project?.fields?.responsible?.read}>{"x"}</button>
+                          </span>
+                        ))
+                      }
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label" htmlFor="start">Start Date <span className="text-danger">*</span></label>
-                <input type="date" className="form-control" name="start" id="start" value={start} onChange={(e) => setStart(e.target.value)} required />
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label" htmlFor="due">Due Date <span className="text-danger">*</span></label>
-                <input type="date" className="form-control" name="due" id="due" value={due} onChange={(e) => setDue(e.target.value)} required />
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label">Priority <span className="text-danger">*</span></label>
-                <select className="form-select" name="status" value={priority} onChange={(e) => setPriority(e.target.value)}>
-                  <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                  <option>High</option>
-                  <option>Medium</option>
-                  <option>Low</option>
-                </select>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label">Status <span className="text-danger">*</span></label>
-                <select className="form-select" name="status" value={selectedProjectStatus} onChange={(e) => setSelectedProjectStatus(e.target.value)}>
-                  <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                  {
-                    projectStatus?.map((p) => (
-                      <option key={p?._id} value={p?._id}>{p?.status}</option>
-                    ))
-                  }
-                </select>
-              </div>
-            </div>
-            <div className="col-md-12">
-              <div className="form-wrap">
-                <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
-                <textarea className="form-control" rows={4} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
-              </div>
-            </div>
+              ) : (
+                null
+              )
+            }
+            {
+              (team?.role?.permissions?.project?.fields?.start?.show) ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label" htmlFor="start">Start Date <span className="text-danger">*</span></label>
+                    <input type="date" className="form-control" name="start" id="start" value={start} onChange={(e) => setStart(e.target.value)} readOnly={team?.role?.permissions?.project?.fields?.start?.read} />
+                  </div>
+                </div>
+              ) : (
+                null
+              )
+            }
+            {
+              (team?.role?.permissions?.project?.fields?.due?.show) ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label" htmlFor="due">Due Date <span className="text-danger">*</span></label>
+                    <input type="date" className="form-control" name="due" id="due" value={due} onChange={(e) => setDue(e.target.value)} required readOnly={team?.role?.permissions?.project?.fields?.due?.read} />
+                  </div>
+                </div>
+              ) : (
+                null
+              )
+            }
+            {
+              (team?.role?.permissions?.project?.fields?.priority?.show) ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label">Priority <span className="text-danger">*</span></label>
+                    <select className="form-select" name="status" value={priority} onChange={(e) => setPriority(e.target.value)} required disabled={team?.role?.permissions?.project?.fields?.priority?.read}>
+                      <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
+                      <option>High</option>
+                      <option>Medium</option>
+                      <option>Low</option>
+                    </select>
+                  </div>
+                </div>
+              ) : (
+                null
+              )
+            }
+            {
+              (team?.role?.permissions?.project?.fields?.status?.show) ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label">Status <span className="text-danger">*</span></label>
+                    <select className="form-select" name="status" value={selectedProjectStatus} onChange={(e) => setSelectedProjectStatus(e.target.value)} required disabled={team?.role?.permissions?.project?.fields?.status?.read}>
+                      <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
+                      {
+                        projectStatus?.map((p) => (
+                          <option key={p?._id} value={p?._id}>{p?.status}</option>
+                        ))
+                      }
+                    </select>
+                  </div>
+                </div>
+              ) : (
+                null
+              )
+            }
+            {
+              (team?.role?.permissions?.project?.fields?.description?.show) ? (
+                <div className="col-md-12">
+                  <div className="form-wrap">
+                    <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
+                    <textarea className="form-control" rows={4} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required readOnly={team?.role?.permissions?.project?.fields?.description?.read} />
+                  </div>
+                </div>
+              ) : (
+                null
+              )
+            }
           </div>
           <div className="submit-button text-end">
             <Link to="/project" className="btn btn-light">Cancel</Link>

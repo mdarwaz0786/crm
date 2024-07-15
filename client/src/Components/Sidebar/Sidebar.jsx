@@ -4,7 +4,6 @@ import usericon from "../../Assets/user-icon.png";
 
 const Sidebar = () => {
   const { team, isLoggedIn } = useAuth();
-  console.log("team:", team);
 
   return (
     <div className="main-wrapper">
@@ -74,14 +73,14 @@ const Sidebar = () => {
                       <i className="ti ti-file-invoice" /><span>Master</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      {team?.role?.permissions?.customer?.access ? <li><Link to="/customer">Customer</Link></li> : ""}
-                      {team?.role?.permissions?.team?.access ? <li><Link to="/team-member">Team Member</Link></li> : ""}
-                      {team?.role?.permissions?.role?.access ? <li><Link to="/role">Role</Link></li> : ""}
-                      {team?.role?.permissions?.designation?.access ? <li><Link to="/designation">Designation</Link></li> : ""}
-                      {team?.role?.permissions?.projectType?.access ? <li><Link to="/project-type">Project Type</Link></li> : ""}
-                      {team?.role?.permissions?.projectStatus?.access ? <li><Link to="/project-status">Project Status</Link></li> : ""}
-                      {team?.role?.permissions?.projectCategory?.access ? <li><Link to="/project-category">Project Category</Link></li> : ""}
-                      {team?.role?.permissions?.projectTiming?.access ? <li><Link to="/project-timing">Project Timing</Link></li> : ""}
+                      {team?.role?.permissions?.customer?.access ? <li><Link to="/customer">Customer</Link></li> : null}
+                      {team?.role?.permissions?.team?.access ? <li><Link to="/team-member">Team Member</Link></li> : null}
+                      {team?.role?.permissions?.role?.access ? <li><Link to="/role">Role</Link></li> : null}
+                      {team?.role?.permissions?.designation?.access ? <li><Link to="/designation">Designation</Link></li> : null}
+                      {team?.role?.permissions?.projectType?.access ? <li><Link to="/project-type">Project Type</Link></li> : null}
+                      {team?.role?.permissions?.projectStatus?.access ? <li><Link to="/project-status">Project Status</Link></li> : null}
+                      {team?.role?.permissions?.projectCategory?.access ? <li><Link to="/project-category">Project Category</Link></li> : null}
+                      {team?.role?.permissions?.projectTiming?.access ? <li><Link to="/project-timing">Project Timing</Link></li> : null}
                     </ul>
                   </li>
                 </ul>
@@ -89,7 +88,7 @@ const Sidebar = () => {
               <li>
                 <h6 className="submenu-hdr">CRM</h6>
                 <ul>
-                  {team?.role?.permissions?.project?.access ? <li><Link to="/project"><i className="ti ti-atom-2" /><span>Projects</span></Link></li> : ""}
+                  {team?.role?.permissions?.project?.access ? <li><Link to="/project"><i className="ti ti-atom-2" /><span>Projects</span></Link></li> : null}
                   <li>
                     <a href="contacts.html"><i className="ti ti-user-up" /><span>Contacts</span></a>
                   </li>

@@ -23,8 +23,8 @@ const Login = () => {
         window.location.reload();
       }
     } catch (error) {
-      console.log("error while login team member:", error.message);
-      toast.error("Error while login team member");
+      console.log("error while login:", error.message);
+      toast.error("Error while login");
     }
   };
 

@@ -2,13 +2,17 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-// import { useAuth } from "../../../context/authContext.jsx";
-// import Preloader from "../../../Preloader.jsx";
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
 const EditRole = () => {
+  const [selectedMaster, setSelectedMaster] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { team, isLoading } = useAuth();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [name, setName] = useState("");
   const [permissions, setPermissions] = useState({
@@ -16,127 +20,131 @@ const EditRole = () => {
       access: false,
       export: false,
       create: false,
+      update: false,
       delete: false,
       fields: {
-        name: { update: false, read: false, show: false },
-        email: { update: false, read: false, show: false },
-        mobile: { update: false, read: false, show: false },
-        address: { update: false, read: false, show: false },
+        name: { read: true, show: true },
+        email: { read: true, show: true },
+        mobile: { read: true, show: true },
+        address: { read: true, show: true },
       },
     },
     team: {
       access: false,
       export: false,
       create: false,
+      update: false,
       delete: false,
       fields: {
-        name: { update: false, read: false, show: false },
-        email: { update: false, read: false, show: false },
-        mobile: { update: false, read: false, show: false },
-        username: { update: false, read: false, show: false },
-        password: { update: false, read: false, show: false },
-        joining: { update: false, read: false, show: false },
-        dob: { update: false, read: false, show: false },
-        designation: { update: false, read: false, show: false },
-        reportingTo: { update: false, read: false, show: false },
+        name: { read: true, show: true },
+        email: { read: true, show: true },
+        mobile: { read: true, show: true },
+        username: { read: true, show: true },
+        password: { read: true, show: true },
+        joining: { read: true, show: true },
+        dob: { read: true, show: true },
+        designation: { read: true, show: true },
+        reportingTo: { read: true, show: true },
       },
     },
     role: {
       access: false,
       export: false,
       create: false,
+      update: false,
       delete: false,
       fields: {
-        name: { update: false, read: false, show: false },
-        customer: { update: false, read: false, show: false },
-        team: { update: false, read: false, show: false },
-        role: { update: false, read: false, show: false },
-        projectType: { update: false, read: false, show: false },
-        projectStatus: { update: false, read: false, show: false },
-        projectCategory: { update: false, read: false, show: false },
-        projectTiming: { update: false, read: false, show: false },
-        project: { update: false, read: false, show: false },
-        Designation: { update: false, read: false, show: false },
+        name: { read: true, show: true },
+        customer: { read: true, show: true },
+        team: { read: true, show: true },
+        role: { read: true, show: true },
+        projectType: { read: true, show: true },
+        projectStatus: { read: true, show: true },
+        projectCategory: { read: true, show: true },
+        projectTiming: { read: true, show: true },
+        project: { read: true, show: true },
+        Designation: { read: true, show: true },
       },
     },
     projectType: {
       access: false,
       export: false,
       create: false,
+      update: false,
       delete: false,
       fields: {
-        name: { update: false, read: false, show: false },
-        description: { update: false, read: false, show: false },
+        name: { read: true, show: true },
+        description: { read: true, show: true },
       },
     },
     projectStatus: {
       access: false,
       export: false,
       create: false,
+      update: false,
       delete: false,
       fields: {
-        status: { update: false, read: false, show: false },
-        description: { update: false, read: false, show: false },
+        status: { read: true, show: true },
+        description: { read: true, show: true },
       },
     },
     projectCategory: {
       access: false,
       export: false,
       create: false,
+      update: false,
       delete: false,
       fields: {
-        name: { update: false, read: false, show: false },
-        description: { update: false, read: false, show: false },
+        name: { read: true, show: true },
+        description: { read: true, show: true },
       },
     },
     projectTiming: {
       access: false,
       export: false,
       create: false,
+      update: false,
       delete: false,
       fields: {
-        name: { update: false, read: false, show: false },
-        description: { update: false, read: false, show: false },
+        name: { read: true, show: true },
+        description: { read: true, show: true },
       },
     },
     project: {
       access: false,
       export: false,
       create: false,
+      update: false,
       delete: false,
       fields: {
-        name: { update: false, read: false, show: false },
-        projectId: { update: false, read: false, show: false },
-        type: { update: false, read: false, show: false },
-        customer: { update: false, read: false, show: false },
-        category: { update: false, read: false, show: false },
-        timing: { update: false, read: false, show: false },
-        price: { update: false, read: false, show: false },
-        responsible: { update: false, read: false, show: false },
-        leader: { update: false, read: false, show: false },
-        start: { update: false, read: false, show: false },
-        due: { update: false, read: false, show: false },
-        priority: { update: false, read: false, show: false },
-        status: { update: false, read: false, show: false },
-        description: { update: false, read: false, show: false },
+        name: { read: true, show: true },
+        projectId: { read: true, show: true },
+        type: { read: true, show: true },
+        customer: { read: true, show: true },
+        category: { read: true, show: true },
+        timing: { read: true, show: true },
+        price: { read: true, show: true },
+        responsible: { read: true, show: true },
+        leader: { read: true, show: true },
+        start: { read: true, show: true },
+        due: { read: true, show: true },
+        priority: { read: true, show: true },
+        status: { read: true, show: true },
+        description: { read: true, show: true },
       },
     },
     Designation: {
       access: false,
       export: false,
       create: false,
+      update: false,
       delete: false,
       fields: {
-        name: { update: false, read: false, show: false },
-        description: { update: false, read: false, show: false },
+        name: { read: true, show: true },
+        description: { read: true, show: true },
       },
     },
   });
-
-  const [selectedMaster, setSelectedMaster] = useState(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  // const { validToken, user, isLoading } = useAuth();
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, checked, type } = e.target;
@@ -200,119 +208,128 @@ const EditRole = () => {
             access: false,
             export: false,
             create: false,
+            update: false,
             delete: false,
             fields: {
-              name: { update: false, read: false, show: false },
-              email: { update: false, read: false, show: false },
-              mobile: { update: false, read: false, show: false },
-              address: { update: false, read: false, show: false },
+              name: { read: true, show: true },
+              email: { read: true, show: true },
+              mobile: { read: true, show: true },
+              address: { read: true, show: true },
             },
           },
           team: {
             access: false,
             export: false,
             create: false,
+            update: false,
             delete: false,
             fields: {
-              name: { update: false, read: false, show: false },
-              email: { update: false, read: false, show: false },
-              mobile: { update: false, read: false, show: false },
-              username: { update: false, read: false, show: false },
-              password: { update: false, read: false, show: false },
-              joining: { update: false, read: false, show: false },
-              dob: { update: false, read: false, show: false },
-              designation: { update: false, read: false, show: false },
-              reportingTo: { update: false, read: false, show: false },
+              name: { read: true, show: true },
+              email: { read: true, show: true },
+              mobile: { read: true, show: true },
+              username: { read: true, show: true },
+              password: { read: true, show: true },
+              joining: { read: true, show: true },
+              dob: { read: true, show: true },
+              designation: { read: true, show: true },
+              reportingTo: { read: true, show: true },
             },
           },
           role: {
             access: false,
             export: false,
             create: false,
+            update: false,
             delete: false,
             fields: {
-              name: { update: false, read: false, show: false },
-              customer: { update: false, read: false, show: false },
-              team: { update: false, read: false, show: false },
-              role: { update: false, read: false, show: false },
-              projectType: { update: false, read: false, show: false },
-              projectStatus: { update: false, read: false, show: false },
-              projectCategory: { update: false, read: false, show: false },
-              projectTiming: { update: false, read: false, show: false },
-              project: { update: false, read: false, show: false },
-              Designation: { update: false, read: false, show: false },
+              name: { read: true, show: true },
+              customer: { read: true, show: true },
+              team: { read: true, show: true },
+              role: { read: true, show: true },
+              projectType: { read: true, show: true },
+              projectStatus: { read: true, show: true },
+              projectCategory: { read: true, show: true },
+              projectTiming: { read: true, show: true },
+              project: { read: true, show: true },
+              Designation: { read: true, show: true },
             },
           },
           projectType: {
             access: false,
             export: false,
             create: false,
+            update: false,
             delete: false,
             fields: {
-              name: { update: false, read: false, show: false },
-              description: { update: false, read: false, show: false },
+              name: { read: true, show: true },
+              description: { read: true, show: true },
             },
           },
           projectStatus: {
             access: false,
             export: false,
             create: false,
+            update: false,
             delete: false,
             fields: {
-              status: { update: false, read: false, show: false },
-              description: { update: false, read: false, show: false },
+              status: { read: true, show: true },
+              description: { read: true, show: true },
             },
           },
           projectCategory: {
             access: false,
             export: false,
             create: false,
+            update: false,
             delete: false,
             fields: {
-              name: { update: false, read: false, show: false },
-              description: { update: false, read: false, show: false },
+              name: { read: true, show: true },
+              description: { read: true, show: true },
             },
           },
           projectTiming: {
             access: false,
             export: false,
             create: false,
+            update: false,
             delete: false,
             fields: {
-              name: { update: false, read: false, show: false },
-              description: { update: false, read: false, show: false },
+              name: { read: true, show: true },
+              description: { read: true, show: true },
             },
           },
           project: {
             access: false,
             export: false,
             create: false,
+            update: false,
             delete: false,
             fields: {
-              name: { update: false, read: false, show: false },
-              projectId: { update: false, read: false, show: false },
-              type: { update: false, read: false, show: false },
-              customer: { update: false, read: false, show: false },
-              category: { update: false, read: false, show: false },
-              timing: { update: false, read: false, show: false },
-              price: { update: false, read: false, show: false },
-              responsible: { update: false, read: false, show: false },
-              leader: { update: false, read: false, show: false },
-              start: { update: false, read: false, show: false },
-              due: { update: false, read: false, show: false },
-              priority: { update: false, read: false, show: false },
-              status: { update: false, read: false, show: false },
-              description: { update: false, read: false, show: false },
+              name: { read: true, show: true },
+              projectId: { read: true, show: true },
+              type: { read: true, show: true },
+              customer: { read: true, show: true },
+              category: { read: true, show: true },
+              timing: { read: true, show: true },
+              price: { read: true, show: true },
+              responsible: { read: true, show: true },
+              leader: { read: true, show: true },
+              start: { read: true, show: true },
+              due: { read: true, show: true },
+              priority: { read: true, show: true },
+              status: { read: true, show: true },
+              description: { read: true, show: true },
             },
           },
           Designation: {
             access: false,
             export: false,
             create: false,
+            update: false,
             delete: false,
             fields: {
-              name: { update: false, read: false, show: false },
-              description: { update: false, read: false, show: false },
+              name: { read: true, show: true },
+              description: { read: true, show: true },
             },
           },
         });
@@ -334,7 +351,7 @@ const EditRole = () => {
     projectCategory: "Project Category",
     projectTiming: "Project Timing",
     project: "Projects",
-    Designation: "Designation",
+    designation: "Designation",
   };
 
   const openModal = (master) => {
@@ -347,19 +364,19 @@ const EditRole = () => {
     setModalIsOpen(false);
   };
 
-  // if (isLoading) {
-  //   return <Preloader />;
-  // }
+  if (isLoading) {
+    return <Preloader />;
+  }
 
-  // if (!user?.role?.permissions?.role?.create) {
-  //   return <Navigate to="/role" />;
-  // }
+  if (!team?.role?.permissions?.role?.update) {
+    return <Navigate to="/role" />;
+  }
 
   return (
     <div className="page-wrapper custom-role" style={{ paddingBottom: "1rem" }}>
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h4>Edit Role</h4>
+          <h4>Update Role</h4>
           <Link to="/role">
             <button className="btn btn-primary">Back</button>
           </Link>
@@ -403,7 +420,7 @@ const EditRole = () => {
                       </label>
                     </div>
                     {
-                      ['export', 'create', 'delete'].map((action) => (
+                      ['export', 'create', 'update', 'delete'].map((action) => (
                         <div className="form-check" key={`${master}-${action}`}>
                           <input
                             type="checkbox"
@@ -424,7 +441,7 @@ const EditRole = () => {
                       className="btn btn-secondary btn-sm ml-2"
                       onClick={() => openModal(master)}
                     >
-                      Update
+                      Field Permission
                     </button>
                   </div>
                 </div>
@@ -455,17 +472,6 @@ const EditRole = () => {
                     <div className="form-group">
                       <label className="col-form-label" style={{ marginLeft: "0rem", marginBottom: "0.2rem", }}>{field.charAt(0).toUpperCase() + field.slice(1)} :</label>
                       <div className="d-flex">
-                        <div className="form-check mr-2">
-                          <input
-                            type="checkbox"
-                            className="form-check-input"
-                            id={`${field}.update`}
-                            name={`${field}.update`}
-                            checked={permission.update}
-                            onChange={handleFieldPermissionChange}
-                          />
-                          <label className="form-check-label" htmlFor={`${field}.update`}>Update</label>
-                        </div>
                         <div className="form-check mr-2">
                           <input
                             type="checkbox"

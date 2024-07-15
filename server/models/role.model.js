@@ -3,17 +3,13 @@ import mongoose from "mongoose";
 // Field permission schema
 const FieldPermissionSchema = new mongoose.Schema(
   {
-    update: {
-      type: Boolean,
-      default: false,
-    },
     read: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     show: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
 );
@@ -30,6 +26,10 @@ const CustomerPermissionSchema = new mongoose.Schema(
       default: false,
     },
     create: {
+      type: Boolean,
+      default: false,
+    },
+    update: {
       type: Boolean,
       default: false,
     },
@@ -61,6 +61,10 @@ const DesignationPermissionSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    update: {
+      type: Boolean,
+      default: false,
+    },
     delete: {
       type: Boolean,
       default: false,
@@ -84,6 +88,10 @@ const ProjectPermissionSchema = new mongoose.Schema(
       default: false,
     },
     create: {
+      type: Boolean,
+      default: false,
+    },
+    update: {
       type: Boolean,
       default: false,
     },
@@ -125,6 +133,10 @@ const ProjectCategoryPermissionSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    update: {
+      type: Boolean,
+      default: false,
+    },
     delete: {
       type: Boolean,
       default: false,
@@ -148,6 +160,10 @@ const ProjectStatusPermissionSchema = new mongoose.Schema(
       default: false,
     },
     create: {
+      type: Boolean,
+      default: false,
+    },
+    update: {
       type: Boolean,
       default: false,
     },
@@ -177,6 +193,10 @@ const ProjectTimingPermissionSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    update: {
+      type: Boolean,
+      default: false,
+    },
     delete: {
       type: Boolean,
       default: false,
@@ -203,6 +223,10 @@ const ProjectTypePermissionSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    update: {
+      type: Boolean,
+      default: false,
+    },
     delete: {
       type: Boolean,
       default: false,
@@ -226,6 +250,10 @@ const TeamPermissionSchema = new mongoose.Schema(
       default: false,
     },
     create: {
+      type: Boolean,
+      default: false,
+    },
+    update: {
       type: Boolean,
       default: false,
     },
@@ -259,6 +287,10 @@ const RolePermissionSchema = new mongoose.Schema(
       default: false,
     },
     create: {
+      type: Boolean,
+      default: false,
+    },
+    update: {
       type: Boolean,
       default: false,
     },
@@ -296,7 +328,7 @@ const RoleSchema = new mongoose.Schema(
       projectCategory: { type: ProjectCategoryPermissionSchema, default: () => ({}) },
       projectTiming: { type: ProjectTimingPermissionSchema, default: () => ({}) },
       project: { type: ProjectPermissionSchema, default: () => ({}) },
-      Designation: { type: DesignationPermissionSchema, default: () => ({}) },
+      designation: { type: DesignationPermissionSchema, default: () => ({}) },
     },
   },
   {

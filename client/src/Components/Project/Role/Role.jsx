@@ -2,15 +2,15 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
-// import { useAuth } from "../../../context/authContext.jsx";
-// import Preloader from "../../../Preloader.jsx";
+import { Link, Navigate } from 'react-router-dom';
+import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 
 const Role = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
-  // const { validToken, user, isLoading } = useAuth();
+  const { team, isLoading } = useAuth();
   let i = 1;
 
   const fetchAllData = async () => {
@@ -42,13 +42,13 @@ const Role = () => {
     }
   };
 
-  // if (isLoading) {
-  //   return <Preloader />;
-  // }
+  if (isLoading) {
+    return <Preloader />;
+  }
 
-  // if (!user?.role?.permissions?.role?.access) {
-  //   return <Navigate to="/" />;
-  // }
+  if (!team?.role?.permissions?.role?.access) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <>
@@ -90,36 +90,48 @@ const Role = () => {
                       <div className="col-md-7 col-sm-8">
                         <div className="export-list text-sm-end">
                           <ul>
-                            <li>
-                              <div className="export-dropdwon">
-                                <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
-                                  <i className="ti ti-package-export" />
-                                  Export
-                                </Link>
-                                <div className="dropdown-menu  dropdown-menu-end">
-                                  <ul>
-                                    <li>
-                                      <Link to="#">
-                                        <i className="ti ti-file-type-pdf text-danger" />
-                                        Export as PDF
-                                      </Link>
-                                    </li>
-                                    <li>
-                                      <Link to="#">
-                                        <i className="ti ti-file-type-xls text-green" />
-                                        Export as Excel
-                                      </Link>
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <Link to="/add-role" className="btn btn-primary">
-                                <i className="ti ti-square-rounded-plus" />
-                                Add New Role
-                              </Link>
-                            </li>
+                            {
+                              team?.role?.permissions?.role?.export ? (
+                                <li>
+                                  <div className="export-dropdwon">
+                                    <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
+                                      <i className="ti ti-package-export" />
+                                      Export
+                                    </Link>
+                                    <div className="dropdown-menu  dropdown-menu-end">
+                                      <ul>
+                                        <li>
+                                          <Link to="#">
+                                            <i className="ti ti-file-type-pdf text-danger" />
+                                            Export as PDF
+                                          </Link>
+                                        </li>
+                                        <li>
+                                          <Link to="#">
+                                            <i className="ti ti-file-type-xls text-green" />
+                                            Export as Excel
+                                          </Link>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </li>
+                              ) : (
+                                null
+                              )
+                            }
+                            {
+                              team?.role?.permissions?.role?.create ? (
+                                <li>
+                                  <Link to="/add-role" className="btn btn-primary">
+                                    <i className="ti ti-square-rounded-plus" />
+                                    Add New Role
+                                  </Link>
+                                </li>
+                              ) : (
+                                null
+                              )
+                            }
                           </ul>
                         </div>
                       </div>
@@ -250,14 +262,26 @@ const Role = () => {
                                     <i className="fa fa-ellipsis-v"></i>
                                   </Link>
                                   <div className="dropdown-menu dropdown-menu-right">
-                                    <Link to={`/edit-role/${d?._id}`} className="dropdown-item">
-                                      <i className="ti ti-edit text-blue"></i>
-                                      Edit
-                                    </Link>
-                                    <Link to="#" className="dropdown-item" onClick={() => handleDelete(d?._id)}>
-                                      <i className="ti ti-trash text-danger"></i>
-                                      Delete
-                                    </Link>
+                                    {
+                                      team?.role?.permissions?.role?.update ? (
+                                        <Link to={`/edit-role/${d?._id}`} className="dropdown-item">
+                                          <i className="ti ti-edit text-blue"></i>
+                                          Update
+                                        </Link>
+                                      ) : (
+                                        null
+                                      )
+                                    }
+                                    {
+                                      team?.role?.permissions?.role?.delete ? (
+                                        <Link to="#" className="dropdown-item" onClick={() => handleDelete(d?._id)}>
+                                          <i className="ti ti-trash text-danger"></i>
+                                          Delete
+                                        </Link>
+                                      ) : (
+                                        null
+                                      )
+                                    }
                                   </div>
                                 </div>
                               </td>

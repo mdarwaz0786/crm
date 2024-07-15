@@ -2,19 +2,23 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
-// import { useAuth } from "../../context/authContext.jsx";
-// import Preloader from "../../Preloader.jsx";
+import { Link, Navigate } from 'react-router-dom';
+import { useAuth } from "../../context/authContext.jsx";
+import Preloader from "../../Preloader.jsx";
 
 const Project = () => {
   const [project, setProject] = useState([]);
   const [total, setTotal] = useState("");
-  // const { validToken, user, isLoading } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
   let i = 1;
 
   const fetchAllProject = async () => {
     try {
-      const response = await axios.get("/api/v1/project/all-project");
+      const response = await axios.get("/api/v1/project/all-project", {
+        headers: {
+          Authorization: `${validToken}`
+        }
+      });
       if (response?.data?.success) {
         setProject(response?.data?.project);
         setTotal(response?.data?.totalCount);
@@ -30,7 +34,11 @@ const Project = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`/api/v1/project/delete-project/${id}`);
+      const response = await axios.delete(`/api/v1/project/delete-project/${id}`, {
+        headers: {
+          Authorization: `${validToken}`
+        }
+      });
       if (response?.data?.success) {
         toast.success("Project deleted successfully");
         fetchAllProject();
@@ -41,13 +49,13 @@ const Project = () => {
     }
   };
 
-  // if (isLoading) {
-  //   return <Preloader />;
-  // }
+  if (isLoading) {
+    return <Preloader />;
+  }
 
-  // if (!user?.role?.permissions?.project?.access) {
-  //   return <Navigate to="/" />;
-  // }
+  if (!team?.role?.permissions?.project?.access) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <>
@@ -90,36 +98,48 @@ const Project = () => {
                       <div className="col-md-7 col-sm-8">
                         <div className="export-list text-sm-end">
                           <ul>
-                            <li>
-                              <div className="export-dropdwon">
-                                <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
-                                  <i className="ti ti-package-export" />
-                                  Export
-                                </Link>
-                                <div className="dropdown-menu  dropdown-menu-end">
-                                  <ul>
-                                    <li>
-                                      <Link to="#">
-                                        <i className="ti ti-file-type-pdf text-danger" />
-                                        Export as PDF
-                                      </Link>
-                                    </li>
-                                    <li>
-                                      <Link to="#">
-                                        <i className="ti ti-file-type-xls text-green" />
-                                        Export as Excel
-                                      </Link>
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <Link to="/add-project" className="btn btn-primary">
-                                <i className="ti ti-square-rounded-plus" />
-                                Add New Project
-                              </Link>
-                            </li>
+                            {
+                              (team?.role?.permissions?.project?.export) ? (
+                                <li>
+                                  <div className="export-dropdwon">
+                                    <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
+                                      <i className="ti ti-package-export" />
+                                      Export
+                                    </Link>
+                                    <div className="dropdown-menu  dropdown-menu-end">
+                                      <ul>
+                                        <li>
+                                          <Link to="#">
+                                            <i className="ti ti-file-type-pdf text-danger" />
+                                            Export as PDF
+                                          </Link>
+                                        </li>
+                                        <li>
+                                          <Link to="#">
+                                            <i className="ti ti-file-type-xls text-green" />
+                                            Export as Excel
+                                          </Link>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </li>
+                              ) : (
+                                null
+                              )
+                            }
+                            {
+                              (team?.role?.permissions?.project?.create) ? (
+                                <li>
+                                  <Link to="/add-project" className="btn btn-primary">
+                                    <i className="ti ti-square-rounded-plus" />
+                                    Add New Project
+                                  </Link>
+                                </li>
+                              ) : (
+                                null
+                              )
+                            }
                           </ul>
                         </div>
                       </div>
@@ -261,14 +281,26 @@ const Project = () => {
                                     <i className="fa fa-ellipsis-v"></i>
                                   </Link>
                                   <div className="dropdown-menu dropdown-menu-right">
-                                    <Link to={`/edit-project/${p?._id}`} className="dropdown-item">
-                                      <i className="ti ti-edit text-blue"></i>
-                                      Edit
-                                    </Link>
-                                    <Link to="#" className="dropdown-item" onClick={() => handleDelete(p?._id)}>
-                                      <i className="ti ti-trash text-danger"></i>
-                                      Delete
-                                    </Link>
+                                    {
+                                      (team?.role?.permissions?.project?.update) ? (
+                                        <Link to={`/edit-project/${p?._id}`} className="dropdown-item">
+                                          <i className="ti ti-edit text-blue"></i>
+                                          Update
+                                        </Link>
+                                      ) : (
+                                        null
+                                      )
+                                    }
+                                    {
+                                      (team?.role?.permissions?.project?.delete) ? (
+                                        <Link to="#" className="dropdown-item" onClick={() => handleDelete(p?._id)}>
+                                          <i className="ti ti-trash text-danger"></i>
+                                          Delete
+                                        </Link>
+                                      ) : (
+                                        null
+                                      )
+                                    }
                                   </div>
                                 </div>
                               </td>
