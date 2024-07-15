@@ -12,6 +12,20 @@ export const createProject = async (req, res) => {
   };
 };
 
+// Helper function to build the projection object based on user permissions
+const buildProjection = (permissions) => {
+  const projectFields = permissions.project.fields;
+  const projection = {};
+
+  for (const [key, value] of Object.entries(projectFields)) {
+    if (value.show) {
+      projection[key] = 1;
+    };
+  };
+
+  return projection;
+};
+
 // Controller for fetching all project
 export const fetchAllProject = async (req, res) => {
   try {
@@ -25,7 +39,10 @@ export const fetchAllProject = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const project = await Project.find(filter).skip(skip).limit(limit).populate("type").populate("customer").populate("category").populate("status").populate("responsible").populate("leader").populate("timing").exec();
+    const teamPermissions = req.team.role.permissions;
+    const projection = buildProjection(teamPermissions);
+
+    const project = await Project.find(filter).skip(skip).limit(limit).populate("type").populate("customer").populate("category").populate("status").populate("responsible").populate("leader").populate("timing").select(projection).exec();
     const totalCount = await Project.countDocuments(filter);
 
     return res.status(200).json({ success: true, message: "All project fetched successfully", project, totalCount });
@@ -35,11 +52,16 @@ export const fetchAllProject = async (req, res) => {
   };
 };
 
+
 // Controller for fetching a single project
 export const fetchSingleProject = async (req, res) => {
   try {
     const projectId = req.params.id;
-    const project = await Project.findById(projectId).populate("type").populate("customer").populate("category").populate("status").populate("responsible").populate("leader").populate("timing").exec();
+
+    const teamPermissions = req.team.role.permissions;
+    const projection = buildProjection(teamPermissions);
+
+    const project = await Project.findById(projectId).populate("type").populate("customer").populate("category").populate("status").populate("responsible").populate("leader").populate("timing").select(projection).exec();
 
     if (!project) {
       return res.status(404).json({ success: false, message: "Project not found" });

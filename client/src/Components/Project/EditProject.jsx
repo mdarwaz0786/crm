@@ -233,7 +233,7 @@ const EditProject = () => {
           <div className="row">
             {
               (team?.role?.permissions?.project?.fields?.name?.show) ? (
-                <div className="col-md-12">
+                <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="name">Project Name <span className="text-danger">*</span></label>
                     <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required readOnly={team?.role?.permissions?.project?.fields?.name?.read} />
@@ -463,10 +463,10 @@ const EditProject = () => {
             }
             {
               (team?.role?.permissions?.project?.fields?.description?.show) ? (
-                <div className="col-md-12">
+                <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
-                    <textarea className="form-control" rows={4} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required readOnly={team?.role?.permissions?.project?.fields?.description?.read} />
+                    <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required readOnly={team?.role?.permissions?.project?.fields?.description?.read} />
                   </div>
                 </div>
               ) : (

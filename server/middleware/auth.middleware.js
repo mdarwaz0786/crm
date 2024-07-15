@@ -19,7 +19,7 @@ export const isLoggedIn = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log("Team member is not logged in error from middleware:", error.message);
+    console.log("Team member is not logged:", error.message);
     return res.status(401).json({ success: false, message: "Team member is not logged in" });
   };
 };
