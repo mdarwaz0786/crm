@@ -30,7 +30,7 @@ const AddProject = () => {
   const [priority, setPriority] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { team, isLoading } = useAuth();
+  const { team, isLoading, validToken } = useAuth();
 
   const fetchAllCustomer = async () => {
     try {
@@ -153,22 +153,29 @@ const AddProject = () => {
         return toast.error("Enter description");
       }
 
-      const response = await axios.post("/api/v1/project/create-project", {
-        name,
-        projectId,
-        type: selectedProjectType,
-        customer: selectedCustomer,
-        category: selectedProjectCategory,
-        timing: selectedProjectTiming,
-        price,
-        responsible: selectedResponsible,
-        leader: selectedLeader,
-        start,
-        due,
-        priority,
-        status: selectedProjectStatus,
-        description,
-      });
+      const response = await axios.post("/api/v1/project/create-project",
+        {
+          name,
+          projectId,
+          type: selectedProjectType,
+          customer: selectedCustomer,
+          category: selectedProjectCategory,
+          timing: selectedProjectTiming,
+          price,
+          responsible: selectedResponsible,
+          leader: selectedLeader,
+          start,
+          due,
+          priority,
+          status: selectedProjectStatus,
+          description,
+        },
+        {
+          headers: {
+            Authorization: `${validToken}`
+          }
+        }
+      );
 
       if (response?.data?.success) {
         setName("");
@@ -306,6 +313,17 @@ const AddProject = () => {
             </div>
             <div className="col-md-6">
               <div className="form-wrap">
+                <label className="col-form-label">Priority <span className="text-danger">*</span></label>
+                <select className="form-select" name="status" value={priority} onChange={(e) => setPriority(e.target.value)}>
+                  <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
+                  <option>High</option>
+                  <option>Medium</option>
+                  <option>Low</option>
+                </select>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-wrap">
                 <label className="col-form-label">Responsible Persons <span className="text-danger">*</span></label>
                 <select className="form-select" name="responsible" value="" onChange={handleSelectChangeResponsible}>
                   <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
@@ -360,17 +378,6 @@ const AddProject = () => {
               <div className="form-wrap">
                 <label className="col-form-label" htmlFor="due">Due Date <span className="text-danger">*</span></label>
                 <input type="date" className="form-control" name="due" id="due" value={due} onChange={(e) => setDue(e.target.value)} required />
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label">Priority <span className="text-danger">*</span></label>
-                <select className="form-select" name="status" value={priority} onChange={(e) => setPriority(e.target.value)}>
-                  <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                  <option>High</option>
-                  <option>Medium</option>
-                  <option>Low</option>
-                </select>
               </div>
             </div>
             <div className="col-md-6">

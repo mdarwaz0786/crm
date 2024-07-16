@@ -26,15 +26,41 @@ const buildProjection = (permissions) => {
   return projection;
 };
 
+// Helper function to filter fields based on projection
+const filterFields = (project, projection) => {
+  const filteredProject = {};
+  for (const key in project._doc) {
+    if (projection[key]) {
+      filteredProject[key] = project[key];
+    };
+  };
+  return filteredProject;
+};
+
 // Controller for fetching all project
 export const fetchAllProject = async (req, res) => {
   try {
     let filter = {};
+    let sort = {};
 
+    // Handle name filter
+    if (req.query.name) {
+      filter.name = req.query.name;
+    };
+
+    // Handle searching
     if (req.query.search) {
       filter.name = { $regex: new RegExp(req.query.search, 'i') };
     };
 
+    // Handle sorting
+    if (req.query.sort === 'Ascending') {
+      sort = { createdAt: 1 }; // Sort by ascending order
+    } else {
+      sort = { createdAt: -1 }; // Sort by ascending order default
+    };
+
+    // Handle pagination
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
@@ -42,16 +68,27 @@ export const fetchAllProject = async (req, res) => {
     const teamPermissions = req.team.role.permissions;
     const projection = buildProjection(teamPermissions);
 
-    const project = await Project.find(filter).skip(skip).limit(limit).populate("type").populate("customer").populate("category").populate("status").populate("responsible").populate("leader").populate("timing").select(projection).exec();
-    const totalCount = await Project.countDocuments(filter);
+    const project = await Project.find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .populate("type")
+      .populate("customer")
+      .populate("category")
+      .populate("status")
+      .populate("responsible")
+      .populate("leader")
+      .populate("timing")
+      .exec();
 
-    return res.status(200).json({ success: true, message: "All project fetched successfully", project, totalCount });
+    const totalCount = await Project.countDocuments(filter);
+    const filteredProject = project.map((project) => filterFields(project, projection));
+    return res.status(200).json({ success: true, message: "All projects fetched successfully", project: filteredProject, totalCount });
   } catch (error) {
-    console.log("Error while fetching all project:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching all project" });
+    console.log("Error while fetching all projects:", error.message);
+    return res.status(500).json({ success: false, message: "Error while fetching all projects" });
   };
 };
-
 
 // Controller for fetching a single project
 export const fetchSingleProject = async (req, res) => {
@@ -61,13 +98,23 @@ export const fetchSingleProject = async (req, res) => {
     const teamPermissions = req.team.role.permissions;
     const projection = buildProjection(teamPermissions);
 
-    const project = await Project.findById(projectId).populate("type").populate("customer").populate("category").populate("status").populate("responsible").populate("leader").populate("timing").select(projection).exec();
+    const project = await Project.findById(projectId)
+      .populate("type")
+      .populate("customer")
+      .populate("category")
+      .populate("status")
+      .populate("responsible")
+      .populate("leader")
+      .populate("timing")
+      .exec();
 
     if (!project) {
       return res.status(404).json({ success: false, message: "Project not found" });
     };
 
-    return res.status(200).json({ success: true, message: "Single project fetched successfully", project });
+    const filteredProject = filterFields(project, projection);
+
+    return res.status(200).json({ success: true, message: "Single project fetched successfully", project: filteredProject });
   } catch (error) {
     console.log("Error while fetching single project:", error.message);
     return res.status(500).json({ success: false, message: "Error while fetching single project" });

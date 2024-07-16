@@ -142,30 +142,74 @@ const EditProject = () => {
 
   const handleUpdate = async (e, id) => {
     e.preventDefault();
+
+    // Create update object
+    const updateData = {};
+    const permissions = team?.role?.permissions?.project?.fields;
+
+    // Conditionally include fields based on permissions
+    if (permissions?.name?.show && !permissions?.name?.read) {
+      updateData.name = name;
+    }
+
+    if (permissions?.projectId?.show && !permissions?.projectId?.read) {
+      updateData.projectId = projectId;
+    }
+
+    if (permissions?.type?.show && !permissions?.type?.read) {
+      updateData.type = selectedProjectType;
+    }
+
+    if (permissions?.customer?.show && !permissions?.customer?.read) {
+      updateData.customer = selectedCustomer;
+    }
+
+    if (permissions?.category?.show && !permissions?.category?.read) {
+      updateData.category = selectedProjectCategory;
+    }
+
+    if (permissions?.timing?.show && !permissions?.timing?.read) {
+      updateData.timing = selectedProjectTiming;
+    }
+
+    if (permissions?.price?.show && !permissions?.price?.read) {
+      updateData.price = price;
+    }
+
+    if (permissions?.responsible?.show && !permissions?.responsible?.read) {
+      updateData.responsible = selectedResponsible;
+    }
+
+    if (permissions?.leader?.show && !permissions?.leader?.read) {
+      updateData.leader = selectedLeader;
+    }
+
+    if (permissions?.start?.show && !permissions?.start?.read) {
+      updateData.start = start;
+    }
+
+    if (permissions?.due?.show && !permissions?.due?.read) {
+      updateData.due = due;
+    }
+
+    if (permissions?.priority?.show && !permissions?.priority?.read) {
+      updateData.priority = priority;
+    }
+
+    if (permissions?.status?.show && !permissions?.status?.read) {
+      updateData.status = selectedProjectStatus;
+    }
+
+    if (permissions?.description?.show && !permissions?.description?.read) {
+      updateData.description = description;
+    }
+
     try {
-      const response = await axios.put(`/api/v1/project/update-project/${id}`,
-        {
-          name,
-          projectId,
-          type: selectedProjectType,
-          customer: selectedCustomer,
-          category: selectedProjectCategory,
-          timing: selectedProjectTiming,
-          price,
-          responsible: selectedResponsible,
-          leader: selectedLeader,
-          start,
-          due,
-          priority,
-          status: selectedProjectStatus,
-          description,
-        },
-        {
-          headers: {
-            Authorization: `${validToken}`
-          }
+      const response = await axios.put(`/api/v1/project/update-project/${id}`, updateData, {
+        headers: {
+          Authorization: `${validToken}`
         }
-      );
+      });
 
       if (response?.data?.success) {
         setName("");
@@ -344,6 +388,23 @@ const EditProject = () => {
               )
             }
             {
+              (team?.role?.permissions?.project?.fields?.priority?.show) ? (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label">Priority <span className="text-danger">*</span></label>
+                    <select className="form-select" name="status" value={priority} onChange={(e) => setPriority(e.target.value)} required disabled={team?.role?.permissions?.project?.fields?.priority?.read}>
+                      <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
+                      <option>High</option>
+                      <option>Medium</option>
+                      <option>Low</option>
+                    </select>
+                  </div>
+                </div>
+              ) : (
+                null
+              )
+            }
+            {
               (team?.role?.permissions?.project?.fields?.responsible?.show) ? (
                 <div className="col-md-6">
                   <div className="form-wrap">
@@ -419,23 +480,6 @@ const EditProject = () => {
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="due">Due Date <span className="text-danger">*</span></label>
                     <input type="date" className="form-control" name="due" id="due" value={due} onChange={(e) => setDue(e.target.value)} required readOnly={team?.role?.permissions?.project?.fields?.due?.read} />
-                  </div>
-                </div>
-              ) : (
-                null
-              )
-            }
-            {
-              (team?.role?.permissions?.project?.fields?.priority?.show) ? (
-                <div className="col-md-6">
-                  <div className="form-wrap">
-                    <label className="col-form-label">Priority <span className="text-danger">*</span></label>
-                    <select className="form-select" name="status" value={priority} onChange={(e) => setPriority(e.target.value)} required disabled={team?.role?.permissions?.project?.fields?.priority?.read}>
-                      <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                      <option>High</option>
-                      <option>Medium</option>
-                      <option>Low</option>
-                    </select>
                   </div>
                 </div>
               ) : (

@@ -10,6 +10,14 @@ const Project = () => {
   const [project, setProject] = useState([]);
   const [total, setTotal] = useState("");
   const { validToken, team, isLoading } = useAuth();
+  const [filters, setFilters] = useState({
+    name: [],
+    search: "",
+    sort: "",
+    page: 1,
+    limit: 10,
+  });
+
   let i = 1;
 
   const fetchAllProject = async () => {
@@ -17,6 +25,13 @@ const Project = () => {
       const response = await axios.get("/api/v1/project/all-project", {
         headers: {
           Authorization: `${validToken}`
+        },
+        params: {
+          name: filters.name,
+          search: filters.search,
+          sort: filters.sort,
+          page: filters.page,
+          limit: filters.limit,
         }
       });
       if (response?.data?.success) {
@@ -28,9 +43,31 @@ const Project = () => {
     }
   };
 
+  const handleFilterChange = (e) => {
+    const { name, value, checked, type } = e.target;
+    console.log("filterchangerunning");
+    if (type === 'checkbox') {
+      if (name === 'name') {
+        // Handle single-value filter for 'name'
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          name: checked ? value : "",  // Set to the selected value or empty if unchecked
+          page: 1  // Reset page to 1 when a new filter is applied
+        }));
+      }
+    } else {
+      // Handle single-value fields (e.g., strings for filters like `search`, `sort`, etc.)
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [name]: value,
+      }));
+    }
+  };
+
+
   useEffect(() => {
     fetchAllProject();
-  }, []);
+  }, [filters.page, filters.limit, filters.search, filters.sort, filters.name]);
 
   const handleDelete = async (id) => {
     try {
@@ -92,7 +129,11 @@ const Project = () => {
                       <div className="col-md-5 col-sm-4">
                         <div className="form-wrap icon-form">
                           <span className="form-icon"><i className="ti ti-search" /></span>
-                          <input type="text" className="form-control" placeholder="Search Project" />
+                          <input type="text" className="form-control" placeholder="Search Project" value={filters.search} onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))} onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              fetchAllProject(filters.page, filters.limit, filters.search);
+                            }
+                          }} />
                         </div>
                       </div>
                       <div className="col-md-7 col-sm-8">
@@ -157,13 +198,13 @@ const Project = () => {
                             <div className="dropdown-menu  dropdown-menu-start">
                               <ul>
                                 <li>
-                                  <Link to="#">
+                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, sort: "Ascending" }))} >
                                     <i className="ti ti-circle-chevron-right" />
                                     Ascending
                                   </Link>
                                 </li>
                                 <li>
-                                  <Link to="#">
+                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, sort: "Descending" }))} >
                                     <i className="ti ti-circle-chevron-right" />
                                     Descending
                                   </Link>
@@ -193,7 +234,7 @@ const Project = () => {
                                       <div className="filter-content-list">
                                         <div className="form-wrap icon-form">
                                           <span className="form-icon"><i className="ti ti-search" /></span>
-                                          <input type="text" className="form-control" placeholder="Search Type" />
+                                          <input type="text" className="form-control" placeholder="Search Project" onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))} />
                                         </div>
                                         <ul>
                                           {
@@ -201,7 +242,13 @@ const Project = () => {
                                               <li key={p?._id}>
                                                 <div className="filter-checks">
                                                   <label className="checkboxs">
-                                                    <input type="checkbox" />
+                                                    <input
+                                                      type="checkbox"
+                                                      name="name"
+                                                      value={p?._id}
+                                                      checked={filters.name.includes(p?._id)}
+                                                      onChange={handleFilterChange}
+                                                    />
                                                     <span className="checkmarks" />
                                                   </label>
                                                 </div>
@@ -219,10 +266,10 @@ const Project = () => {
                                 <div className="filter-reset-btns">
                                   <div className="row">
                                     <div className="col-6">
-                                      <Link to="#" className="btn btn-light">Reset</Link>
+                                      <Link to="#" className="btn btn-light" onClick={() => setFilters(prev => ({ ...prev, name: "" }))}>Reset</Link>
                                     </div>
                                     <div className="col-6">
-                                      <Link to="#" className="btn btn-primary">Filter</Link>
+                                      <Link to="#" className="btn btn-primary" onClick={() => fetchAllProject()}>Apply</Link>
                                     </div>
                                   </div>
                                 </div>
@@ -250,13 +297,55 @@ const Project = () => {
                             <label className="checkboxs"><input type="checkbox" id="select-all" /><span className="checkmarks" /></label>
                           </th>
                           <th>#</th>
-                          <th>Name</th>
-                          <th>Client</th>
-                          <th>Priority</th>
-                          <th>Start Date</th>
-                          <th>End Date</th>
-                          <th>Type</th>
-                          <th>Status</th>
+                          {
+                            (team?.role?.permissions?.project?.fields?.name?.show) ? (
+                              <th>Project Name</th>
+                            ) : (
+                              null
+                            )
+                          }
+                          {
+                            (team?.role?.permissions?.project?.fields?.customer?.show) ? (
+                              <th>Customer</th>
+                            ) : (
+                              null
+                            )
+                          }
+                          {
+                            (team?.role?.permissions?.project?.fields?.priority?.show) ? (
+                              <th>Priority</th>
+                            ) : (
+                              null
+                            )
+                          }
+                          {
+                            (team?.role?.permissions?.project?.fields?.start?.show) ? (
+                              <th>Start Date</th>
+                            ) : (
+                              null
+                            )
+                          }
+                          {
+                            (team?.role?.permissions?.project?.fields?.due?.show) ? (
+                              <th>Due Date</th>
+                            ) : (
+                              null
+                            )
+                          }
+                          {
+                            (team?.role?.permissions?.project?.fields?.type?.show) ? (
+                              <th>Project Type</th>
+                            ) : (
+                              null
+                            )
+                          }
+                          {
+                            (team?.role?.permissions?.project?.fields?.status?.show) ? (
+                              <th>Status</th>
+                            ) : (
+                              null
+                            )
+                          }
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -268,13 +357,55 @@ const Project = () => {
                                 <label className="checkboxs"><input type="checkbox" /><span className="checkmarks"></span></label>
                               </td>
                               <td>{i++}</td>
-                              <td>{p?.name}</td>
-                              <td>{p?.customer?.name}</td>
-                              <td>{p?.priority}</td>
-                              <td>{p?.start}</td>
-                              <td>{p?.due}</td>
-                              <td>{p?.type?.name}</td>
-                              <td>{p?.status?.status}</td>
+                              {
+                                (team?.role?.permissions?.project?.fields?.name?.show) ? (
+                                  <td>{p?.name}</td>
+                                ) : (
+                                  null
+                                )
+                              }
+                              {
+                                (team?.role?.permissions?.project?.fields?.customer?.show) ? (
+                                  <td>{p?.customer?.name}</td>
+                                ) : (
+                                  null
+                                )
+                              }
+                              {
+                                (team?.role?.permissions?.project?.fields?.priority?.show) ? (
+                                  <td>{p?.priority}</td>
+                                ) : (
+                                  null
+                                )
+                              }
+                              {
+                                (team?.role?.permissions?.project?.fields?.start?.show) ? (
+                                  <td>{p?.start}</td>
+                                ) : (
+                                  null
+                                )
+                              }
+                              {
+                                (team?.role?.permissions?.project?.fields?.due?.show) ? (
+                                  <td>{p?.due}</td>
+                                ) : (
+                                  null
+                                )
+                              }
+                              {
+                                (team?.role?.permissions?.project?.fields?.type?.show) ? (
+                                  <td>{p?.type?.name}</td>
+                                ) : (
+                                  null
+                                )
+                              }
+                              {
+                                (team?.role?.permissions?.project?.fields?.status?.show) ? (
+                                  <td>{p?.status?.status}</td>
+                                ) : (
+                                  null
+                                )
+                              }
                               <td>
                                 <div className="table-action">
                                   <Link to="#" className="action-icon" data-bs-toggle="dropdown" aria-expanded="false">
@@ -316,11 +447,11 @@ const Project = () => {
                         <div className="dataTables_length" id="project-list_length">
                           <label>
                             Show
-                            <select name="project-list_length" aria-controls="project-list" className="form-select form-select-sm">
+                            <select name="project-list_length" value={filters.limit} onChange={(e) => setFilters((prev) => ({ ...prev, limit: e.target.value }))} aria-controls="project-list" className="form-select form-select-sm">
                               <option value="10">10</option>
+                              <option value="15">15</option>
+                              <option value="20">20</option>
                               <option value="25">25</option>
-                              <option value="50">50</option>
-                              <option value="100">100</option>
                             </select>
                             entries
                           </label>
@@ -331,28 +462,23 @@ const Project = () => {
                       <div className="datatable-paginate">
                         <div className="dataTables_paginate paging_simple_numbers" id="project-list_paginate">
                           <ul className="pagination">
-                            <li className="paginate_button page-item previous disabled" id="project-list_previous">
-                              <Link to="#" aria-controls="project-list" aria-disabled="true" role="link" data-dt-idx="previous" tabIndex="-1"
-                                className="page-link">
-                                <i className="fa fa-angle-left"></i>
-                                Prev
+                            <li className={`paginate_button page-item previous ${filters.page === 1 ? "disabled" : ""}`} id="project-list_previous">
+                              <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: filters.page - 1 }))} aria-controls="project-list" aria-disabled={filters.page === 1} role="link" data-dt-idx="previous" tabIndex="-1" className="page-link" >
+                                <i className="fa fa-angle-left"></i> Prev
                               </Link>
                             </li>
-                            <li className="paginate_button page-item active">
-                              <Link to="#" aria-controls="project-list" role="link" aria-current="page" data-dt-idx="0" tabIndex="0"
-                                className="page-link">
-                                1
-                              </Link>
-                            </li>
-                            <li className="paginate_button page-item ">
-                              <Link to="#" aria-controls="project-list" role="link" data-dt-idx="1" tabIndex="0" className="page-link">
-                                2
-                              </Link>
-                            </li>
-                            <li className="paginate_button page-item next" id="project-list_next">
-                              <Link to="#" aria-controls="project-list" role="link" data-dt-idx="next" tabIndex="0" className="page-link">
-                                Next
-                                <i className="fa fa-angle-right"></i>
+                            {
+                              [...Array(Math.ceil(total / filters.limit)).keys()].map((num) => (
+                                <li className={`paginate_button page-item ${filters.page === num + 1 ? "active" : ""}`} key={num}>
+                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: filters.page + 1 }))} aria-controls="project-list" role="link" aria-current={filters.page === num + 1} data-dt-idx={num} tabIndex="0" className="page-link">
+                                    {num + 1}
+                                  </Link>
+                                </li>
+                              ))
+                            }
+                            <li className={`paginate_button page-item next ${filters.page === Math.ceil(total / filters.limit) ? "disabled" : ""}`} id="project-list_next">
+                              <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: filters.page + 1 }))} className="page-link" aria-controls="project-list" role="link" data-dt-idx="next" tabIndex="0">
+                                Next <i className="fa fa-angle-right"></i>
                               </Link>
                             </li>
                           </ul>
