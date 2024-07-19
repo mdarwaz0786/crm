@@ -6,7 +6,6 @@ import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
 import Preloader from "../../../Preloader.jsx";
 
-
 const Role = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);

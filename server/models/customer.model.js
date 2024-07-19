@@ -9,7 +9,7 @@ const customerSchema = new mongoose.Schema(
       type: String,
     },
     mobile: {
-      type: Number,
+      type: String,
     },
     address: {
       type: String,

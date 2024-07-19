@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import { useAuth } from "../../context/authContext.jsx";
 import Preloader from "../../Preloader.jsx";
 
-
 const AddProject = () => {
   const [customer, setCustomer] = useState([]);
   const [projectType, setProjectType] = useState([]);
@@ -34,7 +33,11 @@ const AddProject = () => {
 
   const fetchAllCustomer = async () => {
     try {
-      const response = await axios.get("/api/v1/customer/all-customer");
+      const response = await axios.get("/api/v1/customer/all-customer", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
       if (response?.data?.success) {
         setCustomer(response?.data?.customer);
       }
@@ -107,6 +110,14 @@ const AddProject = () => {
     fetchAllProjectTiming();
   }, []);
 
+  const formatDateToDDMMYYYY = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
@@ -153,6 +164,9 @@ const AddProject = () => {
         return toast.error("Enter description");
       }
 
+      const formattedStart = formatDateToDDMMYYYY(start);
+      const formattedDue = formatDateToDDMMYYYY(due);
+
       const response = await axios.post("/api/v1/project/create-project",
         {
           name,
@@ -164,8 +178,8 @@ const AddProject = () => {
           price,
           responsible: selectedResponsible,
           leader: selectedLeader,
-          start,
-          due,
+          start: formattedStart,
+          due: formattedDue,
           priority,
           status: selectedProjectStatus,
           description,

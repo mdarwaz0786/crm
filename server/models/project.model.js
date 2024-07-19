@@ -25,7 +25,7 @@ const projectSchema = new mongoose.Schema(
       ref: "ProjectTiming",
     },
     price: {
-      type: Number,
+      type: String,
     },
     responsible: [{
       type: mongoose.Schema.Types.ObjectId,

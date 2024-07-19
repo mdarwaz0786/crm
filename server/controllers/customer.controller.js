@@ -15,14 +15,72 @@ export const createCustomer = async (req, res) => {
   };
 };
 
+// Helper function to build the projection object based on user permissions
+const buildProjection = (permissions) => {
+  const customerFields = permissions.customer.fields;
+  const projection = {};
+
+  for (const [key, value] of Object.entries(customerFields)) {
+    if (value.show) {
+      projection[key] = 1;
+    } else {
+      projection[key] = 0;
+    };
+  };
+
+  if (projection._id === undefined) {
+    projection._id = 1;
+  };
+  return projection;
+};
+
+// Helper function to filter fields based on projection
+const filterFields = (customer, projection) => {
+  const filteredCustomer = {};
+  for (const key in customer._doc) {
+    if (projection[key]) {
+      filteredCustomer[key] = customer[key];
+    };
+  };
+
+  if (projection._id !== undefined && !filteredCustomer._id) {
+    filteredCustomer._id = customer._id;
+  };
+  return filteredCustomer;
+};
+
 // Controller for fetching all customer
 export const fetchAllCustomer = async (req, res) => {
   try {
     let filter = {};
+    let sort = {};
 
-    // Handle search query
+    // Handle universal searching across all fields
     if (req.query.search) {
-      filter.name = { $regex: new RegExp(req.query.search, 'i') };
+      const searchRegex = new RegExp(req.query.search, 'i');
+      filter.$or = [
+        { name: { $regex: searchRegex } },
+        { email: { $regex: searchRegex } },
+        { mobile: { $regex: searchRegex } },
+        { address: { $regex: searchRegex } },
+      ];
+    };
+
+    // Handle name search
+    if (req.query.name) {
+      filter.name = { $regex: new RegExp(req.query.name, 'i') };
+    };
+
+    // Handle name filter
+    if (req.query.nameFilter) {
+      filter.name = { $in: Array.isArray(req.query.nameFilter) ? req.query.nameFilter : [req.query.nameFilter] };
+    };
+
+    // Handle sorting
+    if (req.query.sort === 'Ascending') {
+      sort = { createdAt: 1 };
+    } else {
+      sort = { createdAt: -1 };
     };
 
     // Handle pagination
@@ -30,16 +88,22 @@ export const fetchAllCustomer = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const customer = await Customer.find(filter).skip(skip).limit(limit).exec();
+    const customer = await Customer.find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .exec();
+
+    const permissions = req.team.role.permissions;
+    const projection = buildProjection(permissions);
+    const filteredCustomer = customer.map((customer) => filterFields(customer, projection));
+    const totalCount = await Customer.countDocuments(filter);
 
     if (!customer) {
       return res.status(404).json({ success: false, message: "Customer not found" });
     };
 
-    // Get total count of customers
-    const totalCount = await Customer.countDocuments(filter);
-
-    return res.status(200).json({ success: true, message: "Customer fetched successfully", customer, totalCount });
+    return res.status(200).json({ success: true, message: "Customer fetched successfully", customer: filteredCustomer, totalCount });
   } catch (error) {
     console.log("Error while fetching customer:", error.message);
     return res.status(500).json({ success: false, message: "Error while fetching customer" });
@@ -56,7 +120,11 @@ export const fetchSingleCustomer = async (req, res) => {
       return res.status(404).json({ success: false, message: "Customer not found" });
     };
 
-    return res.status(200).json({ success: true, message: "Customer fetched successfully", customer });
+    const permissions = req.team.role.permissions;
+    const projection = buildProjection(permissions);
+    const filteredCustomer = filterFields(customer, projection);
+
+    return res.status(200).json({ success: true, message: "Customer fetched successfully", customer: filteredCustomer });
   } catch (error) {
     console.log("Error while fetching customer:", error.message);
     return res.status(500).json({ success: false, message: "Error while fetching customer" });

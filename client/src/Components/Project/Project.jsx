@@ -5,20 +5,21 @@ import { toast } from 'react-toastify';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from "../../context/authContext.jsx";
 import Preloader from "../../Preloader.jsx";
+import html2pdf from "html2pdf.js";
 
 const Project = () => {
   const [project, setProject] = useState([]);
   const [total, setTotal] = useState("");
   const { validToken, team, isLoading } = useAuth();
+  const [nameData, setNameData] = useState([]);
+  const [name, setName] = useState("");
   const [filters, setFilters] = useState({
-    name: [],
     search: "",
+    nameFilter: [],
     sort: "",
     page: 1,
-    limit: 10,
+    limit: 2,
   });
-
-  let i = 1;
 
   const fetchAllProject = async () => {
     try {
@@ -27,12 +28,12 @@ const Project = () => {
           Authorization: `${validToken}`
         },
         params: {
-          name: filters.name,
           search: filters.search,
           sort: filters.sort,
           page: filters.page,
           limit: filters.limit,
-        }
+          nameFilter: filters.nameFilter.map(String),
+        },
       });
       if (response?.data?.success) {
         setProject(response?.data?.project);
@@ -43,31 +44,52 @@ const Project = () => {
     }
   };
 
-  const handleFilterChange = (e) => {
-    const { name, value, checked, type } = e.target;
-    console.log("filterchangerunning");
-    if (type === 'checkbox') {
-      if (name === 'name') {
-        // Handle single-value filter for 'name'
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          name: checked ? value : "",  // Set to the selected value or empty if unchecked
-          page: 1  // Reset page to 1 when a new filter is applied
-        }));
+  const fetchAllProjectName = async () => {
+    try {
+      const response = await axios.get("/api/v1/project/all-project", {
+        headers: {
+          Authorization: `${validToken}`
+        },
+        params: {
+          name,
+        }
+      });
+      if (response?.data?.success) {
+        setNameData(response?.data?.project);
       }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllProjectName();
+  }, [name]);
+
+
+  const handleFilterChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [name]: checked
+          ? [...prevFilters[name], value]
+          : prevFilters[name].filter((item) => item !== value),
+        page: 1,
+      }));
     } else {
-      // Handle single-value fields (e.g., strings for filters like `search`, `sort`, etc.)
       setFilters((prevFilters) => ({
         ...prevFilters,
         [name]: value,
+        page: 1,
       }));
     }
   };
 
-
   useEffect(() => {
     fetchAllProject();
-  }, [filters.page, filters.limit, filters.search, filters.sort, filters.name]);
+  }, [filters]);
 
   const handleDelete = async (id) => {
     try {
@@ -86,6 +108,21 @@ const Project = () => {
     }
   };
 
+  const exportProjectListAsPdf = () => {
+    const element = document.querySelector("#exportProjectList");
+    element.style.padding = "1.5rem";
+    const options = {
+      filename: "project-list.pdf",
+      html2canvas: {
+        useCORS: true,
+      },
+      jsPDF: {
+        orientation: 'landscape',
+      },
+    };
+    html2pdf().set(options).from(element).save();
+  };
+
   if (isLoading) {
     return <Preloader />;
   }
@@ -98,7 +135,7 @@ const Project = () => {
     <>
       {/* Page Wrapper */}
       <div className="page-wrapper">
-        <div className="content">
+        <div className="content" id="exportProjectList">
           <div className="row">
             <div className="col-md-12">
               {/* Page Header */}
@@ -129,11 +166,7 @@ const Project = () => {
                       <div className="col-md-5 col-sm-4">
                         <div className="form-wrap icon-form">
                           <span className="form-icon"><i className="ti ti-search" /></span>
-                          <input type="text" className="form-control" placeholder="Search Project" value={filters.search} onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))} onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              fetchAllProject(filters.page, filters.limit, filters.search);
-                            }
-                          }} />
+                          <input type="text" className="form-control" placeholder="Search Project" value={filters.search} onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))} />
                         </div>
                       </div>
                       <div className="col-md-7 col-sm-8">
@@ -150,15 +183,9 @@ const Project = () => {
                                     <div className="dropdown-menu  dropdown-menu-end">
                                       <ul>
                                         <li>
-                                          <Link to="#">
+                                          <Link to="#" onClick={() => setTimeout(() => { exportProjectListAsPdf() }, 1000)}>
                                             <i className="ti ti-file-type-pdf text-danger" />
                                             Export as PDF
-                                          </Link>
-                                        </li>
-                                        <li>
-                                          <Link to="#">
-                                            <i className="ti ti-file-type-xls text-green" />
-                                            Export as Excel
                                           </Link>
                                         </li>
                                       </ul>
@@ -220,7 +247,7 @@ const Project = () => {
                         <li>
                           <div className="form-sorts dropdown">
                             <Link to="#" data-bs-toggle="dropdown" data-bs-auto-close="false"><i className="ti ti-filter-share" />Filter</Link>
-                            <div className="filter-dropdown-menu dropdown-menu  dropdown-menu-xl-end">
+                            <div className="filter-dropdown-menu dropdown-menu dropdown-menu-xl-end">
                               <div className="filter-set-view">
                                 <div className="filter-set-head">
                                   <h4><i className="ti ti-filter-share" />Filter</h4>
@@ -228,32 +255,32 @@ const Project = () => {
                                 <div className="accordion" id="accordionExample">
                                   <div className="filter-set-content">
                                     <div className="filter-set-content-head">
-                                      <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Project</Link>
+                                      <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Project Name</Link>
                                     </div>
                                     <div className="filter-set-contents accordion-collapse collapse show" id="collapseTwo" data-bs-parent="#accordionExample">
                                       <div className="filter-content-list">
                                         <div className="form-wrap icon-form">
                                           <span className="form-icon"><i className="ti ti-search" /></span>
-                                          <input type="text" className="form-control" placeholder="Search Project" onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))} />
+                                          <input type="text" className="form-control" placeholder="Search Project Name" onChange={(e) => setName(e.target.value)} />
                                         </div>
                                         <ul>
                                           {
-                                            project?.map((p) => (
-                                              <li key={p?._id}>
+                                            nameData?.map((n) => (
+                                              <li key={n._id}>
                                                 <div className="filter-checks">
                                                   <label className="checkboxs">
                                                     <input
                                                       type="checkbox"
-                                                      name="name"
-                                                      value={p?._id}
-                                                      checked={filters.name.includes(p?._id)}
+                                                      name="nameFilter"
+                                                      value={n?.name}
+                                                      checked={filters.nameFilter.includes(n?.name)}
                                                       onChange={handleFilterChange}
                                                     />
                                                     <span className="checkmarks" />
                                                   </label>
                                                 </div>
                                                 <div className="collapse-inside-text">
-                                                  <h5>{p?.name}</h5>
+                                                  <h5>{n.name}</h5>
                                                 </div>
                                               </li>
                                             ))
@@ -266,10 +293,7 @@ const Project = () => {
                                 <div className="filter-reset-btns">
                                   <div className="row">
                                     <div className="col-6">
-                                      <Link to="#" className="btn btn-light" onClick={() => setFilters(prev => ({ ...prev, name: "" }))}>Reset</Link>
-                                    </div>
-                                    <div className="col-6">
-                                      <Link to="#" className="btn btn-primary" onClick={() => fetchAllProject()}>Apply</Link>
+                                      <Link to="#" className="btn btn-light" onClick={() => setFilters((prev) => ({ ...prev, nameFilter: [] }))}>Reset</Link>
                                     </div>
                                   </div>
                                 </div>
@@ -351,12 +375,12 @@ const Project = () => {
                       </thead>
                       <tbody>
                         {
-                          project?.map((p) => (
+                          project?.map((p, index) => (
                             <tr key={p?._id}>
                               <td>
                                 <label className="checkboxs"><input type="checkbox" /><span className="checkmarks"></span></label>
                               </td>
-                              <td>{i++}</td>
+                              <td> {(filters.page - 1) * filters.limit + index + 1}</td>
                               {
                                 (team?.role?.permissions?.project?.fields?.name?.show) ? (
                                   <td>{p?.name}</td>
@@ -452,6 +476,7 @@ const Project = () => {
                               <option value="15">15</option>
                               <option value="20">20</option>
                               <option value="25">25</option>
+                              <option value={total}>All</option>
                             </select>
                             entries
                           </label>
@@ -470,7 +495,7 @@ const Project = () => {
                             {
                               [...Array(Math.ceil(total / filters.limit)).keys()].map((num) => (
                                 <li className={`paginate_button page-item ${filters.page === num + 1 ? "active" : ""}`} key={num}>
-                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: filters.page + 1 }))} aria-controls="project-list" role="link" aria-current={filters.page === num + 1} data-dt-idx={num} tabIndex="0" className="page-link">
+                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: num + 1 }))} aria-controls="project-list" role="link" aria-current={filters.page === num + 1} data-dt-idx={num} tabIndex="0" className="page-link">
                                     {num + 1}
                                   </Link>
                                 </li>

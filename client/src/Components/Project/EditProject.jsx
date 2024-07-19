@@ -34,7 +34,11 @@ const EditProject = () => {
 
   const fetchAllCustomer = async () => {
     try {
-      const response = await axios.get("/api/v1/customer/all-customer");
+      const response = await axios.get("/api/v1/customer/all-customer", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
       if (response?.data?.success) {
         setCustomer(response?.data?.customer);
       }
@@ -140,12 +144,23 @@ const EditProject = () => {
     fetchSingleProject(id);
   }, [id]);
 
+  const formatDateToDDMMYYYY = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const formattedStart = formatDateToDDMMYYYY(start);
+  const formattedDue = formatDateToDDMMYYYY(due);
+
+  // Create update object
+  const updateData = {};
+  const permissions = team?.role?.permissions?.project?.fields;
+
   const handleUpdate = async (e, id) => {
     e.preventDefault();
-
-    // Create update object
-    const updateData = {};
-    const permissions = team?.role?.permissions?.project?.fields;
 
     // Conditionally include fields based on permissions
     if (permissions?.name?.show && !permissions?.name?.read) {
@@ -185,11 +200,11 @@ const EditProject = () => {
     }
 
     if (permissions?.start?.show && !permissions?.start?.read) {
-      updateData.start = start;
+      updateData.start = formattedStart;
     }
 
     if (permissions?.due?.show && !permissions?.due?.read) {
-      updateData.due = due;
+      updateData.due = formattedDue;
     }
 
     if (permissions?.priority?.show && !permissions?.priority?.read) {

@@ -1,4 +1,5 @@
 import Project from "../models/project.model.js";
+import mongoose from "mongoose";
 
 // Controller for creating a project
 export const createProject = async (req, res) => {
@@ -20,9 +21,15 @@ const buildProjection = (permissions) => {
   for (const [key, value] of Object.entries(projectFields)) {
     if (value.show) {
       projection[key] = 1;
+    } else {
+      projection[key] = 0; // Ensure excluded fields are marked as 0
     };
   };
 
+  // Ensure _id is included by default unless explicitly excluded
+  if (projection._id === undefined) {
+    projection._id = 1;
+  };
   return projection;
 };
 
@@ -34,7 +41,26 @@ const filterFields = (project, projection) => {
       filteredProject[key] = project[key];
     };
   };
+
+  // Ensure _id is included in the filtered project
+  if (projection._id !== undefined && !filteredProject._id) {
+    filteredProject._id = project._id;
+  };
   return filteredProject;
+};
+
+// Helper function to find ObjectId by string in referenced models
+const findObjectIdByString = async (modelName, fieldName, searchString) => {
+  const Model = mongoose.model(modelName);
+  const result = await Model.findOne({ [fieldName]: { $regex: new RegExp(searchString, 'i') } }).select('_id');
+  return result ? result._id : null;
+};
+
+// Helper function to find ObjectId array by string in referenced models
+const findObjectIdArrayByString = async (modelName, fieldName, searchString) => {
+  const Model = mongoose.model(modelName);
+  const results = await Model.find({ [fieldName]: { $regex: new RegExp(searchString, 'i') } }).select('_id');
+  return results.map((result) => result._id);
 };
 
 // Controller for fetching all project
@@ -43,30 +69,48 @@ export const fetchAllProject = async (req, res) => {
     let filter = {};
     let sort = {};
 
-    // Handle name filter
-    if (req.query.name) {
-      filter.name = req.query.name;
+    // Handle universal searching across all fields
+    if (req.query.search) {
+      const searchRegex = new RegExp(req.query.search, 'i');
+      filter.$or = [
+        { name: { $regex: searchRegex } },
+        { projectId: { $regex: searchRegex } },
+        { price: { $regex: searchRegex } },
+        { start: { $regex: searchRegex } },
+        { due: { $regex: searchRegex } },
+        { priority: { $regex: searchRegex } },
+        { description: { $regex: searchRegex } },
+        { type: await findObjectIdByString('ProjectType', 'name', req.query.search) },
+        { customer: await findObjectIdByString('Customer', 'name', req.query.search) },
+        { category: await findObjectIdByString('ProjectCategory', 'name', req.query.search) },
+        { timing: await findObjectIdByString('ProjectTiming', 'name', req.query.search) },
+        { status: await findObjectIdByString('ProjectStatus', 'status', req.query.search) },
+        { responsible: await findObjectIdArrayByString('Team', 'name', req.query.search) },
+        { leader: await findObjectIdArrayByString('Team', 'name', req.query.search) }
+      ];
     };
 
-    // Handle searching
-    if (req.query.search) {
-      filter.name = { $regex: new RegExp(req.query.search, 'i') };
+    // Handle name search
+    if (req.query.name) {
+      filter.name = { $regex: new RegExp(req.query.name, 'i') };
+    };
+
+    // Handle name filter
+    if (req.query.nameFilter) {
+      filter.name = { $in: Array.isArray(req.query.nameFilter) ? req.query.nameFilter : [req.query.nameFilter] };
     };
 
     // Handle sorting
     if (req.query.sort === 'Ascending') {
       sort = { createdAt: 1 }; // Sort by ascending order
     } else {
-      sort = { createdAt: -1 }; // Sort by ascending order default
+      sort = { createdAt: -1 }; // Sort by descending order by default
     };
 
     // Handle pagination
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
-
-    const teamPermissions = req.team.role.permissions;
-    const projection = buildProjection(teamPermissions);
 
     const project = await Project.find(filter)
       .sort(sort)
@@ -81,8 +125,11 @@ export const fetchAllProject = async (req, res) => {
       .populate("timing")
       .exec();
 
-    const totalCount = await Project.countDocuments(filter);
+    const permissions = req.team.role.permissions;
+    const projection = buildProjection(permissions);
     const filteredProject = project.map((project) => filterFields(project, projection));
+    const totalCount = await Project.countDocuments(filter);
+
     return res.status(200).json({ success: true, message: "All projects fetched successfully", project: filteredProject, totalCount });
   } catch (error) {
     console.log("Error while fetching all projects:", error.message);
@@ -94,9 +141,6 @@ export const fetchAllProject = async (req, res) => {
 export const fetchSingleProject = async (req, res) => {
   try {
     const projectId = req.params.id;
-
-    const teamPermissions = req.team.role.permissions;
-    const projection = buildProjection(teamPermissions);
 
     const project = await Project.findById(projectId)
       .populate("type")
@@ -112,6 +156,8 @@ export const fetchSingleProject = async (req, res) => {
       return res.status(404).json({ success: false, message: "Project not found" });
     };
 
+    const permissions = req.team.role.permissions;
+    const projection = buildProjection(permissions);
     const filteredProject = filterFields(project, projection);
 
     return res.status(200).json({ success: true, message: "Single project fetched successfully", project: filteredProject });

@@ -19,7 +19,7 @@ const Login = () => {
         setUsername("");
         setPassword("");
         toast.success("Login successful");
-        setTimeout(() => { navigate('/'); window.location.reload(); }, 2000);
+        setTimeout(() => { navigate('/'); window.location.reload(); }, 3000);
       }
     } catch (error) {
       console.log("error while login:", error.message);

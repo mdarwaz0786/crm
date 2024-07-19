@@ -2,10 +2,9 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-// import { useAuth } from "../../../context/authContext.jsx";
-// import Preloader from "../../../Preloader.jsx";
-
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 const EditCustomer = () => {
   const [name, setName] = useState("");
@@ -14,11 +13,15 @@ const EditCustomer = () => {
   const [address, setAddress] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  // const { validToken, team, isLoading } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
-      const response = await axios.get(`/api/v1/customer/single-customer/${id}`);
+      const response = await axios.get(`/api/v1/customer/single-customer/${id}`, {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
       if (response?.data?.success) {
         setName(response?.data?.customer?.name);
         setEmail(response?.data?.customer?.email);
@@ -34,10 +37,36 @@ const EditCustomer = () => {
     fetchSingleData(id);
   }, [id]);
 
+  const updateData = {};
+  const permissions = team?.role?.permissions?.customer?.fields;
+
   const handleUpdate = async (e, id) => {
     e.preventDefault();
+
+    // Conditionally include fields based on permissions
+    if (permissions?.name?.show && !permissions?.name?.read) {
+      updateData.name = name;
+    }
+
+    if (permissions?.email?.show && !permissions?.email?.read) {
+      updateData.email = email;
+    }
+
+    if (permissions?.mobile?.show && !permissions?.mobile?.read) {
+      updateData.mobile = mobile;
+    }
+
+    if (permissions?.address?.show && !permissions?.address?.read) {
+      updateData.address = address;
+    }
+
     try {
-      const response = await axios.put(`/api/v1/customer/update-customer/${id}`, { name, email, mobile, address });
+      const response = await axios.put(`/api/v1/customer/update-customer/${id}`, updateData, {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setName("");
         setEmail("");
@@ -52,50 +81,74 @@ const EditCustomer = () => {
     }
   };
 
-  // if (isLoading) {
-  //   return <Preloader />;
-  // }
+  if (isLoading) {
+    return <Preloader />;
+  }
 
-  // if (!team?.role?.permissions?.customer?.update) {
-  //   return <Navigate to="/customer" />;
-  // }
+  if (!team?.role?.permissions?.customer?.update) {
+    return <Navigate to="/customer" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h4>Add Customer</h4>
+          <h4>Edit Customer</h4>
           <Link to="/customer"><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
-          <div className="col-md-12">
-            <div className="form-wrap">
-              <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
-              <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
-            </div>
-          </div>
-          <div className="col-md-12">
-            <div className="form-wrap">
-              <label className="col-form-label" htmlFor="email">Email <span className="text-danger">*</span></label>
-              <input type="email" className="form-control" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            </div>
-          </div>
-          <div className="col-md-12">
-            <div className="form-wrap">
-              <label className="col-form-label" htmlFor="mobile">Mobile <span className="text-danger">*</span></label>
-              <input type="text" className="form-control" name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} required />
-            </div>
-          </div>
-          <div className="col-md-12">
-            <div className="form-wrap">
-              <label className="col-form-label" htmlFor="address">Address <span className="text-danger">*</span></label>
-              <textarea className="form-control" rows={6} name="description" id="description" value={address} onChange={(e) => setAddress(e.target.value)} required />
-            </div>
-          </div>
+          {
+            (permissions?.name?.show) ? (
+              <div className="col-md-6">
+                <div className="form-wrap">
+                  <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
+                  <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required readOnly={permissions?.name?.read} />
+                </div>
+              </div>
+            ) : (
+              null
+            )
+          }
+          {
+            (permissions?.email?.show) ? (
+              <div className="col-md-6">
+                <div className="form-wrap">
+                  <label className="col-form-label" htmlFor="email">Email <span className="text-danger">*</span></label>
+                  <input type="email" className="form-control" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required readOnly={permissions?.email?.read} />
+                </div>
+              </div>
+            ) : (
+              null
+            )
+          }
+          {
+            (permissions?.mobile?.show) ? (
+              <div className="col-md-6">
+                <div className="form-wrap">
+                  <label className="col-form-label" htmlFor="mobile">Mobile <span className="text-danger">*</span></label>
+                  <input type="text" className="form-control" name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} required readOnly={permissions?.mobile?.read} />
+                </div>
+              </div>
+            ) : (
+              null
+            )
+          }
+          {
+            (permissions?.address?.show) ? (
+              <div className="col-md-6">
+                <div className="form-wrap">
+                  <label className="col-form-label" htmlFor="address">Address <span className="text-danger">*</span></label>
+                  <textarea className="form-control" rows={1} name="description" id="description" value={address} onChange={(e) => setAddress(e.target.value)} required readOnly={permissions?.address?.read} />
+                </div>
+              </div>
+            ) : (
+              null
+            )
+          }
         </div>
         <div className="submit-button text-end">
           <Link to="/customer" className="btn btn-light sidebar-close">Cancel</Link>
-          <Link to="#" className="btn btn-primary" onClick={(e) => handleUpdate(e, id)}>Edit</Link>
+          <Link to="#" className="btn btn-primary" onClick={(e) => handleUpdate(e, id)}>Update</Link>
         </div>
       </div>
     </div>

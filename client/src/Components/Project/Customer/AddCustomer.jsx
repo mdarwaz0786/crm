@@ -1,9 +1,9 @@
 import { useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
-// import { useAuth } from "../../../context/authContext.jsx";
-// import Preloader from "../../../Preloader.jsx";
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 const AddCustomer = () => {
   const [name, setName] = useState("");
@@ -11,7 +11,7 @@ const AddCustomer = () => {
   const [mobile, setMobile] = useState("");
   const [address, setAddress] = useState("");
   const navigate = useNavigate();
-  // const { validToken, team, isLoading } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -29,7 +29,11 @@ const AddCustomer = () => {
         return toast.error("Enter address");
       }
 
-      const response = await axios.post("/api/v1/customer/create-customer", { name, email, mobile, address });
+      const response = await axios.post("/api/v1/customer/create-customer", { name, email, mobile, address }, {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
       if (response?.data?.success) {
         setName("");
         setEmail("");
@@ -44,13 +48,13 @@ const AddCustomer = () => {
     }
   };
 
-  // if (isLoading) {
-  //   return <Preloader />;
-  // }
+  if (isLoading) {
+    return <Preloader />;
+  }
 
-  // if (!team?.role?.permissions?.customer?.create) {
-  //   return <Navigate to="/customer" />;
-  // }
+  if (!team?.role?.permissions?.customer?.create) {
+    return <Navigate to="/customer" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
@@ -60,28 +64,28 @@ const AddCustomer = () => {
           <Link to="/customer"><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
               <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
             </div>
           </div>
-          <div className="col-md-12">
+          <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="email">Email <span className="text-danger">*</span></label>
               <input type="email" className="form-control" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
           </div>
-          <div className="col-md-12">
+          <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="mobile">Mobile <span className="text-danger">*</span></label>
               <input type="text" className="form-control" name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} required />
             </div>
           </div>
-          <div className="col-md-12">
+          <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="address">Address <span className="text-danger">*</span></label>
-              <textarea className="form-control" rows={6} name="description" id="description" value={address} onChange={(e) => setAddress(e.target.value)} required />
+              <textarea className="form-control" rows={1} name="description" id="description" value={address} onChange={(e) => setAddress(e.target.value)} required />
             </div>
           </div>
         </div>

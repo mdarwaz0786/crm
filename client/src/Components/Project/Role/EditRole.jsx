@@ -350,8 +350,8 @@ const EditRole = () => {
     projectStatus: "Project Status",
     projectCategory: "Project Category",
     projectTiming: "Project Timing",
-    project: "Projects",
     designation: "Designation",
+    project: "Projects",
   };
 
   const openModal = (master) => {

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import { format } from 'date-fns';
 // import { useAuth } from "../../../context/authContext.jsx";
 // import Preloader from "../../../Preloader.jsx";
 
@@ -14,10 +13,6 @@ const TeamMember = () => {
   // const { validToken, isLoading } = useAuth();
   let i = 1;
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return format(date, 'dd MMMM yyyy');
-  };
 
   const fetchAllData = async () => {
     try {
@@ -260,7 +255,7 @@ const TeamMember = () => {
                               <td>{d?.mobile}</td>
                               <td>{d?.role?.name}</td>
                               <td>{d?.designation?.name}</td>
-                              <td>{formatDate(d?.joining)}</td>
+                              <td>{d?.joining}</td>
                               <td>
                                 <div className="table-action">
                                   <Link to="#" className="action-icon" data-bs-toggle="dropdown" aria-expanded="false">
