@@ -1,5 +1,6 @@
 import Team from "../models/team.model.js";
 import generateToken from "../utils/generateToken.js";
+import mongoose from "mongoose";
 
 // Controller for creating a team
 export const createTeam = async (req, res) => {
@@ -73,22 +74,118 @@ export const loggedInTeam = async (req, res) => {
   };
 };
 
+// Helper function to build the projection object based on user permissions
+const buildProjection = (permissions) => {
+  const teamFields = permissions.team.fields;
+  const projection = {};
+
+  for (const [key, value] of Object.entries(teamFields)) {
+    if (value.show) {
+      projection[key] = 1;
+    } else {
+      projection[key] = 0;
+    };
+  };
+
+  if (projection._id === undefined) {
+    projection._id = 1;
+  };
+  return projection;
+};
+
+// Helper function to filter fields based on projection
+const filterFields = (team, projection) => {
+  const filteredTeam = {};
+  for (const key in team._doc) {
+    if (projection[key]) {
+      filteredTeam[key] = team[key];
+    };
+  };
+
+  if (projection._id !== undefined && !filteredTeam._id) {
+    filteredTeam._id = team._id;
+  };
+  return filteredTeam;
+};
+
+// Helper function to find ObjectId by string in referenced models
+const findObjectIdByString = async (modelName, fieldName, searchString) => {
+  const Model = mongoose.model(modelName);
+  const result = await Model.findOne({ [fieldName]: { $regex: new RegExp(searchString, 'i') } }).select('_id');
+  return result ? result._id : null;
+};
+
+// Helper function to find ObjectId array by string in referenced models
+const findObjectIdArrayByString = async (modelName, fieldName, searchString) => {
+  const Model = mongoose.model(modelName);
+  const results = await Model.find({ [fieldName]: { $regex: new RegExp(searchString, 'i') } }).select('_id');
+  return results.map((result) => result._id);
+};
+
 // Controller for fetching all team
 export const fetchAllTeam = async (req, res) => {
   try {
     let filter = {};
+    let sort = {};
+
+    // Handle universal searching across all fields
     if (req.query.search) {
-      filter.name = { $regex: new RegExp(req.query.search, 'i') };
+      const searchRegex = new RegExp(req.query.search, 'i');
+      filter.$or = [
+        { name: { $regex: searchRegex } },
+        { email: { $regex: searchRegex } },
+        { mobile: { $regex: searchRegex } },
+        { username: { $regex: searchRegex } },
+        { password: { $regex: searchRegex } },
+        { joining: { $regex: searchRegex } },
+        { dob: { $regex: searchRegex } },
+        { designation: await findObjectIdByString('Designation', 'name', req.query.search) },
+        { role: await findObjectIdByString('Role', 'name', req.query.search) },
+        { reportingTo: await findObjectIdArrayByString('Team', 'name', req.query.search) },
+      ];
     };
+
+    // Handle name search
+    if (req.query.name) {
+      filter.name = { $regex: new RegExp(req.query.name, 'i') };
+    };
+
+    // Handle name filter
+    if (req.query.nameFilter) {
+      filter.name = { $in: Array.isArray(req.query.nameFilter) ? req.query.nameFilter : [req.query.nameFilter] };
+    };
+
+    // Handle sorting
+    if (req.query.sort === 'Ascending') {
+      sort = { createdAt: 1 };
+    } else {
+      sort = { createdAt: -1 };
+    };
+
+    // Handle pagination
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
-    const team = await Team.find(filter).skip(skip).limit(limit).populate("reportingTo").populate("role").populate("designation").exec();
+
+    const team = await Team.find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .populate("reportingTo")
+      .populate("role")
+      .populate("designation")
+      .exec();
+
     if (!team) {
       return res.status(404).json({ success: false, message: "Team not found" });
     };
+
+    const permissions = req.team.role.permissions;
+    const projection = buildProjection(permissions);
+    const filteredTeam = team.map((team) => filterFields(team, projection));
     const totalCount = await Team.countDocuments(filter);
-    return res.status(200).json({ success: true, message: "All team fetched successfully", team, totalCount });
+
+    return res.status(200).json({ success: true, message: "All team fetched successfully", team: filteredTeam, totalCount });
   } catch (error) {
     console.log("Error while fetching all team:", error.message);
     return res.status(500).json({ success: false, message: "Error while fetching all team" });
@@ -99,11 +196,21 @@ export const fetchAllTeam = async (req, res) => {
 export const fetchSingleTeam = async (req, res) => {
   try {
     const teamId = req.params.id;
-    const team = await Team.findById(teamId).populate("reportingTo").populate("reportingTo").populate("role").populate("designation").exec();
+    const team = await Team.findById(teamId)
+      .populate("reportingTo")
+      .populate("role")
+      .populate("designation")
+      .exec();
+
     if (!team) {
       return res.status(404).json({ success: false, message: "Team not found" });
     };
-    return res.status(200).json({ success: true, message: "Single team fetched successfully", team });
+
+    const permissions = req.team.role.permissions;
+    const projection = buildProjection(permissions);
+    const filteredTeam = filterFields(team, projection);
+
+    return res.status(200).json({ success: true, message: "Single team fetched successfully", team: filteredTeam });
   } catch (error) {
     console.log("Error while fetching team:", error.message);
     return res.status(500).json({ success: false, message: "Error while fetching team" });

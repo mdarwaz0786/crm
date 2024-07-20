@@ -8,9 +8,9 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
 const AddRole = () => {
+  const { validToken, team, isLoading } = useAuth();
   const [selectedMaster, setSelectedMaster] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { team, isLoading } = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [permissions, setPermissions] = useState({
@@ -43,6 +43,7 @@ const AddRole = () => {
         dob: { read: true, show: true },
         designation: { read: true, show: true },
         reportingTo: { read: true, show: true },
+        role: { read: true, show: true },
       },
     },
     role: {
@@ -53,15 +54,17 @@ const AddRole = () => {
       delete: false,
       fields: {
         name: { read: true, show: true },
-        customer: { read: true, show: true },
-        team: { read: true, show: true },
-        role: { read: true, show: true },
-        projectType: { read: true, show: true },
-        projectStatus: { read: true, show: true },
-        projectCategory: { read: true, show: true },
-        projectTiming: { read: true, show: true },
-        project: { read: true, show: true },
-        Designation: { read: true, show: true },
+      },
+    },
+    designation: {
+      access: false,
+      export: false,
+      create: false,
+      update: false,
+      delete: false,
+      fields: {
+        name: { read: true, show: true },
+        description: { read: true, show: true },
       },
     },
     projectType: {
@@ -131,17 +134,6 @@ const AddRole = () => {
         description: { read: true, show: true },
       },
     },
-    designation: {
-      access: false,
-      export: false,
-      create: false,
-      update: false,
-      delete: false,
-      fields: {
-        name: { read: true, show: true },
-        description: { read: true, show: true },
-      },
-    },
   });
 
   const handleChange = (e) => {
@@ -185,7 +177,12 @@ const AddRole = () => {
     }
 
     try {
-      const response = await axios.post("/api/v1/role/create-role", { name, permissions });
+      const response = await axios.post("/api/v1/role/create-role", { name, permissions }, {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setName("");
         setPermissions({
@@ -218,6 +215,7 @@ const AddRole = () => {
               dob: { read: true, show: true },
               designation: { read: true, show: true },
               reportingTo: { read: true, show: true },
+              role: { read: true, show: true },
             },
           },
           role: {
@@ -228,15 +226,17 @@ const AddRole = () => {
             delete: false,
             fields: {
               name: { read: true, show: true },
-              customer: { read: true, show: true },
-              team: { read: true, show: true },
-              role: { read: true, show: true },
-              projectType: { read: true, show: true },
-              projectStatus: { read: true, show: true },
-              projectCategory: { read: true, show: true },
-              projectTiming: { read: true, show: true },
-              project: { read: true, show: true },
-              Designation: { read: true, show: true },
+            },
+          },
+          designation: {
+            access: false,
+            export: false,
+            create: false,
+            update: false,
+            delete: false,
+            fields: {
+              name: { read: true, show: true },
+              description: { read: true, show: true },
             },
           },
           projectType: {
@@ -306,17 +306,6 @@ const AddRole = () => {
               description: { read: true, show: true },
             },
           },
-          designation: {
-            access: false,
-            export: false,
-            create: false,
-            update: false,
-            delete: false,
-            fields: {
-              name: { read: true, show: true },
-              description: { read: true, show: true },
-            },
-          },
         });
         toast.success("Role created successfully");
         navigate("/role");
@@ -331,12 +320,12 @@ const AddRole = () => {
     customer: "Customer",
     team: "Team Member",
     role: "Role",
+    designation: "Designation",
     projectType: "Project Type",
     projectStatus: "Project Status",
     projectCategory: "Project Category",
     projectTiming: "Project Timing",
     project: "Projects",
-    designation: "Designation",
   };
 
   const openModal = (master) => {
@@ -353,7 +342,9 @@ const AddRole = () => {
     return <Preloader />;
   }
 
-  if (!team?.role?.permissions?.role?.create) {
+  const permission = team?.role?.permissions?.role;
+
+  if (!permission?.create) {
     return <Navigate to="/role" />;
   }
 

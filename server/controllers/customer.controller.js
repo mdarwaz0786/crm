@@ -15,6 +15,7 @@ export const createCustomer = async (req, res) => {
   };
 };
 
+
 // Helper function to build the projection object based on user permissions
 const buildProjection = (permissions) => {
   const customerFields = permissions.customer.fields;
@@ -94,14 +95,14 @@ export const fetchAllCustomer = async (req, res) => {
       .limit(limit)
       .exec();
 
+    if (!customer) {
+      return res.status(404).json({ success: false, message: "Customer not found" });
+    };
+
     const permissions = req.team.role.permissions;
     const projection = buildProjection(permissions);
     const filteredCustomer = customer.map((customer) => filterFields(customer, projection));
     const totalCount = await Customer.countDocuments(filter);
-
-    if (!customer) {
-      return res.status(404).json({ success: false, message: "Customer not found" });
-    };
 
     return res.status(200).json({ success: true, message: "Customer fetched successfully", customer: filteredCustomer, totalCount });
   } catch (error) {

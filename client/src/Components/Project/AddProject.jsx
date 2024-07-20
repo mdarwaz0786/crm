@@ -70,7 +70,11 @@ const AddProject = () => {
 
   const fetchAllTeamMember = async () => {
     try {
-      const response = await axios.get("/api/v1/team/all-team");
+      const response = await axios.get("/api/v1/team/all-team", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
       if (response?.data?.success) {
         setTeamMember(response?.data?.team);
       }
@@ -118,6 +122,9 @@ const AddProject = () => {
     return `${day}-${month}-${year}`;
   };
 
+  const formattedStart = formatDateToDDMMYYYY(start);
+  const formattedDue = formatDateToDDMMYYYY(due);
+
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
@@ -163,9 +170,6 @@ const AddProject = () => {
       if (!description) {
         return toast.error("Enter description");
       }
-
-      const formattedStart = formatDateToDDMMYYYY(start);
-      const formattedDue = formatDateToDDMMYYYY(due);
 
       const response = await axios.post("/api/v1/project/create-project",
         {

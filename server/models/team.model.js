@@ -9,7 +9,7 @@ const teamSchema = new mongoose.Schema(
       type: String,
     },
     mobile: {
-      type: Number,
+      type: String,
     },
     username: {
       type: String,

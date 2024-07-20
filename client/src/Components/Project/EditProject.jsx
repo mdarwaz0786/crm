@@ -71,7 +71,11 @@ const EditProject = () => {
 
   const fetchAllTeamMember = async () => {
     try {
-      const response = await axios.get("/api/v1/team/all-team");
+      const response = await axios.get("/api/v1/team/all-team", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
       if (response?.data?.success) {
         setTeamMember(response?.data?.team);
       }
@@ -101,7 +105,6 @@ const EditProject = () => {
       console.log(error.message);
     }
   };
-
 
   useEffect(() => {
     fetchAllCustomer();
@@ -143,17 +146,6 @@ const EditProject = () => {
   useEffect(() => {
     fetchSingleProject(id);
   }, [id]);
-
-  const formatDateToDDMMYYYY = (dateString) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
-
-  const formattedStart = formatDateToDDMMYYYY(start);
-  const formattedDue = formatDateToDDMMYYYY(due);
 
   // Create update object
   const updateData = {};
@@ -200,11 +192,11 @@ const EditProject = () => {
     }
 
     if (permissions?.start?.show && !permissions?.start?.read) {
-      updateData.start = formattedStart;
+      updateData.start = start;
     }
 
     if (permissions?.due?.show && !permissions?.due?.read) {
-      updateData.due = formattedDue;
+      updateData.due = due;
     }
 
     if (permissions?.priority?.show && !permissions?.priority?.read) {
@@ -482,7 +474,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="start">Start Date <span className="text-danger">*</span></label>
-                    <input type="date" className="form-control" name="start" id="start" value={start} onChange={(e) => setStart(e.target.value)} readOnly={team?.role?.permissions?.project?.fields?.start?.read} />
+                    <input type="text" className="form-control" name="start" id="start" value={start} onChange={(e) => setStart(e.target.value)} readOnly={team?.role?.permissions?.project?.fields?.start?.read} />
                   </div>
                 </div>
               ) : (
@@ -494,7 +486,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="due">Due Date <span className="text-danger">*</span></label>
-                    <input type="date" className="form-control" name="due" id="due" value={due} onChange={(e) => setDue(e.target.value)} required readOnly={team?.role?.permissions?.project?.fields?.due?.read} />
+                    <input type="text" className="form-control" name="due" id="due" value={due} onChange={(e) => setDue(e.target.value)} required readOnly={team?.role?.permissions?.project?.fields?.due?.read} />
                   </div>
                 </div>
               ) : (

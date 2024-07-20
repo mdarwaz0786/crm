@@ -2,10 +2,9 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
-// import { useAuth } from "../../../context/authContext.jsx";
-// import Preloader from "../../../Preloader.jsx";
-
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 const AddTeamMember = () => {
   const [name, setName] = useState("");
@@ -22,11 +21,15 @@ const AddTeamMember = () => {
   const [reportingTo, setReportingTo] = useState([]);
   const [selectedReportingTo, setSelectedReportingTo] = useState([]);
   const navigate = useNavigate();
-  // const { validToken, user, isLoading } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
 
   const fetchAllTeamMember = async () => {
     try {
-      const response = await axios.get("/api/v1/team/all-team");
+      const response = await axios.get("/api/v1/team/all-team", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
       if (response?.data?.success) {
         setReportingTo(response?.data?.team);
       }
@@ -48,7 +51,11 @@ const AddTeamMember = () => {
 
   const fetchAllRole = async () => {
     try {
-      const response = await axios.get("/api/v1/role/all-role");
+      const response = await axios.get("/api/v1/role/all-role", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
       if (response?.data?.success) {
         setRole(response?.data?.role);
       }
@@ -62,6 +69,17 @@ const AddTeamMember = () => {
     fetchAllDesignation();
     fetchAllRole();
   }, []);
+
+  const formatDateToDDMMYYYY = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const formattedJoining = formatDateToDDMMYYYY(joining);
+  const formattedDob = formatDateToDDMMYYYY(dob);
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -94,7 +112,12 @@ const AddTeamMember = () => {
         return toast.error("Select role");
       }
 
-      const response = await axios.post("/api/v1/team/create-team", { name, email, username, password, mobile, joining, dob, role: selectedRole, designation: selectedDesignation, reportingTo: selectedReportingTo });
+      const response = await axios.post("/api/v1/team/create-team", { name, email, username, password, mobile, joining: formattedJoining, dob: formattedDob, role: selectedRole, designation: selectedDesignation, reportingTo: selectedReportingTo }, {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setName("");
         setEmail("");
@@ -126,13 +149,13 @@ const AddTeamMember = () => {
     setSelectedReportingTo(selectedReportingTo?.filter((item) => item !== value));
   };
 
-  // if (isLoading) {
-  //   return <Preloader />;
-  // }
+  if (isLoading) {
+    return <Preloader />;
+  }
 
-  // if (!user?.role?.permissions?.team?.create) {
-  //   return <Navigate to="/team-member" />;
-  // }
+  if (!team?.role?.permissions?.team?.create) {
+    return <Navigate to="/team-member" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

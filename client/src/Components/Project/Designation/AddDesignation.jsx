@@ -17,9 +17,6 @@ const AddDesignation = () => {
       if (!name) {
         return toast.error("Enter name");
       }
-      if (!description) {
-        return toast.error("Enter description");
-      }
 
       const response = await axios.post("/api/v1/designation/create-designation", { name, description });
       if (response?.data?.success) {

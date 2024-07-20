@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button';
 const EditRole = () => {
   const [selectedMaster, setSelectedMaster] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { team, isLoading } = useAuth();
+  const { team, validToken, isLoading } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
   const [name, setName] = useState("");
@@ -45,6 +45,7 @@ const EditRole = () => {
         dob: { read: true, show: true },
         designation: { read: true, show: true },
         reportingTo: { read: true, show: true },
+        role: { read: true, show: true },
       },
     },
     role: {
@@ -55,82 +56,6 @@ const EditRole = () => {
       delete: false,
       fields: {
         name: { read: true, show: true },
-        customer: { read: true, show: true },
-        team: { read: true, show: true },
-        role: { read: true, show: true },
-        projectType: { read: true, show: true },
-        projectStatus: { read: true, show: true },
-        projectCategory: { read: true, show: true },
-        projectTiming: { read: true, show: true },
-        project: { read: true, show: true },
-        Designation: { read: true, show: true },
-      },
-    },
-    projectType: {
-      access: false,
-      export: false,
-      create: false,
-      update: false,
-      delete: false,
-      fields: {
-        name: { read: true, show: true },
-        description: { read: true, show: true },
-      },
-    },
-    projectStatus: {
-      access: false,
-      export: false,
-      create: false,
-      update: false,
-      delete: false,
-      fields: {
-        status: { read: true, show: true },
-        description: { read: true, show: true },
-      },
-    },
-    projectCategory: {
-      access: false,
-      export: false,
-      create: false,
-      update: false,
-      delete: false,
-      fields: {
-        name: { read: true, show: true },
-        description: { read: true, show: true },
-      },
-    },
-    projectTiming: {
-      access: false,
-      export: false,
-      create: false,
-      update: false,
-      delete: false,
-      fields: {
-        name: { read: true, show: true },
-        description: { read: true, show: true },
-      },
-    },
-    project: {
-      access: false,
-      export: false,
-      create: false,
-      update: false,
-      delete: false,
-      fields: {
-        name: { read: true, show: true },
-        projectId: { read: true, show: true },
-        type: { read: true, show: true },
-        customer: { read: true, show: true },
-        category: { read: true, show: true },
-        timing: { read: true, show: true },
-        price: { read: true, show: true },
-        responsible: { read: true, show: true },
-        leader: { read: true, show: true },
-        start: { read: true, show: true },
-        due: { read: true, show: true },
-        priority: { read: true, show: true },
-        status: { read: true, show: true },
-        description: { read: true, show: true },
       },
     },
     Designation: {
@@ -142,6 +67,73 @@ const EditRole = () => {
       fields: {
         name: { read: true, show: true },
         description: { read: true, show: true },
+      },
+      projectType: {
+        access: false,
+        export: false,
+        create: false,
+        update: false,
+        delete: false,
+        fields: {
+          name: { read: true, show: true },
+          description: { read: true, show: true },
+        },
+      },
+      projectStatus: {
+        access: false,
+        export: false,
+        create: false,
+        update: false,
+        delete: false,
+        fields: {
+          status: { read: true, show: true },
+          description: { read: true, show: true },
+        },
+      },
+      projectCategory: {
+        access: false,
+        export: false,
+        create: false,
+        update: false,
+        delete: false,
+        fields: {
+          name: { read: true, show: true },
+          description: { read: true, show: true },
+        },
+      },
+      projectTiming: {
+        access: false,
+        export: false,
+        create: false,
+        update: false,
+        delete: false,
+        fields: {
+          name: { read: true, show: true },
+          description: { read: true, show: true },
+        },
+      },
+      project: {
+        access: false,
+        export: false,
+        create: false,
+        update: false,
+        delete: false,
+        fields: {
+          name: { read: true, show: true },
+          projectId: { read: true, show: true },
+          type: { read: true, show: true },
+          customer: { read: true, show: true },
+          category: { read: true, show: true },
+          timing: { read: true, show: true },
+          price: { read: true, show: true },
+          responsible: { read: true, show: true },
+          leader: { read: true, show: true },
+          start: { read: true, show: true },
+          due: { read: true, show: true },
+          priority: { read: true, show: true },
+          status: { read: true, show: true },
+          description: { read: true, show: true },
+        },
       },
     },
   });
@@ -182,11 +174,15 @@ const EditRole = () => {
 
   const fetchSingleRole = async (id) => {
     try {
-      const response = await axios.get(`/api/v1/role/single-role/${id}`);
+      const response = await axios.get(`/api/v1/role/single-role/${id}`, {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
-        const role = response?.data?.role;
-        setName(role?.name);
-        setPermissions(role?.permissions);
+        setName(response?.data?.role?.name);
+        setPermissions(response?.data?.role?.permissions);
       }
     } catch (error) {
       console.error('Error while fetching single role:', error.message);
@@ -197,10 +193,26 @@ const EditRole = () => {
     fetchSingleRole(id);
   }, [id]);
 
+  const fieldPermissions = team?.role?.permissions?.role?.fields;
+
+  // Create the update object
+  const updateData = { permissions };
+
   const handleUpdate = async (e, id) => {
     e.preventDefault();
+
+    // Conditionally include fields based on permissions
+    if (fieldPermissions?.name?.show && !fieldPermissions?.name?.read) {
+      updateData.name = name;
+    }
+
     try {
-      const response = await axios.put(`/api/v1/role/update-role/${id}`, { name, permissions });
+      const response = await axios.put(`/api/v1/role/update-role/${id}`, updateData, {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setName("");
         setPermissions({
@@ -233,6 +245,7 @@ const EditRole = () => {
               dob: { read: true, show: true },
               designation: { read: true, show: true },
               reportingTo: { read: true, show: true },
+              role: { read: true, show: true },
             },
           },
           role: {
@@ -243,15 +256,17 @@ const EditRole = () => {
             delete: false,
             fields: {
               name: { read: true, show: true },
-              customer: { read: true, show: true },
-              team: { read: true, show: true },
-              role: { read: true, show: true },
-              projectType: { read: true, show: true },
-              projectStatus: { read: true, show: true },
-              projectCategory: { read: true, show: true },
-              projectTiming: { read: true, show: true },
-              project: { read: true, show: true },
-              Designation: { read: true, show: true },
+            },
+          },
+          Designation: {
+            access: false,
+            export: false,
+            create: false,
+            update: false,
+            delete: false,
+            fields: {
+              name: { read: true, show: true },
+              description: { read: true, show: true },
             },
           },
           projectType: {
@@ -321,17 +336,6 @@ const EditRole = () => {
               description: { read: true, show: true },
             },
           },
-          Designation: {
-            access: false,
-            export: false,
-            create: false,
-            update: false,
-            delete: false,
-            fields: {
-              name: { read: true, show: true },
-              description: { read: true, show: true },
-            },
-          },
         });
         toast.success("Role updated successfully");
         navigate("/role");
@@ -346,11 +350,11 @@ const EditRole = () => {
     customer: "Customer",
     team: "Team Member",
     role: "Role",
+    designation: "Designation",
     projectType: "Project Type",
     projectStatus: "Project Status",
     projectCategory: "Project Category",
     projectTiming: "Project Timing",
-    designation: "Designation",
     project: "Projects",
   };
 
@@ -376,30 +380,37 @@ const EditRole = () => {
     <div className="page-wrapper custom-role" style={{ paddingBottom: "1rem" }}>
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h4>Update Role</h4>
+          <h4>Edit Role</h4>
           <Link to="/role">
             <button className="btn btn-primary">Back</button>
           </Link>
         </div>
         <form onSubmit={(e) => handleUpdate(e, id)}>
-          <div className="row mb-3">
-            <div className="col-md-12">
-              <div className="form-group">
-                <label className="col-form-label" htmlFor="name">
-                  Name <span className="text-danger">*</span>
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="name"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
+          {
+            (fieldPermissions?.name?.show) ? (
+              <div className="row mb-3">
+                <div className="col-md-12">
+                  <div className="form-group">
+                    <label className="col-form-label" htmlFor="name">
+                      Name <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="name"
+                      id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      readOnly={fieldPermissions?.name?.read}
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            ) : (
+              null
+            )
+          }
           <div className="row">
             {
               Object.keys(permissionLabels).map((master) => (

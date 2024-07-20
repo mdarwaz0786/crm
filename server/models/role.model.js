@@ -271,6 +271,7 @@ const TeamPermissionSchema = new mongoose.Schema(
       dob: { type: FieldPermissionSchema, default: () => ({}) },
       designation: { type: FieldPermissionSchema, default: () => ({}) },
       reportingTo: { type: FieldPermissionSchema, default: () => ({}) },
+      role: { type: FieldPermissionSchema, default: () => ({}) },
     },
   },
 );
@@ -300,15 +301,6 @@ const RolePermissionSchema = new mongoose.Schema(
     },
     fields: {
       name: { type: FieldPermissionSchema, default: () => ({}) },
-      customer: { type: FieldPermissionSchema, default: () => ({}) },
-      team: { type: FieldPermissionSchema, default: () => ({}) },
-      role: { type: FieldPermissionSchema, default: () => ({}) },
-      projectType: { type: FieldPermissionSchema, default: () => ({}) },
-      projectStatus: { type: FieldPermissionSchema, default: () => ({}) },
-      projectCategory: { type: FieldPermissionSchema, default: () => ({}) },
-      projectTiming: { type: FieldPermissionSchema, default: () => ({}) },
-      project: { type: FieldPermissionSchema, default: () => ({}) },
-      Designation: { type: FieldPermissionSchema, default: () => ({}) },
     },
   },
 );
@@ -327,8 +319,8 @@ const RoleSchema = new mongoose.Schema(
       projectStatus: { type: ProjectStatusPermissionSchema, default: () => ({}) },
       projectCategory: { type: ProjectCategoryPermissionSchema, default: () => ({}) },
       projectTiming: { type: ProjectTimingPermissionSchema, default: () => ({}) },
-      project: { type: ProjectPermissionSchema, default: () => ({}) },
       designation: { type: DesignationPermissionSchema, default: () => ({}) },
+      project: { type: ProjectPermissionSchema, default: () => ({}) },
     },
   },
   {
