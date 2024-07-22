@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-// import { useAuth } from "../../../context/authContext.jsx";
-// import Preloader from '../../../Preloader.jsx';
+import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from '../../../Preloader.jsx';
 
 const AddDesignation = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  // const { validToken, user, isLoading } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -18,7 +18,12 @@ const AddDesignation = () => {
         return toast.error("Enter name");
       }
 
-      const response = await axios.post("/api/v1/designation/create-designation", { name, description });
+      const response = await axios.post("/api/v1/designation/create-designation", { name, description }, {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setName("");
         setDescription("");
@@ -31,13 +36,13 @@ const AddDesignation = () => {
     }
   };
 
-  // if (isLoading) {
-  //   return <Preloader />;
-  // }
+  if (isLoading) {
+    return <Preloader />;
+  }
 
-  // if (!user?.role?.permissions?.projectCategory?.create) {
-  //   return <Navigate to="/project-category" />;
-  // }
+  if (!team?.role?.permissions?.designation?.create) {
+    return <Navigate to="/designation" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
@@ -47,16 +52,16 @@ const AddDesignation = () => {
           <Link to="/designation"><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
               <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
             </div>
           </div>
-          <div className="col-md-12">
+          <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
-              <textarea className="form-control" rows={6} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
+              <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
             </div>
           </div>
         </div>

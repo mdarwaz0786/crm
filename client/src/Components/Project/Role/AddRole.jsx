@@ -54,6 +54,7 @@ const AddRole = () => {
       delete: false,
       fields: {
         name: { read: true, show: true },
+        masters: { read: true, show: true },
       },
     },
     designation: {
@@ -226,6 +227,7 @@ const AddRole = () => {
             delete: false,
             fields: {
               name: { read: true, show: true },
+              masters: { read: true, show: true },
             },
           },
           designation: {

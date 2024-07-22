@@ -56,6 +56,7 @@ const EditRole = () => {
       delete: false,
       fields: {
         name: { read: true, show: true },
+        masters: { read: true, show: true },
       },
     },
     Designation: {
@@ -193,10 +194,9 @@ const EditRole = () => {
     fetchSingleRole(id);
   }, [id]);
 
-  const fieldPermissions = team?.role?.permissions?.role?.fields;
-
   // Create the update object
   const updateData = { permissions };
+  const fieldPermissions = team?.role?.permissions?.role?.fields;
 
   const handleUpdate = async (e, id) => {
     e.preventDefault();
@@ -256,6 +256,7 @@ const EditRole = () => {
             delete: false,
             fields: {
               name: { read: true, show: true },
+              masters: { read: true, show: true },
             },
           },
           Designation: {
@@ -411,54 +412,62 @@ const EditRole = () => {
               null
             )
           }
-          <div className="row">
-            {
-              Object.keys(permissionLabels).map((master) => (
-                <div className="col-md-4 mb-3" key={master}>
-                  <div className="form-group">
-                    <div className="d-flex align-items-center mb-2">
-                      <label className="col-form-label" style={{ marginRight: "0.5rem" }}>{permissionLabels[master]} :</label>
-                      <input
-                        type="checkbox"
-                        className="form-check-input ml-2"
-                        id={`${master}.access`}
-                        name={`${master}.access`}
-                        checked={permissions[master]?.access || false}
-                        onChange={handleChange}
-                      />
-                      <label className="form-check-label" htmlFor={`${master}.access`} style={{ marginLeft: '5px' }}>
-                        Access
-                      </label>
-                    </div>
-                    {
-                      ['export', 'create', 'update', 'delete'].map((action) => (
-                        <div className="form-check" key={`${master}-${action}`}>
+          {
+            (fieldPermissions?.masters?.show) ? (
+              <div className="row">
+                {
+                  Object.keys(permissionLabels).map((master) => (
+                    <div className="col-md-4 mb-3" key={master}>
+                      <div className="form-group">
+                        <div className="d-flex align-items-center mb-2">
+                          <label className="col-form-label" style={{ marginRight: "0.5rem" }}>{permissionLabels[master]} :</label>
                           <input
                             type="checkbox"
-                            className="form-check-input"
-                            id={`${master}.${action}`}
-                            name={`${master}.${action}`}
-                            checked={permissions[master]?.[action] || false}
+                            className="form-check-input ml-2"
+                            id={`${master}.access`}
+                            name={`${master}.access`}
+                            checked={permissions[master]?.access || false}
                             onChange={handleChange}
+                            disabled={fieldPermissions?.masters?.read}
                           />
-                          <label className="form-check-label" htmlFor={`${master}.${action}`}>
-                            {action.charAt(0).toUpperCase() + action.slice(1)}
+                          <label className="form-check-label" htmlFor={`${master}.access`} style={{ marginLeft: '5px' }}>
+                            Access
                           </label>
                         </div>
-                      ))
-                    }
-                    <button
-                      type="button"
-                      className="btn btn-secondary btn-sm ml-2"
-                      onClick={() => openModal(master)}
-                    >
-                      Field Permission
-                    </button>
-                  </div>
-                </div>
-              ))
-            }
-          </div>
+                        {
+                          ['export', 'create', 'update', 'delete'].map((action) => (
+                            <div className="form-check" key={`${master}-${action}`}>
+                              <input
+                                type="checkbox"
+                                className="form-check-input"
+                                id={`${master}.${action}`}
+                                name={`${master}.${action}`}
+                                checked={permissions[master]?.[action] || false}
+                                onChange={handleChange}
+                                disabled={fieldPermissions?.masters?.read}
+                              />
+                              <label className="form-check-label" htmlFor={`${master}.${action}`}>
+                                {action.charAt(0).toUpperCase() + action.slice(1)}
+                              </label>
+                            </div>
+                          ))
+                        }
+                        <button
+                          type="button"
+                          className="btn btn-secondary btn-sm ml-2"
+                          onClick={() => openModal(master)}
+                        >
+                          Field Permission
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+            ) : (
+              null
+            )
+          }
           <div className="submit-button text-end">
             <Link to="/role" className="btn btn-light sidebar-close">
               Cancel
@@ -491,6 +500,7 @@ const EditRole = () => {
                             name={`${field}.read`}
                             checked={permission.read}
                             onChange={handleFieldPermissionChange}
+                            disabled={fieldPermissions?.masters?.read}
                           />
                           <label className="form-check-label" htmlFor={`${field}.read`}>Read Only</label>
                         </div>
@@ -502,6 +512,7 @@ const EditRole = () => {
                             name={`${field}.show`}
                             checked={permission.show}
                             onChange={handleFieldPermissionChange}
+                            disabled={fieldPermissions?.masters?.read}
                           />
                           <label className="form-check-label" htmlFor={`${field}.show`}>Show</label>
                         </div>

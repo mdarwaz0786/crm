@@ -109,6 +109,7 @@ const Role = () => {
   };
 
   const exportRoleListAsPdf = () => {
+    console.log("called");
     const element = document.querySelector("#exportRoleList");
     element.style.padding = "1.5rem";
     const options = {
@@ -185,8 +186,8 @@ const Role = () => {
                                     <div className="dropdown-menu  dropdown-menu-end">
                                       <ul>
                                         <li>
-                                          <Link to="#">
-                                            <i className="ti ti-file-type-pdf text-danger" onClick={() => setTimeout(() => { exportRoleListAsPdf() }, 1000)} />
+                                          <Link to="#" onClick={() => setTimeout(() => { exportRoleListAsPdf() }, 1000)}>
+                                            <i className="ti ti-file-type-pdf text-danger" />
                                             Export as PDF
                                           </Link>
                                         </li>

@@ -38,6 +38,7 @@ const AddProject = () => {
           Authorization: `${validToken}`,
         },
       });
+
       if (response?.data?.success) {
         setCustomer(response?.data?.customer);
       }
@@ -48,7 +49,12 @@ const AddProject = () => {
 
   const fetchAllProjectCatgory = async () => {
     try {
-      const response = await axios.get("/api/v1/projectCategory/all-projectCategory");
+      const response = await axios.get("/api/v1/projectCategory/all-projectCategory", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setProjectCategory(response?.data?.projectCategory);
       }
@@ -59,7 +65,12 @@ const AddProject = () => {
 
   const fetchAllProjectTiming = async () => {
     try {
-      const response = await axios.get("/api/v1/projectTiming/all-projectTiming");
+      const response = await axios.get("/api/v1/projectTiming/all-projectTiming", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setProjectTiming(response?.data?.projectTiming);
       }
@@ -75,6 +86,7 @@ const AddProject = () => {
           Authorization: `${validToken}`,
         },
       });
+
       if (response?.data?.success) {
         setTeamMember(response?.data?.team);
       }
@@ -85,7 +97,12 @@ const AddProject = () => {
 
   const fetchAllProjectStatus = async () => {
     try {
-      const response = await axios.get("/api/v1/projectStatus/all-projectStatus");
+      const response = await axios.get("/api/v1/projectStatus/all-projectStatus", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setProjectStatus(response?.data?.projectStatus);
       }
@@ -96,7 +113,12 @@ const AddProject = () => {
 
   const fetchAllProjectType = async () => {
     try {
-      const response = await axios.get("/api/v1/projectType/all-projectType");
+      const response = await axios.get("/api/v1/projectType/all-projectType", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setProjectType(response?.data?.projectType);
       }

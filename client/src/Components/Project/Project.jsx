@@ -35,6 +35,7 @@ const Project = () => {
           nameFilter: filters.nameFilter.map(String),
         },
       });
+
       if (response?.data?.success) {
         setProject(response?.data?.project);
         setTotal(response?.data?.totalCount);
@@ -54,6 +55,7 @@ const Project = () => {
           name,
         }
       });
+
       if (response?.data?.success) {
         setNameData(response?.data?.project);
       }
@@ -98,6 +100,7 @@ const Project = () => {
           Authorization: `${validToken}`
         }
       });
+
       if (response?.data?.success) {
         toast.success("Project deleted successfully");
         fetchAllProject();

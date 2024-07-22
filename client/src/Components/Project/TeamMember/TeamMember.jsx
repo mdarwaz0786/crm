@@ -55,6 +55,7 @@ const TeamMember = () => {
           name,
         }
       });
+
       if (response?.data?.success) {
         setNameData(response?.data?.team);
       }
@@ -98,6 +99,7 @@ const TeamMember = () => {
           Authorization: `${validToken}`,
         },
       });
+
       if (response?.data?.succes) {
         toast.success("Team member deleted successfully");
         fetchAllData();

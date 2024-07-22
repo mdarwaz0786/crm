@@ -70,7 +70,7 @@ const Sidebar = () => {
                 <ul>
                   <li className="submenu">
                     <Link to="#">
-                      <i className="ti ti-file-invoice" /><span>Master</span><span className="menu-arrow" />
+                      <i className="ti ti-file-invoice" /><span>Masters</span><span className="menu-arrow" />
                     </Link>
                     <ul>
                       {team?.role?.permissions?.customer?.access ? <li><Link to="/customer">Customer</Link></li> : null}

@@ -30,6 +30,7 @@ const AddTeamMember = () => {
           Authorization: `${validToken}`,
         },
       });
+
       if (response?.data?.success) {
         setReportingTo(response?.data?.team);
       }
@@ -40,7 +41,12 @@ const AddTeamMember = () => {
 
   const fetchAllDesignation = async () => {
     try {
-      const response = await axios.get("/api/v1/designation/all-designation");
+      const response = await axios.get("/api/v1/designation/all-designation", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setDesignation(response?.data?.designation);
       }
@@ -56,6 +62,7 @@ const AddTeamMember = () => {
           Authorization: `${validToken}`,
         },
       });
+
       if (response?.data?.success) {
         setRole(response?.data?.role);
       }

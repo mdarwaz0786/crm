@@ -42,7 +42,12 @@ const EditTeamMember = () => {
 
   const fetchAllDesignation = async () => {
     try {
-      const response = await axios.get("/api/v1/designation/all-designation");
+      const response = await axios.get("/api/v1/designation/all-designation", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setDesignation(response?.data?.designation);
       }
@@ -58,6 +63,7 @@ const EditTeamMember = () => {
           Authorization: `${validToken}`,
         },
       });
+
       if (response?.data?.success) {
         setRole(response?.data?.role);
       }
@@ -79,6 +85,7 @@ const EditTeamMember = () => {
           Authorization: `${validToken}`,
         },
       });
+
       if (response?.data?.success) {
         setName(response?.data?.team?.name);
         setEmail(response?.data?.team?.email);
@@ -100,11 +107,10 @@ const EditTeamMember = () => {
     fetchSingleData(id);
   }, [id]);
 
-  const permissions = team?.role?.permissions?.team;
-  const fieldPermissions = team?.role?.permissions?.team?.fields;
-
   // Create update object
   const updateData = {};
+  const permissions = team?.role?.permissions?.team;
+  const fieldPermissions = team?.role?.permissions?.team?.fields;
 
   const handleUpdate = async (e, id) => {
     e.preventDefault();

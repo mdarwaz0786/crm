@@ -76,8 +76,8 @@ export const fetchAllRole = async (req, res) => {
     };
 
     // Handle pagination
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
     const role = await Role.find(filter)

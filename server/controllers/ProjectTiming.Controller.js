@@ -15,14 +15,70 @@ export const createProjectTiming = async (req, res) => {
   };
 };
 
+// Helper function to build the projection object based on user permissions
+const buildProjection = (permissions) => {
+  const projectTimingFields = permissions.projectTiming.fields;
+  const projection = {};
+
+  for (const [key, value] of Object.entries(projectTimingFields)) {
+    if (value.show) {
+      projection[key] = 1;
+    } else {
+      projection[key] = 0;
+    };
+  };
+
+  if (projection._id === undefined) {
+    projection._id = 1;
+  };
+  return projection;
+};
+
+// Helper function to filter fields based on projection
+const filterFields = (projectTiming, projection) => {
+  const filteredProjectTiming = {};
+  for (const key in projectTiming._doc) {
+    if (projection[key]) {
+      filteredProjectTiming[key] = projectTiming[key];
+    };
+  };
+
+  if (projection._id !== undefined && !filteredProjectTiming._id) {
+    filteredProjectTiming._id = projectTiming._id;
+  };
+  return filteredProjectTiming;
+};
+
 // Controller for fetching all project timing
 export const fetchAllProjectTiming = async (req, res) => {
   try {
     let filter = {};
+    let sort = {};
 
-    // Handle search query
+    // Handle universal searching across all fields
     if (req.query.search) {
-      filter.name = { $regex: new RegExp(req.query.search, 'i') };
+      const searchRegex = new RegExp(req.query.search, 'i');
+      filter.$or = [
+        { name: { $regex: searchRegex } },
+        { description: { $regex: searchRegex } },
+      ];
+    };
+
+    // Handle name search
+    if (req.query.name) {
+      filter.name = { $regex: new RegExp(req.query.name, 'i') };
+    };
+
+    // Handle name filter
+    if (req.query.nameFilter) {
+      filter.name = { $in: Array.isArray(req.query.nameFilter) ? req.query.nameFilter : [req.query.nameFilter] };
+    };
+
+    // Handle sorting
+    if (req.query.sort === 'Ascending') {
+      sort = { createdAt: 1 };
+    } else {
+      sort = { createdAt: -1 };
     };
 
     // Handle pagination
@@ -30,16 +86,22 @@ export const fetchAllProjectTiming = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const projectTiming = await ProjectTiming.find(filter).skip(skip).limit(limit).exec();
+    const projectTiming = await ProjectTiming.find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .exec();
 
     if (!projectTiming) {
       return res.status(404).json({ success: false, message: "Project timing not found" });
     };
 
-    // Get total count of project timing
+    const permissions = req.team.role.permissions;
+    const projection = buildProjection(permissions);
+    const filteredProjectTiming = projectTiming.map((projectTiming) => filterFields(projectTiming, projection));
     const totalCount = await ProjectTiming.countDocuments(filter);
 
-    return res.status(200).json({ success: true, message: "Project timing fetched successfully", projectTiming, totalCount });
+    return res.status(200).json({ success: true, message: "Project timing fetched successfully", projectTiming: filteredProjectTiming, totalCount });
   } catch (error) {
     console.log("Error while fetching project timing:", error.message);
     return res.status(500).json({ success: false, message: "Error while fetching project timing" });
@@ -55,8 +117,11 @@ export const fetchSingleProjectTiming = async (req, res) => {
     if (!projectTiming) {
       return res.status(404).json({ success: false, message: "Project timing not found" });
     };
+    const permissions = req.team.role.permissions;
+    const projection = buildProjection(permissions);
+    const filteredProjectTiming = filterFields(projectTiming, projection);
 
-    return res.status(200).json({ success: true, message: "Project timing fetched successfully", projectTiming });
+    return res.status(200).json({ success: true, message: "Project timing fetched successfully", projectTiming: filteredProjectTiming });
   } catch (error) {
     console.log("Error while fetching project timing:", error.message);
     return res.status(500).json({ success: false, message: "Error while fetching project timing" });

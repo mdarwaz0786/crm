@@ -1,15 +1,15 @@
 import { useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
-// import { useAuth } from "../../../context/authContext.jsx";
-// import Preloader from "../../../Preloader.jsx";
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 const AddProjectStatus = () => {
   const [status, setStatus] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  // const { validToken, user, isLoading } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -17,11 +17,13 @@ const AddProjectStatus = () => {
       if (!status) {
         return toast.error("Enter status");
       }
-      if (!description) {
-        return toast.error("Enter description");
-      }
 
-      const response = await axios.post("/api/v1/projectStatus/create-projectStatus", { status, description });
+      const response = await axios.post("/api/v1/projectStatus/create-projectStatus", { status, description }, {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setStatus("");
         setDescription("");
@@ -34,13 +36,13 @@ const AddProjectStatus = () => {
     }
   };
 
-  // if (isLoading) {
-  //   return <Preloader />;
-  // }
+  if (isLoading) {
+    return <Preloader />;
+  }
 
-  // if (!user?.role?.permissions?.projectStatus?.create) {
-  //   return <Navigate to="/project-status" />;
-  // }
+  if (!team?.role?.permissions?.projectStatus?.create) {
+    return <Navigate to="/project-status" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
@@ -50,16 +52,16 @@ const AddProjectStatus = () => {
           <Link to="/project-status"><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="status">Status <span className="text-danger">*</span></label>
               <input type="text" className="form-control" name="status" id="status" value={status} onChange={(e) => setStatus(e.target.value)} required />
             </div>
           </div>
-          <div className="col-md-12">
+          <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
-              <textarea className="form-control" rows={6} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
+              <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
             </div>
           </div>
         </div>

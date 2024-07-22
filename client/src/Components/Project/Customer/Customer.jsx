@@ -53,7 +53,7 @@ const Customer = () => {
         },
         params: {
           name,
-        }
+        },
       });
       if (response?.data?.success) {
         setNameData(response?.data?.customer);
@@ -183,7 +183,7 @@ const Customer = () => {
                                     <div className="dropdown-menu  dropdown-menu-end">
                                       <ul>
                                         <li>
-                                          <Link to="#" onClick={() => setTimeout(() => { exportCustomerListAsPdf() }, 1000)}>
+                                          <Link to="#" onClick={() => setTimeout(() => { exportCustomerListAsPdf() }, 0)}>
                                             <i className="ti ti-file-type-pdf text-danger" />
                                             Export as PDF
                                           </Link>
@@ -311,7 +311,6 @@ const Customer = () => {
                     </div>
                   </div>
                   {/* /Filter */}
-
 
                   {/* Customer List */}
                   <div className="table-responsive custom-table">

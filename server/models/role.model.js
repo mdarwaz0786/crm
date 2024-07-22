@@ -301,6 +301,7 @@ const RolePermissionSchema = new mongoose.Schema(
     },
     fields: {
       name: { type: FieldPermissionSchema, default: () => ({}) },
+      masters: { type: FieldPermissionSchema, default: () => ({}) },
     },
   },
 );

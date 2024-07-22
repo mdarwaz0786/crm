@@ -1,21 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-// import { useAuth } from "../../../context/authContext.jsx";
-// import Preloader from "../../../Preloader.jsx";
+import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 const EditProjectType = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  // const { validToken, user, isLoading } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
-      const response = await axios.get(`/api/v1/projectType/single-projectType/${id}`);
+      const response = await axios.get(`/api/v1/projectType/single-projectType/${id}`, {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setName(response?.data?.projectType?.name);
         setDescription(response?.data?.projectType?.description);
@@ -29,10 +34,29 @@ const EditProjectType = () => {
     fetchSingleData(id);
   }, [id]);
 
+  // Create update object
+  const updateData = {};
+  const fieldPermissions = team?.role?.permissions?.projectType?.fields;
+
   const handleUpdate = async (e, id) => {
     e.preventDefault();
+
+    // Conditionally include fields based on permissions
+    if (fieldPermissions?.name?.show && !fieldPermissions?.name?.read) {
+      updateData.name = name;
+    }
+
+    if (fieldPermissions?.description?.show && !fieldPermissions?.description?.read) {
+      updateData.description = description;
+    }
+
     try {
-      const response = await axios.put(`/api/v1/projectType/update-projectType/${id}`, { name, description });
+      const response = await axios.put(`/api/v1/projectType/update-projectType/${id}`, updateData, {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         setName("");
         setDescription("");
@@ -45,13 +69,13 @@ const EditProjectType = () => {
     }
   };
 
-  // if (isLoading) {
-  //   return <Preloader />;
-  // }
+  if (isLoading) {
+    return <Preloader />;
+  }
 
-  // if (!user?.role?.permissions?.projectType?.update) {
-  //   return <Navigate to="/project-type" />;
-  // }
+  if (!team?.role?.permissions?.projectType?.update) {
+    return <Navigate to="/project-type" />;
+  }
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
@@ -61,18 +85,30 @@ const EditProjectType = () => {
           <Link to="/project-type"><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
-          <div className="col-md-12">
-            <div className="form-wrap">
-              <label className="col-form-label" htmlFor="name">Type <span className="text-danger">*</span></label>
-              <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
-            </div>
-          </div>
-          <div className="col-md-12">
-            <div className="form-wrap">
-              <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
-              <textarea className="form-control" rows={6} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
-            </div>
-          </div>
+          {
+            (fieldPermissions?.name?.show) ? (
+              <div className="col-md-6">
+                <div className="form-wrap">
+                  <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
+                  <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required readOnly={fieldPermissions?.name?.read} />
+                </div>
+              </div>
+            ) : (
+              null
+            )
+          }
+          {
+            (fieldPermissions?.description?.show) ? (
+              <div className="col-md-6">
+                <div className="form-wrap">
+                  <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
+                  <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required readOnly={fieldPermissions?.description?.read} />
+                </div>
+              </div>
+            ) : (
+              null
+            )
+          }
         </div>
         <div className="submit-button text-end">
           <Link to="/project-type" className="btn btn-light">Cancel</Link>

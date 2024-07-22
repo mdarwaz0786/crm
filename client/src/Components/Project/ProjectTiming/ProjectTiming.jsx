@@ -2,20 +2,40 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
-// import { useAuth } from "../../../context/authContext.jsx";
-// import Preloader from "../../../Preloader.jsx";
-
+import { Link, Navigate } from 'react-router-dom';
+import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
+import html2pdf from "html2pdf.js";
 
 const ProjectTiming = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState("");
-  // const { validToken, user, isLoading } = useAuth();
-  let i = 1;
+  const { validToken, team, isLoading } = useAuth();
+  const [nameData, setNameData] = useState([]);
+  const [name, setName] = useState("");
+  const [filters, setFilters] = useState({
+    search: "",
+    nameFilter: [],
+    sort: "",
+    page: 1,
+    limit: 2,
+  });
 
   const fetchAllData = async () => {
     try {
-      const response = await axios.get("/api/v1/projectTiming/all-projectTiming");
+      const response = await axios.get("/api/v1/projectTiming/all-projectTiming", {
+        headers: {
+          Authorization: `${validToken}`
+        },
+        params: {
+          search: filters.search,
+          sort: filters.sort,
+          page: filters.page,
+          limit: filters.limit,
+          nameFilter: filters.nameFilter.map(String),
+        },
+      });
+
       if (response?.data?.success) {
         setData(response?.data?.projectTiming);
         setTotal(response?.data?.totalCount);
@@ -23,15 +43,63 @@ const ProjectTiming = () => {
     } catch (error) {
       console.log(error.message);
     }
-  }
+  };
+
+  const fetchAllProjectTimingName = async () => {
+    try {
+      const response = await axios.get("/api/v1/projectTiming/all-projectTiming", {
+        headers: {
+          Authorization: `${validToken}`
+        },
+        params: {
+          name,
+        },
+      });
+
+      if (response?.data?.success) {
+        setNameData(response?.data?.projectTiming);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllProjectTimingName();
+  }, [name]);
+
+  const handleFilterChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [name]: checked
+          ? [...prevFilters[name], value]
+          : prevFilters[name].filter((item) => item !== value),
+        page: 1,
+      }));
+    } else {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [name]: value,
+        page: 1,
+      }));
+    }
+  };
 
   useEffect(() => {
     fetchAllData();
-  }, []);
+  }, [filters]);
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`/api/v1/projectTiming/delete-projectTiming/${id}`);
+      const response = await axios.delete(`/api/v1/projectTiming/delete-projectTiming/${id}`, {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
       if (response?.data?.success) {
         toast.success("Project timing deleted successfully");
         fetchAllData();
@@ -42,19 +110,38 @@ const ProjectTiming = () => {
     }
   };
 
-  // if (isLoading) {
-  //   return <Preloader />;
-  // }
+  const exportProjectTimingListAsPdf = () => {
+    const element = document.querySelector("#exportProjectTimingList");
+    element.style.padding = "1.5rem";
+    const options = {
+      filename: "project-timing-list.pdf",
+      html2canvas: {
+        useCORS: true,
+      },
+      jsPDF: {
+        orientation: 'landscape',
+      },
+    };
+    html2pdf().set(options).from(element).save();
+  };
 
-  // if (!user?.role?.permissions?.projectTiming?.access) {
-  //   return <Navigate to="/" />;
-  // }
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  const permissions = team?.role?.permissions?.projectTiming;
+  const FiledPermissions = team?.role?.permissions?.projectTiming?.fields;
+
+  if (!permissions?.access) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <>
       {/* Page Wrapper */}
       <div className="page-wrapper">
-        <div className="content">
+        <div className="content" id="exportProjectTimingList">
           <div className="row">
             <div className="col-md-12">
               {/* Page Header */}
@@ -85,42 +172,48 @@ const ProjectTiming = () => {
                       <div className="col-md-5 col-sm-4">
                         <div className="form-wrap icon-form">
                           <span className="form-icon"><i className="ti ti-search" /></span>
-                          <input type="text" className="form-control" placeholder="Search Project Timing" />
+                          <input type="text" className="form-control" placeholder="Search Project Timing" value={filters.search} onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))} />
                         </div>
                       </div>
                       <div className="col-md-7 col-sm-8">
                         <div className="export-list text-sm-end">
                           <ul>
-                            <li>
-                              <div className="export-dropdwon">
-                                <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
-                                  <i className="ti ti-package-export" />
-                                  Export
-                                </Link>
-                                <div className="dropdown-menu  dropdown-menu-end">
-                                  <ul>
-                                    <li>
-                                      <Link to="#">
-                                        <i className="ti ti-file-type-pdf text-danger" />
-                                        Export as PDF
-                                      </Link>
-                                    </li>
-                                    <li>
-                                      <Link to="#">
-                                        <i className="ti ti-file-type-xls text-green" />
-                                        Export as Excel
-                                      </Link>
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <Link to="/add-project-timing" className="btn btn-primary">
-                                <i className="ti ti-square-rounded-plus" />
-                                Add New Project Timing
-                              </Link>
-                            </li>
+                            {
+                              (permissions?.export) ? (
+                                <li>
+                                  <div className="export-dropdwon">
+                                    <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
+                                      <i className="ti ti-package-export" />
+                                      Export
+                                    </Link>
+                                    <div className="dropdown-menu  dropdown-menu-end">
+                                      <ul>
+                                        <li>
+                                          <Link to="#" onClick={() => setTimeout(() => { exportProjectTimingListAsPdf() }, 0)}>
+                                            <i className="ti ti-file-type-pdf text-danger" />
+                                            Export as PDF
+                                          </Link>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </li>
+                              ) : (
+                                null
+                              )
+                            }
+                            {
+                              (permissions?.create) ? (
+                                <li>
+                                  <Link to="/add-project-timing" className="btn btn-primary">
+                                    <i className="ti ti-square-rounded-plus" />
+                                    Add New Project Timing
+                                  </Link>
+                                </li>
+                              ) : (
+                                null
+                              )
+                            }
                           </ul>
                         </div>
                       </div>
@@ -138,13 +231,13 @@ const ProjectTiming = () => {
                             <div className="dropdown-menu  dropdown-menu-start">
                               <ul>
                                 <li>
-                                  <Link to="#">
+                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, sort: "Ascending" }))}>
                                     <i className="ti ti-circle-chevron-right" />
                                     Ascending
                                   </Link>
                                 </li>
                                 <li>
-                                  <Link to="#">
+                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, sort: "Descending" }))}>
                                     <i className="ti ti-circle-chevron-right" />
                                     Descending
                                   </Link>
@@ -168,26 +261,32 @@ const ProjectTiming = () => {
                                 <div className="accordion" id="accordionExample">
                                   <div className="filter-set-content">
                                     <div className="filter-set-content-head">
-                                      <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Project Timing</Link>
+                                      <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Project Timing Name</Link>
                                     </div>
                                     <div className="filter-set-contents accordion-collapse collapse show" id="collapseTwo" data-bs-parent="#accordionExample">
                                       <div className="filter-content-list">
                                         <div className="form-wrap icon-form">
                                           <span className="form-icon"><i className="ti ti-search" /></span>
-                                          <input type="text" className="form-control" placeholder="Search Type" />
+                                          <input type="text" className="form-control" placeholder="Search Project Timing Name" onChange={(e) => setName(e.target.value)} />
                                         </div>
                                         <ul>
                                           {
-                                            data?.map((d) => (
-                                              <li key={d?._id}>
+                                            nameData?.map((n) => (
+                                              <li key={n._id}>
                                                 <div className="filter-checks">
                                                   <label className="checkboxs">
-                                                    <input type="checkbox" />
+                                                    <input
+                                                      type="checkbox"
+                                                      name="nameFilter"
+                                                      value={n?.name}
+                                                      checked={filters.nameFilter.includes(n?.name)}
+                                                      onChange={handleFilterChange}
+                                                    />
                                                     <span className="checkmarks" />
                                                   </label>
                                                 </div>
                                                 <div className="collapse-inside-text">
-                                                  <h5>{d?.name}</h5>
+                                                  <h5>{n?.name}</h5>
                                                 </div>
                                               </li>
                                             ))
@@ -200,10 +299,7 @@ const ProjectTiming = () => {
                                 <div className="filter-reset-btns">
                                   <div className="row">
                                     <div className="col-6">
-                                      <Link to="#" className="btn btn-light">Reset</Link>
-                                    </div>
-                                    <div className="col-6">
-                                      <Link to="#" className="btn btn-primary">Filter</Link>
+                                      <Link to="#" className="btn btn-light" onClick={() => setFilters((prev) => ({ ...prev, nameFilter: [] }))}>Reset</Link>
                                     </div>
                                   </div>
                                 </div>
@@ -232,35 +328,71 @@ const ProjectTiming = () => {
                             <label className="checkboxs"><input type="checkbox" id="select-all" /><span className="checkmarks" /></label>
                           </th>
                           <th>#</th>
-                          <th>Name</th>
-                          <th>Description</th>
+                          {
+                            (FiledPermissions?.name?.show) ? (
+                              <th>Name</th>
+                            ) : (
+                              null
+                            )
+                          }
+                          {
+                            (FiledPermissions?.description?.show) ? (
+                              <th>Description</th>
+                            ) : (
+                              null
+                            )
+                          }
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {
-                          data?.map((d) => (
+                          data?.map((d, index) => (
                             <tr key={d?._id}>
                               <td>
                                 <label className="checkboxs"><input type="checkbox" /><span className="checkmarks"></span></label>
                               </td>
-                              <td>{i++}</td>
-                              <td>{d?.name}</td>
-                              <td>{d?.description}</td>
+                              <td> {(filters.page - 1) * filters.limit + index + 1}</td>
+                              {
+                                (FiledPermissions?.name?.show) ? (
+                                  <td>{d?.name}</td>
+                                ) : (
+                                  null
+                                )
+                              }
+                              {
+                                (FiledPermissions?.description?.show) ? (
+                                  <td>{d?.description}</td>
+                                ) : (
+                                  null
+                                )
+                              }
                               <td>
                                 <div className="table-action">
                                   <Link to="#" className="action-icon" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i className="fa fa-ellipsis-v"></i>
                                   </Link>
                                   <div className="dropdown-menu dropdown-menu-right">
-                                    <Link to={`/edit-project-timing/${d?._id}`} className="dropdown-item">
-                                      <i className="ti ti-edit text-blue"></i>
-                                      Edit
-                                    </Link>
-                                    <Link to="#" className="dropdown-item" onClick={() => handleDelete(d?._id)}>
-                                      <i className="ti ti-trash text-danger"></i>
-                                      Delete
-                                    </Link>
+                                    {
+                                      (permissions?.update) ? (
+                                        <Link to={`/edit-project-timing/${d?._id}`} className="dropdown-item">
+                                          <i className="ti ti-edit text-blue"></i>
+                                          Update
+                                        </Link>
+                                      ) : (
+                                        null
+                                      )
+                                    }
+                                    {
+                                      (permissions?.delete) ? (
+                                        <Link to="#" className="dropdown-item" onClick={() => handleDelete(d?._id)}>
+                                          <i className="ti ti-trash text-danger"></i>
+                                          Delete
+                                        </Link>
+                                      ) : (
+                                        null
+                                      )
+                                    }
                                   </div>
                                 </div>
                               </td>
@@ -276,11 +408,12 @@ const ProjectTiming = () => {
                         <div className="dataTables_length" id="project-list_length">
                           <label>
                             Show
-                            <select name="project-list_length" aria-controls="project-list" className="form-select form-select-sm">
+                            <select name="project-list_length" value={filters.limit} onChange={(e) => setFilters((prev) => ({ ...prev, limit: e.target.value }))} aria-controls="project-list" className="form-select form-select-sm">
                               <option value="10">10</option>
+                              <option value="15">15</option>
+                              <option value="20">20</option>
                               <option value="25">25</option>
-                              <option value="50">50</option>
-                              <option value="100">100</option>
+                              <option value={total}>All</option>
                             </select>
                             entries
                           </label>
@@ -291,28 +424,23 @@ const ProjectTiming = () => {
                       <div className="datatable-paginate">
                         <div className="dataTables_paginate paging_simple_numbers" id="project-list_paginate">
                           <ul className="pagination">
-                            <li className="paginate_button page-item previous disabled" id="project-list_previous">
-                              <Link to="#" aria-controls="project-list" aria-disabled="true" role="link" data-dt-idx="previous" tabIndex="-1"
-                                className="page-link">
-                                <i className="fa fa-angle-left"></i>
-                                Prev
+                            <li className={`paginate_button page-item previous ${filters.page === 1 ? "disabled" : ""}`} id="project-list_previous">
+                              <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: filters.page - 1 }))} aria-controls="project-list" aria-disabled={filters.page === 1} role="link" data-dt-idx="previous" tabIndex="-1" className="page-link" >
+                                <i className="fa fa-angle-left"></i> Prev
                               </Link>
                             </li>
-                            <li className="paginate_button page-item active">
-                              <Link to="#" aria-controls="project-list" role="link" aria-current="page" data-dt-idx="0" tabIndex="0"
-                                className="page-link">
-                                1
-                              </Link>
-                            </li>
-                            <li className="paginate_button page-item ">
-                              <Link to="#" aria-controls="project-list" role="link" data-dt-idx="1" tabIndex="0" className="page-link">
-                                2
-                              </Link>
-                            </li>
-                            <li className="paginate_button page-item next" id="project-list_next">
-                              <Link to="#" aria-controls="project-list" role="link" data-dt-idx="next" tabIndex="0" className="page-link">
-                                Next
-                                <i className="fa fa-angle-right"></i>
+                            {
+                              [...Array(Math.ceil(total / filters.limit)).keys()].map((num) => (
+                                <li className={`paginate_button page-item ${filters.page === num + 1 ? "active" : ""}`} key={num}>
+                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: num + 1 }))} aria-controls="project-list" role="link" aria-current={filters.page === num + 1} data-dt-idx={num} tabIndex="0" className="page-link">
+                                    {num + 1}
+                                  </Link>
+                                </li>
+                              ))
+                            }
+                            <li className={`paginate_button page-item next ${filters.page === Math.ceil(total / filters.limit) ? "disabled" : ""}`} id="project-list_next">
+                              <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: filters.page + 1 }))} className="page-link" aria-controls="project-list" role="link" data-dt-idx="next" tabIndex="0">
+                                Next <i className="fa fa-angle-right"></i>
                               </Link>
                             </li>
                           </ul>
