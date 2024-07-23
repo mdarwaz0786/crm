@@ -118,3 +118,11 @@
 .custom-role .form-check {
   margin-right: 1rem;
 }
+
+@media screen and (max-width: 767px) {
+  .filter-reset-btns a {
+    font-size: 0.85rem !important;
+    width: 100% !important;
+    padding: 0.5rem !important;
+  }
+}
