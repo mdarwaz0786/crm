@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import axios from 'axios';
@@ -39,11 +40,11 @@ const Customer = () => {
       if (response?.data?.success) {
         setData(response?.data?.customer);
         setTotal(response?.data?.totalCount);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
-  }
+    };
+  };
 
   const fetchAllCustomerName = async () => {
     try {
@@ -55,12 +56,13 @@ const Customer = () => {
           name,
         },
       });
+
       if (response?.data?.success) {
         setNameData(response?.data?.customer);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   useEffect(() => {
@@ -84,7 +86,7 @@ const Customer = () => {
         [name]: value,
         page: 1,
       }));
-    }
+    };
   };
 
   useEffect(() => {
@@ -98,14 +100,15 @@ const Customer = () => {
           Authorization: `${validToken}`,
         },
       });
+
       if (response?.data?.success) {
         toast.success("Customer deleted successfully");
         fetchAllData();
-      }
+      };
     } catch (error) {
       console.log("Error while deleting customer:", error.message);
       toast.error("Error while deleting customer");
-    }
+    };
   };
 
   const exportCustomerListAsPdf = () => {
@@ -125,11 +128,14 @@ const Customer = () => {
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
-  if (!team?.role?.permissions?.customer?.access) {
+  const permissions = team?.role?.permissions?.customer;
+  const filedPermissions = team?.role?.permissions?.customer?.fields;
+
+  if (!permissions?.access) {
     return <Navigate to="/" />;
-  }
+  };
 
   return (
     <>
@@ -173,7 +179,7 @@ const Customer = () => {
                         <div className="export-list text-sm-end">
                           <ul>
                             {
-                              (team?.role?.permissions?.customer?.export) ? (
+                              (permissions?.export) ? (
                                 <li>
                                   <div className="export-dropdwon">
                                     <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
@@ -197,7 +203,7 @@ const Customer = () => {
                               )
                             }
                             {
-                              (team?.role?.permissions?.customer?.create) ? (
+                              (permissions?.create) ? (
                                 <li>
                                   <Link to="/add-customer" className="btn btn-primary">
                                     <i className="ti ti-square-rounded-plus" />
@@ -322,21 +328,21 @@ const Customer = () => {
                           </th>
                           <th>#</th>
                           {
-                            (team?.role?.permissions?.customer?.fields?.name?.show) ? (
+                            (filedPermissions?.name?.show) ? (
                               <th>Name</th>
                             ) : (
                               null
                             )
                           }
                           {
-                            (team?.role?.permissions?.customer?.fields?.email?.show) ? (
+                            (filedPermissions?.email?.show) ? (
                               <th>Email</th>
                             ) : (
                               null
                             )
                           }
                           {
-                            (team?.role?.permissions?.customer?.fields?.mobile?.show) ? (
+                            (filedPermissions?.mobile?.show) ? (
                               <th>Mobile</th>
                             ) : (
                               null
@@ -354,21 +360,21 @@ const Customer = () => {
                               </td>
                               <td> {(filters.page - 1) * filters.limit + index + 1}</td>
                               {
-                                (team?.role?.permissions?.customer?.fields?.name?.show) ? (
+                                (filedPermissions?.name?.show) ? (
                                   <td>{d?.name}</td>
                                 ) : (
                                   null
                                 )
                               }
                               {
-                                (team?.role?.permissions?.customer?.fields?.email?.show) ? (
+                                (filedPermissions?.email?.show) ? (
                                   <td>{d?.email}</td>
                                 ) : (
                                   null
                                 )
                               }
                               {
-                                (team?.role?.permissions?.customer?.fields?.mobile?.show) ? (
+                                (filedPermissions?.mobile?.show) ? (
                                   <td>{d?.mobile}</td>
                                 ) : (
                                   null
@@ -381,7 +387,7 @@ const Customer = () => {
                                   </Link>
                                   <div className="dropdown-menu dropdown-menu-right">
                                     {
-                                      (team?.role?.permissions?.customer?.update) ? (
+                                      (permissions?.update) ? (
                                         <Link to={`/edit-customer/${d?._id}`} className="dropdown-item">
                                           <i className="ti ti-edit text-blue"></i>
                                           Update
@@ -391,7 +397,7 @@ const Customer = () => {
                                       )
                                     }
                                     {
-                                      (team?.role?.permissions?.customer?.delete) ? (
+                                      (permissions?.delete) ? (
                                         <Link to="#" className="dropdown-item" onClick={() => handleDelete(d?._id)}>
                                           <i className="ti ti-trash text-danger"></i>
                                           Delete

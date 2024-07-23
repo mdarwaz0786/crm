@@ -1,8 +1,9 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
 import Preloader from "../../../Preloader.jsx";
 import html2pdf from "html2pdf.js";
@@ -39,10 +40,10 @@ const ProjectType = () => {
       if (response?.data?.success) {
         setData(response?.data?.projectType);
         setTotal(response?.data?.totalCount);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   const fetchAllProjectTypeName = async () => {
@@ -58,10 +59,10 @@ const ProjectType = () => {
 
       if (response?.data?.success) {
         setNameData(response?.data?.projectType);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   useEffect(() => {
@@ -103,11 +104,11 @@ const ProjectType = () => {
       if (response?.data?.success) {
         toast.success("Project type deleted successfully");
         fetchAllData();
-      }
+      };
     } catch (error) {
       console.log("Error while deleting project type:", error.message);
       toast.error("Error while deleting project type");
-    }
+    };
   };
 
   const exportProjectTypeListAsPdf = () => {
@@ -127,14 +128,14 @@ const ProjectType = () => {
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
   const permissions = team?.role?.permissions?.projectType;
-  const FiledPermissions = team?.role?.permissions?.projectType?.fields;
+  const filedPermissions = team?.role?.permissions?.projectType?.fields;
 
   if (!permissions?.access) {
     return <Navigate to="/" />;
-  }
+  };
 
   return (
     <>
@@ -326,14 +327,14 @@ const ProjectType = () => {
                           </th>
                           <th>#</th>
                           {
-                            (FiledPermissions?.name?.show) ? (
+                            (filedPermissions?.name?.show) ? (
                               <th>Name</th>
                             ) : (
                               null
                             )
                           }
                           {
-                            (FiledPermissions?.description?.show) ? (
+                            (filedPermissions?.description?.show) ? (
                               <th>Description</th>
                             ) : (
                               null
@@ -351,14 +352,14 @@ const ProjectType = () => {
                               </td>
                               <td> {(filters.page - 1) * filters.limit + index + 1}</td>
                               {
-                                (FiledPermissions?.name?.show) ? (
+                                (filedPermissions?.name?.show) ? (
                                   <td>{d?.name}</td>
                                 ) : (
                                   null
                                 )
                               }
                               {
-                                (FiledPermissions?.description?.show) ? (
+                                (filedPermissions?.description?.show) ? (
                                   <td>{d?.description}</td>
                                 ) : (
                                   null

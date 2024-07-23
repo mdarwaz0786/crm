@@ -6,10 +6,11 @@ export const createProject = async (req, res) => {
   try {
     const project = new Project(req.body);
     await project.save();
+
     return res.status(201).json({ success: true, message: "Project created successfully", project });
   } catch (error) {
     console.log("Error while creating project:", error.message);
-    return res.status(500).json({ success: false, message: "Error while creating project" });
+    return res.status(500).json({ success: false, message: `Error while creating project: ${error.message}` });
   };
 };
 
@@ -22,7 +23,7 @@ const buildProjection = (permissions) => {
     if (value.show) {
       projection[key] = 1;
     } else {
-      projection[key] = 0; // Ensure excluded fields are marked as 0
+      projection[key] = 0;
     };
   };
 
@@ -30,12 +31,14 @@ const buildProjection = (permissions) => {
   if (projection._id === undefined) {
     projection._id = 1;
   };
+
   return projection;
 };
 
 // Helper function to filter fields based on projection
 const filterFields = (project, projection) => {
   const filteredProject = {};
+
   for (const key in project._doc) {
     if (projection[key]) {
       filteredProject[key] = project[key];
@@ -46,6 +49,7 @@ const filterFields = (project, projection) => {
   if (projection._id !== undefined && !filteredProject._id) {
     filteredProject._id = project._id;
   };
+
   return filteredProject;
 };
 
@@ -85,8 +89,8 @@ export const fetchAllProject = async (req, res) => {
         { category: await findObjectIdByString('ProjectCategory', 'name', req.query.search) },
         { timing: await findObjectIdByString('ProjectTiming', 'name', req.query.search) },
         { status: await findObjectIdByString('ProjectStatus', 'status', req.query.search) },
-        { responsible: await findObjectIdArrayByString('Team', 'name', req.query.search) },
-        { leader: await findObjectIdArrayByString('Team', 'name', req.query.search) }
+        { responsible: { $in: await findObjectIdArrayByString('Team', 'name', req.query.search) } },
+        { leader: { $in: await findObjectIdArrayByString('Team', 'name', req.query.search) } },
       ];
     };
 
@@ -98,6 +102,16 @@ export const fetchAllProject = async (req, res) => {
     // Handle name filter
     if (req.query.nameFilter) {
       filter.name = { $in: Array.isArray(req.query.nameFilter) ? req.query.nameFilter : [req.query.nameFilter] };
+    };
+
+    // Handle projectId search
+    if (req.query.projectId) {
+      filter.projectId = { $regex: new RegExp(req.query.projectId, 'i') };
+    };
+
+    // Handle projectId filter
+    if (req.query.projectIdFilter) {
+      filter.projectId = { $in: Array.isArray(req.query.projectIdFilter) ? req.query.projectIdFilter : [req.query.projectIdFilter] };
     };
 
     // Handle sorting
@@ -132,8 +146,8 @@ export const fetchAllProject = async (req, res) => {
 
     return res.status(200).json({ success: true, message: "All projects fetched successfully", project: filteredProject, totalCount });
   } catch (error) {
-    console.log("Error while fetching all projects:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching all projects" });
+    console.log("Error while fetching all project:", error.message);
+    return res.status(500).json({ success: false, message: `Error while fetching all project: ${error.message}` });
   };
 };
 
@@ -163,7 +177,7 @@ export const fetchSingleProject = async (req, res) => {
     return res.status(200).json({ success: true, message: "Single project fetched successfully", project: filteredProject });
   } catch (error) {
     console.log("Error while fetching single project:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching single project" });
+    return res.status(500).json({ success: false, message: `Error while fetching single project: ${error.message}` });
   };
 };
 
@@ -180,7 +194,7 @@ export const updateProject = async (req, res) => {
     return res.status(200).json({ success: true, message: "Project updated successfully", project });
   } catch (error) {
     console.log("Error while updating project:", error.message);
-    return res.status(500).json({ success: false, message: "Error while updating project" });
+    return res.status(500).json({ success: false, message: `Error while updating project: ${error.message}` });
   };
 };
 
@@ -194,9 +208,9 @@ export const deleteProject = async (req, res) => {
       return res.status(404).json({ success: false, message: "Project not found" });
     };
 
-    return res.status(200).json({ success: true, message: "Project deleted successfully", project });
+    return res.status(200).json({ success: true, message: "Project deleted successfully" });
   } catch (error) {
     console.log("Error while deleting project:", error.message);
-    return res.status(500).json({ success: false, message: "Error while deleting project" });
+    return res.status(500).json({ success: false, message: `Error while deleting project: ${error.message}` });
   };
 };

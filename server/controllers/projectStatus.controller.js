@@ -11,7 +11,7 @@ export const createProjectStatus = async (req, res) => {
     return res.status(200).json({ success: true, message: "Project status created successfully", projectStatus });
   } catch (error) {
     console.log("Error while creating project status:", error.message);
-    return res.status(500).json({ success: false, message: "Error while creating project status" });
+    return res.status(500).json({ success: false, message: `Error while creating project status: ${error.message}` });
   };
 };
 
@@ -31,12 +31,14 @@ const buildProjection = (permissions) => {
   if (projection._id === undefined) {
     projection._id = 1;
   };
+
   return projection;
 };
 
 // Helper function to filter fields based on projection
 const filterFields = (projectStatus, projection) => {
   const filteredProjectStatus = {};
+
   for (const key in projectStatus._doc) {
     if (projection[key]) {
       filteredProjectStatus[key] = projectStatus[key];
@@ -46,6 +48,7 @@ const filterFields = (projectStatus, projection) => {
   if (projection._id !== undefined && !filteredProjectStatus._id) {
     filteredProjectStatus._id = projectStatus._id;
   };
+
   return filteredProjectStatus;
 };
 
@@ -103,8 +106,8 @@ export const fetchAllProjectStatus = async (req, res) => {
 
     return res.status(200).json({ success: true, message: "Project status fetched successfully", projectStatus: filteredProjectStatus, totalCount });
   } catch (error) {
-    console.log("Error while fetching project status:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching project status" });
+    console.log("Error while fetching all project status:", error.message);
+    return res.status(500).json({ success: false, message: `Error while fetching allproject status: ${error.message}` });
   };
 };
 
@@ -125,7 +128,7 @@ export const fetchSingleProjectStatus = async (req, res) => {
     return res.status(200).json({ success: true, message: "Project status fetched successfully", projectStatus: filteredProjectStatus });
   } catch (error) {
     console.log("Error while fetching project status:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching project status" });
+    return res.status(500).json({ success: false, message: `Error while fetching single project status: ${error.message}` });
   };
 };
 
@@ -144,7 +147,7 @@ export const updateProjectStatus = async (req, res) => {
     return res.status(200).json({ success: true, message: "Project status updated successfully", projectStatus });
   } catch (error) {
     console.log("Error while updating project status:", error.message);
-    return res.status(500).json({ success: false, message: "Error while updating project status" });
+    return res.status(500).json({ success: false, message: `Error while updating project status: ${error.message}` });
   };
 };
 
@@ -158,9 +161,9 @@ export const deleteProjectStatus = async (req, res) => {
       return res.status(400).json({ success: false, message: "Project status not found" });
     };
 
-    return res.status(200).json({ success: true, message: "Project status deleted successfully", projectStatus });
+    return res.status(200).json({ success: true, message: "Project status deleted successfully" });
   } catch (error) {
     console.log("Error while deleting project status:", error.message);
-    return res.status(500).json({ success: false, message: "Error while deleting project status" });
+    return res.status(500).json({ success: false, message: `Error while deleting project status: ${error.message}` });
   };
 };

@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import axios from 'axios';
@@ -24,10 +25,10 @@ const EditProjectStatus = () => {
       if (response?.data?.success) {
         setStatus(response?.data?.projectStatus?.status);
         setDescription(response?.data?.projectStatus?.description);
-      }
+      };
     } catch (error) {
       console.log("Error while fetching single project status:", error.message);
-    }
+    };
   };
 
   useEffect(() => {
@@ -44,11 +45,11 @@ const EditProjectStatus = () => {
     // Conditionally include fields based on permissions
     if (fieldPermissions?.status?.show && !fieldPermissions?.status?.read) {
       updateData.status = status;
-    }
+    };
 
     if (fieldPermissions?.description?.show && !fieldPermissions?.description?.read) {
       updateData.description = description;
-    }
+    };
 
     try {
       const response = await axios.put(`/api/v1/projectStatus/update-projectStatus/${id}`, updateData, {
@@ -62,20 +63,20 @@ const EditProjectStatus = () => {
         setDescription("");
         toast.success("Project Status updated successfully");
         navigate("/project-status");
-      }
+      };
     } catch (error) {
       console.log("Error while updating project status:", error.message);
       toast.error("Error while updating project status");
-    }
+    };
   };
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
   if (!team?.role?.permissions?.projectStatus?.update) {
     return <Navigate to="/" />;
-  }
+  };
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
@@ -90,7 +91,7 @@ const EditProjectStatus = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="status">Status <span className="text-danger">*</span></label>
-                  <input type="text" className="form-control" name="status" id="status" value={status} onChange={(e) => setStatus(e.target.value)} required readOnly={fieldPermissions?.status?.read} />
+                  <input type="text" className="form-control" name="status" id="status" value={status} onChange={(e) => setStatus(e.target.value)} readOnly={fieldPermissions?.status?.read} onKeyDown={fieldPermissions?.status?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -102,7 +103,7 @@ const EditProjectStatus = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
-                  <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required readOnly={fieldPermissions?.description?.read} />
+                  <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} readOnly={fieldPermissions?.description?.read} onKeyDown={fieldPermissions?.description?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (

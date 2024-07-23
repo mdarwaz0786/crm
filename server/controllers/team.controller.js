@@ -6,12 +6,14 @@ import mongoose from "mongoose";
 export const createTeam = async (req, res) => {
   try {
     const { name, email, username, password, mobile, joining, dob, designation, role, reportingTo } = req.body;
+
     const team = new Team({ name, email, username, password, mobile, joining, dob, designation, role, reportingTo });
     await team.save();
-    return res.status(200).json({ success: true, message: "Team created successfully", team });
+
+    return res.status(200).json({ success: true, message: "Team member created successfully", team });
   } catch (error) {
-    console.log("Error while creating team:", error.message);
-    return res.status(500).json({ success: false, message: "Error while creating team" });
+    console.log("Error while creating team member:", error.message);
+    return res.status(500).json({ success: false, message: `Error while creating team member: ${error.message}` });
   };
 };
 
@@ -20,12 +22,15 @@ export const loginTeam = async (req, res) => {
   try {
     const { username, password } = req.body;
     const team = await Team.findOne({ username });
+
     if (!team) {
       return res.status(404).json({ success: false, message: "Team not found" });
     };
+
     if (password !== team.password) {
       return res.status(401).json({ success: false, message: "Invalid password" });
     };
+
     return res.status(200).json({
       success: true,
       message: "Team member login successfully",
@@ -56,21 +61,28 @@ export const loginTeam = async (req, res) => {
       ),
     });
   } catch (error) {
-    console.log("Error while logging team member:", error.message);
-    return res.status(500).json({ success: false, message: "Error while logging team member" });
+    console.log("Error while login team member:", error.message);
+    return res.status(500).json({ success: false, message: `Error while login team member: ${error.message}` });
   };
 };
 
+// Controller for fetching logged in team member
 export const loggedInTeam = async (req, res) => {
   try {
-    const team = await Team.findById(req.team._id).populate('designation').populate('role').populate('reportingTo').exec();
+    const team = await Team.findById(req.team._id)
+      .populate('designation')
+      .populate('role')
+      .populate('reportingTo')
+      .exec();
+
     if (!team) {
       return res.status(404).json({ success: false, message: 'Team member not found' });
     };
+
     return res.status(200).json({ success: true, message: 'Logged in team member fetched successfully', team });
   } catch (error) {
     console.log('Error while fetching logged in team member:', error.message);
-    return res.status(500).json({ success: false, message: 'Error while fetching logged in team member' });
+    return res.status(500).json({ success: false, message: `Error while fetching logged in team member: ${error.message}` });
   };
 };
 
@@ -90,12 +102,14 @@ const buildProjection = (permissions) => {
   if (projection._id === undefined) {
     projection._id = 1;
   };
+
   return projection;
 };
 
 // Helper function to filter fields based on projection
 const filterFields = (team, projection) => {
   const filteredTeam = {};
+
   for (const key in team._doc) {
     if (projection[key]) {
       filteredTeam[key] = team[key];
@@ -105,6 +119,7 @@ const filterFields = (team, projection) => {
   if (projection._id !== undefined && !filteredTeam._id) {
     filteredTeam._id = team._id;
   };
+
   return filteredTeam;
 };
 
@@ -141,7 +156,7 @@ export const fetchAllTeam = async (req, res) => {
         { dob: { $regex: searchRegex } },
         { designation: await findObjectIdByString('Designation', 'name', req.query.search) },
         { role: await findObjectIdByString('Role', 'name', req.query.search) },
-        { reportingTo: await findObjectIdArrayByString('Team', 'name', req.query.search) },
+        { reportingTo: { $in: await findObjectIdArrayByString('Team', 'name', req.query.search) } },
       ];
     };
 
@@ -177,7 +192,7 @@ export const fetchAllTeam = async (req, res) => {
       .exec();
 
     if (!team) {
-      return res.status(404).json({ success: false, message: "Team not found" });
+      return res.status(404).json({ success: false, message: "Team member not found" });
     };
 
     const permissions = req.team.role.permissions;
@@ -185,10 +200,10 @@ export const fetchAllTeam = async (req, res) => {
     const filteredTeam = team.map((team) => filterFields(team, projection));
     const totalCount = await Team.countDocuments(filter);
 
-    return res.status(200).json({ success: true, message: "All team fetched successfully", team: filteredTeam, totalCount });
+    return res.status(200).json({ success: true, message: "All team member fetched successfully", team: filteredTeam, totalCount });
   } catch (error) {
-    console.log("Error while fetching all team:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching all team" });
+    console.log("Error while fetching all team member:", error.message);
+    return res.status(500).json({ success: false, message: `Error while fetching all team member: ${error.message}` });
   };
 };
 
@@ -196,6 +211,7 @@ export const fetchAllTeam = async (req, res) => {
 export const fetchSingleTeam = async (req, res) => {
   try {
     const teamId = req.params.id;
+
     const team = await Team.findById(teamId)
       .populate("reportingTo")
       .populate("role")
@@ -203,33 +219,36 @@ export const fetchSingleTeam = async (req, res) => {
       .exec();
 
     if (!team) {
-      return res.status(404).json({ success: false, message: "Team not found" });
+      return res.status(404).json({ success: false, message: "Team member not found" });
     };
 
     const permissions = req.team.role.permissions;
     const projection = buildProjection(permissions);
     const filteredTeam = filterFields(team, projection);
 
-    return res.status(200).json({ success: true, message: "Single team fetched successfully", team: filteredTeam });
+    return res.status(200).json({ success: true, message: "Single team member fetched successfully", team: filteredTeam });
   } catch (error) {
-    console.log("Error while fetching team:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching team" });
+    console.log("Error while fetching single team member:", error.message);
+    return res.status(500).json({ success: false, message: `Error while fetching single team member: ${error.message}` });
   };
 };
 
-// Controller for updating a team
+// Controller for updating a team member
 export const updateTeam = async (req, res) => {
   try {
     const teamId = req.params.id;
     const { name, email, username, password, mobile, joining, dob, role, designation, reportingTo } = req.body;
+
     const team = await Team.findByIdAndUpdate(teamId, { name, email, username, password, mobile, joining, dob, designation, role, reportingTo }, { new: true });
+
     if (!team) {
-      return res.status(404).json({ success: false, message: "Team not found" });
+      return res.status(404).json({ success: false, message: "Team member not found" });
     };
-    return res.status(200).json({ success: true, message: "Team updated successfully", team });
+
+    return res.status(200).json({ success: true, message: "Team member updated successfully", team });
   } catch (error) {
-    console.log("Error while updating team:", error.message);
-    return res.status(500).json({ success: false, message: "Error while updating team" });
+    console.log("Error while updating team member:", error.message);
+    return res.status(500).json({ success: false, message: `Error while updating team member: ${error.message}` });
   };
 };
 
@@ -238,12 +257,14 @@ export const deleteTeam = async (req, res) => {
   try {
     const teamId = req.params.id;
     const team = await Team.findByIdAndDelete(teamId);
+
     if (!team) {
-      return res.status(400).json({ success: false, message: "Team not found" });
+      return res.status(400).json({ success: false, message: "Team member not found" });
     };
-    return res.status(200).json({ success: true, message: "Team deleted successfully", team });
+
+    return res.status(200).json({ success: true, message: "Team member deleted successfully", team });
   } catch (error) {
-    console.log("Error while deleting team:", error.message);
-    return res.status(500).json({ success: false, message: "Error while deleting team" });
+    console.log("Error while deleting team member:", error.message);
+    return res.status(500).json({ success: false, message: `Error while deleting team member: ${error.message}` });
   };
 };

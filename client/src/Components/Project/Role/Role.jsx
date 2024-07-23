@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import axios from 'axios';
@@ -39,10 +40,10 @@ const Role = () => {
       if (response?.data?.success) {
         setData(response?.data?.role);
         setTotal(response?.data?.totalCount);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   const fetchAllRoleName = async () => {
@@ -55,12 +56,13 @@ const Role = () => {
           name,
         }
       });
+
       if (response?.data?.success) {
         setNameData(response?.data?.role);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   useEffect(() => {
@@ -84,7 +86,7 @@ const Role = () => {
         [name]: value,
         page: 1,
       }));
-    }
+    };
   };
 
   useEffect(() => {
@@ -98,14 +100,15 @@ const Role = () => {
           Authorization: `${validToken}`,
         },
       });
+
       if (response?.data?.success) {
         toast.success("Role deleted successfully");
         fetchAllData();
-      }
+      };
     } catch (error) {
       console.log("Error while deleting role:", error.message);
       toast.error("Error while deleting role");
-    }
+    };
   };
 
   const exportRoleListAsPdf = () => {
@@ -126,14 +129,14 @@ const Role = () => {
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
   const permissions = team?.role?.permissions?.role;
   const fieldPermissions = team?.role?.permissions?.role?.fields;
 
   if (!permissions?.access) {
     return <Navigate to="/" />;
-  }
+  };
 
   return (
     <>
@@ -186,7 +189,7 @@ const Role = () => {
                                     <div className="dropdown-menu  dropdown-menu-end">
                                       <ul>
                                         <li>
-                                          <Link to="#" onClick={() => setTimeout(() => { exportRoleListAsPdf() }, 1000)}>
+                                          <Link to="#" onClick={() => setTimeout(() => { exportRoleListAsPdf() }, 0)}>
                                             <i className="ti ti-file-type-pdf text-danger" />
                                             Export as PDF
                                           </Link>
@@ -283,7 +286,7 @@ const Role = () => {
                                                   </label>
                                                 </div>
                                                 <div className="collapse-inside-text">
-                                                  <h5>{n.name}</h5>
+                                                  <h5>{n?.name}</h5>
                                                 </div>
                                               </li>
                                             ))

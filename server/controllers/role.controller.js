@@ -1,15 +1,17 @@
 import Role from "../models/role.model.js";
 
-// Create a new role
+// Controller for create role
 export const createRole = async (req, res) => {
   try {
     const { name, permissions } = req.body;
+
     const role = new Role({ name, permissions });
     await role.save();
+
     res.status(201).json({ success: true, meaasge: "Role created successfully", role });
   } catch (error) {
     console.log("Error while creatinng role:", error.message);
-    res.status(500).json({ success: false, meaasge: "Error while creatinng role" });
+    res.status(500).json({ success: false, meaasge: `Error while creatinng role: ${error.message}` });
   };
 };
 
@@ -29,12 +31,14 @@ const buildProjection = (permissions) => {
   if (projection._id === undefined) {
     projection._id = 1;
   };
+
   return projection;
 };
 
 // Helper function to filter fields based on projection
 const filterFields = (role, projection) => {
   const filteredRole = {};
+
   for (const key in role._doc) {
     if (projection[key]) {
       filteredRole[key] = role[key];
@@ -44,10 +48,11 @@ const filterFields = (role, projection) => {
   if (projection._id !== undefined && !filteredRole._id) {
     filteredRole._id = role._id;
   };
+
   return filteredRole;
 };
 
-// Get all roles
+// Controller for fetching all role
 export const fetchAllRole = async (req, res) => {
   try {
     let filter = {};
@@ -98,11 +103,11 @@ export const fetchAllRole = async (req, res) => {
     res.status(200).json({ success: true, meaasge: "All role fetched successfully", role: filteredRole, totalCount });
   } catch (error) {
     console.log("Error while fetching all role:", error.message);
-    res.status(500).json({ success: false, meaasge: "Error while fetching all role" });
+    res.status(500).json({ success: false, meaasge: `Error while fetching all role: ${error.message}` });
   };
 };
 
-// Get a single role by ID
+// Controller for fetching single role
 export const fetchSingleRole = async (req, res) => {
   try {
     const role = await Role.findById(req.params.id);
@@ -114,22 +119,25 @@ export const fetchSingleRole = async (req, res) => {
     res.status(200).json({ success: true, message: 'Single role fetched successfully', role });
   } catch (error) {
     console.log("Error while fetching single role:", error.message);
-    res.status(500).json({ success: false, message: 'Error while fetching single role' });
+    res.status(500).json({ success: false, message: `Error while fetching single role: ${error.message}` });
   };
 };
 
-// Update a role by ID
+// Controller for Update role
 export const updateRole = async (req, res) => {
   try {
     const { name, permissions } = req.body;
+
     const role = await Role.findByIdAndUpdate(req.params.id, { name, permissions }, { new: true });
+
     if (!role) {
       return res.status(404).json({ success: false, message: 'Role not found' });
     };
+
     res.status(200).json({ success: true, message: 'Role updated successfully', role });
   } catch (error) {
     console.log("Error while updating role:", error.message);
-    res.status(500).json({ success: false, message: 'Error while updating role' });
+    res.status(500).json({ success: false, message: `Error while updating role: ${error.message}` });
   };
 };
 
@@ -137,13 +145,15 @@ export const updateRole = async (req, res) => {
 export const deleteRole = async (req, res) => {
   try {
     const role = await Role.findByIdAndDelete(req.params.id);
+
     if (!role) {
       return res.status(404).json({ success: false, message: 'Role not found' });
     };
-    res.status(200).json({ success: true, message: 'Role deleted successfully', role });
+
+    res.status(200).json({ success: true, message: 'Role deleted successfully' });
   } catch (error) {
     console.log("Error while deleting role:", error.message);
-    res.status(500).json({ success: false, message: 'Error while updating role' });
+    res.status(500).json({ success: false, message: `Error while updating role: ${error.message}` });
   };
 };
 

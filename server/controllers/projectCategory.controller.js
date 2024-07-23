@@ -11,7 +11,7 @@ export const createProjectCategory = async (req, res) => {
     return res.status(200).json({ success: true, message: "Project category created successfully", projectCategory });
   } catch (error) {
     console.log("Error while creating project category:", error.message);
-    return res.status(500).json({ success: false, message: "Error while creating project category" });
+    return res.status(500).json({ success: false, message: `Error while creating project category: ${error.message}` });
   };
 };
 
@@ -31,12 +31,14 @@ const buildProjection = (permissions) => {
   if (projection._id === undefined) {
     projection._id = 1;
   };
+
   return projection;
 };
 
 // Helper function to filter fields based on projection
 const filterFields = (projectCategory, projection) => {
   const filteredProjectStatus = {};
+
   for (const key in projectCategory._doc) {
     if (projection[key]) {
       filteredProjectStatus[key] = projectCategory[key];
@@ -46,6 +48,7 @@ const filterFields = (projectCategory, projection) => {
   if (projection._id !== undefined && !filteredProjectStatus._id) {
     filteredProjectStatus._id = projectCategory._id;
   };
+
   return filteredProjectStatus;
 };
 
@@ -103,8 +106,8 @@ export const fetchAllProjectCategory = async (req, res) => {
 
     return res.status(200).json({ success: true, message: "Project category fetched successfully", projectCategory: filteredProjectCategory, totalCount });
   } catch (error) {
-    console.log("Error while fetching project category:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching project category" });
+    console.log("Error while fetching all project category:", error.message);
+    return res.status(500).json({ success: false, message: `Error while fetching all project category: ${error.message}` });
   };
 };
 
@@ -124,8 +127,8 @@ export const fetchSingleProjectCategory = async (req, res) => {
 
     return res.status(200).json({ success: true, message: "Project category fetched successfully", projectCategory: filteredProjectCategory });
   } catch (error) {
-    console.log("Error while fetching project category:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching project category" });
+    console.log("Error while fetching single project category:", error.message);
+    return res.status(500).json({ success: false, message: `Error while fetching single project category: ${error.message}` });
   };
 };
 
@@ -144,7 +147,7 @@ export const updateProjectCategory = async (req, res) => {
     return res.status(200).json({ success: true, message: "Project category updated successfully", projectCategory });
   } catch (error) {
     console.log("Error while updating project category:", error.message);
-    return res.status(500).json({ success: false, message: "Error while updating project category" });
+    return res.status(500).json({ success: false, message: `Error while updating project category: ${error.message}` });
   };
 };
 
@@ -158,9 +161,9 @@ export const deleteProjectCategory = async (req, res) => {
       return res.status(400).json({ success: false, message: "Project category not found" });
     };
 
-    return res.status(200).json({ success: true, message: "Project category deleted successfully", projectCategory });
+    return res.status(200).json({ success: true, message: "Project category deleted successfully" });
   } catch (error) {
     console.log("Error while deleting project category:", error.message);
-    return res.status(500).json({ success: false, message: "Error while deleting project category" });
+    return res.status(500).json({ success: false, message: `Error while deleting project category: ${error.message}` });
   };
 };

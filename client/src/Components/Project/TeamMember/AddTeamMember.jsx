@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import axios from 'axios';
@@ -33,10 +34,10 @@ const AddTeamMember = () => {
 
       if (response?.data?.success) {
         setReportingTo(response?.data?.team);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   const fetchAllDesignation = async () => {
@@ -49,10 +50,10 @@ const AddTeamMember = () => {
 
       if (response?.data?.success) {
         setDesignation(response?.data?.designation);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   const fetchAllRole = async () => {
@@ -65,10 +66,10 @@ const AddTeamMember = () => {
 
       if (response?.data?.success) {
         setRole(response?.data?.role);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   useEffect(() => {
@@ -93,31 +94,39 @@ const AddTeamMember = () => {
     try {
       if (!name) {
         return toast.error("Enter name");
-      }
+      };
+
       if (!email) {
         return toast.error("Enter email");
-      }
+      };
+
       if (!username) {
         return toast.error("Enter username");
-      }
+      };
+
       if (!password) {
         return toast.error("Enter password");
-      }
+      };
+
       if (!mobile) {
         return toast.error("Enter mobile number");
-      }
+      };
+
       if (!joining) {
         return toast.error("Enter joining date");
-      }
+      };
+
       if (!dob) {
         return toast.error("Enter date of birth");
-      }
+      };
+
       if (!selectedDesignation) {
         return toast.error("Select designation");
-      }
+      };
+
       if (!selectedRole) {
         return toast.error("Select role");
-      }
+      };
 
       const response = await axios.post("/api/v1/team/create-team", { name, email, username, password, mobile, joining: formattedJoining, dob: formattedDob, role: selectedRole, designation: selectedDesignation, reportingTo: selectedReportingTo }, {
         headers: {
@@ -138,18 +147,18 @@ const AddTeamMember = () => {
         setSelectedReportingTo([]);
         toast.success("Team member created successfully");
         navigate("/team-member");
-      }
+      };
     } catch (error) {
       console.log("Error while creating team member:", error.message);
       toast.error("Error while creating team member");
-    }
+    };
   };
 
   const handleSelectChange = (e) => {
     const value = e.target.value;
     if (value && !selectedReportingTo?.includes(value)) {
       setSelectedReportingTo([...selectedReportingTo, value]);
-    }
+    };
   };
 
   const handleRemove = (value) => {
@@ -158,11 +167,11 @@ const AddTeamMember = () => {
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
   if (!team?.role?.permissions?.team?.create) {
     return <Navigate to="/team-member" />;
-  }
+  };
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
@@ -175,19 +184,19 @@ const AddTeamMember = () => {
           <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
-              <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+              <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="email">Email <span className="text-danger">*</span></label>
-              <input type="email" className="form-control" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <input type="email" className="form-control" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="mobile">Mobile <span className="text-danger">*</span></label>
-              <input type="text" className="form-control" name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} required />
+              <input type="text" className="form-control" name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} />
             </div>
           </div>
           <div className="col-md-6">
@@ -206,25 +215,25 @@ const AddTeamMember = () => {
           <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="username">User Name <span className="text-danger">*</span></label>
-              <input type="text" className="form-control" name="username" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+              <input type="text" className="form-control" name="username" id="username" value={username} onChange={(e) => setUsername(e.target.value)} />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="password">Password<span className="text-danger">*</span></label>
-              <input type="password" className="form-control" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <input type="password" className="form-control" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="joining">Joining Date <span className="text-danger">*</span></label>
-              <input type="date" className="form-control" name="joining" id="joining" value={joining} onChange={(e) => setJoining(e.target.value)} required />
+              <input type="date" className="form-control" name="joining" id="joining" value={joining} onChange={(e) => setJoining(e.target.value)} />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="dob">Date of Birth <span className="text-danger">*</span></label>
-              <input type="date" className="form-control" name="dob" id="dob" value={dob} onChange={(e) => setDob(e.target.value)} required />
+              <input type="date" className="form-control" name="dob" id="dob" value={dob} onChange={(e) => setDob(e.target.value)} />
             </div>
           </div>
           <div className="col-md-6">

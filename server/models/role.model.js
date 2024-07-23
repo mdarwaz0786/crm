@@ -306,7 +306,7 @@ const RolePermissionSchema = new mongoose.Schema(
   },
 );
 
-// role schema
+// Role schema
 const RoleSchema = new mongoose.Schema(
   {
     name: {

@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import axios from 'axios';
@@ -39,10 +40,10 @@ const TeamMember = () => {
       if (response?.data?.success) {
         setData(response?.data?.team);
         setTotal(response?.data?.totalCount);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   const fetchAllTeamName = async () => {
@@ -53,15 +54,15 @@ const TeamMember = () => {
         },
         params: {
           name,
-        }
+        },
       });
 
       if (response?.data?.success) {
         setNameData(response?.data?.team);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   useEffect(() => {
@@ -103,11 +104,11 @@ const TeamMember = () => {
       if (response?.data?.succes) {
         toast.success("Team member deleted successfully");
         fetchAllData();
-      }
+      };
     } catch (error) {
       console.log("Error while deleting team:", error.message);
       toast.error("Error while deleting team");
-    }
+    };
   };
 
   const exportTeamListAsPdf = () => {
@@ -127,14 +128,14 @@ const TeamMember = () => {
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
   const permissions = team?.role?.permissions?.team;
   const fieldPermissions = team?.role?.permissions?.team?.fields;
 
   if (!permissions?.access) {
     return <Navigate to="/" />;
-  }
+  };
 
   return (
     <>
@@ -188,7 +189,7 @@ const TeamMember = () => {
                                     <div className="dropdown-menu  dropdown-menu-end">
                                       <ul>
                                         <li>
-                                          <Link to="#" onClick={() => setTimeout(() => { exportTeamListAsPdf() }, 1000)}>
+                                          <Link to="#" onClick={() => setTimeout(() => { exportTeamListAsPdf() }, 0)}>
                                             <i className="ti ti-file-type-pdf text-danger" />
                                             Export as PDF
                                           </Link>

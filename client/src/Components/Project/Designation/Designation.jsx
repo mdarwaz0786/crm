@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import axios from 'axios';
@@ -39,10 +40,10 @@ const Designation = () => {
       if (response?.data?.success) {
         setData(response?.data?.designation);
         setTotal(response?.data?.totalCount);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   const fetchAllDesignationName = async () => {
@@ -55,12 +56,13 @@ const Designation = () => {
           name,
         },
       });
+
       if (response?.data?.success) {
         setNameData(response?.data?.designation);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   useEffect(() => {
@@ -98,14 +100,15 @@ const Designation = () => {
           Authorization: `${validToken}`,
         },
       });
+
       if (response?.data?.success) {
         toast.success("Designation deleted successfully");
         fetchAllData();
-      }
+      };
     } catch (error) {
       console.log("Error while deleting designation:", error.message);
       toast.error("Error while deleting designation");
-    }
+    };
   };
 
   const exportDesignationListAsPdf = () => {
@@ -125,14 +128,14 @@ const Designation = () => {
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
   const permissions = team?.role?.permissions?.designation;
-  const FiledPermissions = team?.role?.permissions?.designation?.fields;
+  const filedPermissions = team?.role?.permissions?.designation?.fields;
 
   if (!permissions?.access) {
     return <Navigate to="/" />;
-  }
+  };
 
   return (
     <>
@@ -325,14 +328,14 @@ const Designation = () => {
                           </th>
                           <th>#</th>
                           {
-                            (FiledPermissions?.name?.show) ? (
+                            (filedPermissions?.name?.show) ? (
                               <th>Name</th>
                             ) : (
                               null
                             )
                           }
                           {
-                            (FiledPermissions?.description?.show) ? (
+                            (filedPermissions?.description?.show) ? (
                               <th>Description</th>
                             ) : (
                               null
@@ -350,14 +353,14 @@ const Designation = () => {
                               </td>
                               <td> {(filters.page - 1) * filters.limit + index + 1}</td>
                               {
-                                (FiledPermissions?.name?.show) ? (
+                                (filedPermissions?.name?.show) ? (
                                   <td>{d?.name}</td>
                                 ) : (
                                   null
                                 )
                               }
                               {
-                                (FiledPermissions?.description?.show) ? (
+                                (filedPermissions?.description?.show) ? (
                                   <td>{d?.description}</td>
                                 ) : (
                                   null

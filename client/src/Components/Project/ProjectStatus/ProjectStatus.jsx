@@ -1,8 +1,9 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
 import Preloader from "../../../Preloader.jsx";
 import html2pdf from "html2pdf.js";
@@ -39,12 +40,11 @@ const ProjectStatus = () => {
       if (response?.data?.success) {
         setData(response?.data?.projectStatus);
         setTotal(response?.data?.totalCount);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
-  }
-
+    };
+  };
 
   const fetchAllProjectStatus = async () => {
     try {
@@ -61,7 +61,7 @@ const ProjectStatus = () => {
       }
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   useEffect(() => {
@@ -99,14 +99,15 @@ const ProjectStatus = () => {
           Authorization: `${validToken}`,
         },
       });
+
       if (response?.data?.success) {
         toast.success("Project status deleted successfully");
         fetchAllData();
-      }
+      };
     } catch (error) {
       console.log("Error while deleting project status:", error.message);
       toast.error("Error while deleting project status");
-    }
+    };
   };
 
   const exportProjectStatusListAsPdf = () => {
@@ -126,14 +127,14 @@ const ProjectStatus = () => {
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
   const permissions = team?.role?.permissions?.projectStatus;
   const FiledPermissions = team?.role?.permissions?.projectStatus?.fields;
 
   if (!permissions?.access) {
     return <Navigate to="/" />;
-  }
+  };
 
   return (
     <>

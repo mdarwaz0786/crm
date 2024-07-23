@@ -11,7 +11,7 @@ export const createDesignation = async (req, res) => {
     return res.status(200).json({ success: true, message: "Designation created successfully", designation });
   } catch (error) {
     console.log("Error while creating designation:", error.message);
-    return res.status(500).json({ success: false, message: "Error while creating designation" });
+    return res.status(500).json({ success: false, message: `Error while creating designation: ${error.message}` });
   };
 };
 
@@ -31,12 +31,14 @@ const buildProjection = (permissions) => {
   if (projection._id === undefined) {
     projection._id = 1;
   };
+
   return projection;
 };
 
 // Helper function to filter fields based on projection
 const filterFields = (designation, projection) => {
   const filteredDesignation = {};
+
   for (const key in designation._doc) {
     if (projection[key]) {
       filteredDesignation[key] = designation[key];
@@ -46,6 +48,7 @@ const filterFields = (designation, projection) => {
   if (projection._id !== undefined && !filteredDesignation._id) {
     filteredDesignation._id = designation._id;
   };
+
   return filteredDesignation;
 };
 
@@ -103,8 +106,8 @@ export const fetchAllDesignation = async (req, res) => {
 
     return res.status(200).json({ success: true, message: "Designation fetched successfully", designation: filteredDesignation, totalCount });
   } catch (error) {
-    console.log("Error while fetching designation:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching designation" });
+    console.log("Error while fetching all designation:", error.message);
+    return res.status(500).json({ success: false, message: `Error while fetching all designation: ${error.message}` });
   };
 };
 
@@ -124,8 +127,8 @@ export const fetchSingleDesignation = async (req, res) => {
 
     return res.status(200).json({ success: true, message: "Designation fetched successfully", designation: filteredDesignation });
   } catch (error) {
-    console.log("Error while fetching designation:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching designation" });
+    console.log("Error while fetching single designation:", error.message);
+    return res.status(500).json({ success: false, message: `Error while fetching single designation: ${error.message}` });
   };
 };
 
@@ -144,7 +147,7 @@ export const updateDesignation = async (req, res) => {
     return res.status(200).json({ success: true, message: "Designation updated successfully", designation });
   } catch (error) {
     console.log("Error while updating designation:", error.message);
-    return res.status(500).json({ success: false, message: "Error while updating designation" });
+    return res.status(500).json({ success: false, message: `Error while updating designation: ${error.message}` });
   };
 };
 
@@ -158,9 +161,9 @@ export const deleteDesignation = async (req, res) => {
       return res.status(400).json({ success: false, message: "Designation not found" });
     };
 
-    return res.status(200).json({ success: true, message: "Designation deleted successfully", designation });
+    return res.status(200).json({ success: true, message: "Designation deleted successfully" });
   } catch (error) {
     console.log("Error while deleting designation:", error.message);
-    return res.status(500).json({ success: false, message: "Error while deleting designation" });
+    return res.status(500).json({ success: false, message: `Error while deleting designation: ${error.message}` });
   };
 };

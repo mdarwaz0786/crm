@@ -13,17 +13,18 @@ const checkMasterActionPermission = (master, action) => {
       const masterPermissions = role.permissions[master];
 
       if (!masterPermissions) {
-        return res.status(403).json({ success: false, message: `No permissions found for ${master}` });
+        return res.status(403).json({ success: false, message: `No permission found for ${master}` });
       };
 
       if (!masterPermissions[action]) {
-        return res.status(403).json({ success: false, message: `${action} action denied for ${master}` });
+        return res.status(403).json({ success: false, message: `${action} permission denied for ${master}` });
       };
 
       next();
+
     } catch (error) {
       console.error('Authorization error:', error.message);
-      res.status(500).json({ success: false, message: 'Internal server error' });
+      res.status(500).json({ success: false, message: `Authorization error: ${error.message}` });
     };
   };
 };

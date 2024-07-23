@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -41,10 +42,10 @@ const AddProject = () => {
 
       if (response?.data?.success) {
         setCustomer(response?.data?.customer);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   const fetchAllProjectCatgory = async () => {
@@ -57,10 +58,10 @@ const AddProject = () => {
 
       if (response?.data?.success) {
         setProjectCategory(response?.data?.projectCategory);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   const fetchAllProjectTiming = async () => {
@@ -73,10 +74,10 @@ const AddProject = () => {
 
       if (response?.data?.success) {
         setProjectTiming(response?.data?.projectTiming);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   const fetchAllTeamMember = async () => {
@@ -89,10 +90,10 @@ const AddProject = () => {
 
       if (response?.data?.success) {
         setTeamMember(response?.data?.team);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   const fetchAllProjectStatus = async () => {
@@ -105,10 +106,10 @@ const AddProject = () => {
 
       if (response?.data?.success) {
         setProjectStatus(response?.data?.projectStatus);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   const fetchAllProjectType = async () => {
@@ -121,10 +122,10 @@ const AddProject = () => {
 
       if (response?.data?.success) {
         setProjectType(response?.data?.projectType);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   useEffect(() => {
@@ -152,46 +153,59 @@ const AddProject = () => {
     try {
       if (!name) {
         return toast.error("Enter name");
-      }
+      };
+
       if (!projectId) {
         return toast.error("Enter project id");
-      }
+      };
+
       if (!selectedProjectType) {
         return toast.error("Enter project type");
-      }
+      };
+
       if (!selectedCustomer) {
         return toast.error("Enter Client");
-      }
+      };
+
       if (!selectedProjectCategory) {
         return toast.error("Enter category");
-      }
+      };
+
       if (!selectedProjectTiming) {
         return toast.error("Enter project timing");
-      }
+      };
+
       if (!price) {
         return toast.error("Enter price");
-      }
+      };
+
       if (selectedResponsible?.length === 0) {
         return toast.error("Enter responsible person");
-      }
+      };
+
       if (selectedLeader?.length === 0) {
         return toast.error("Enter team leader");
-      }
+      };
+
       if (!start) {
         return toast.error("Enter start date");
-      }
+      };
+
       if (!due) {
         return toast.error("Enter due date");
-      }
+      };
+
       if (!priority) {
         return toast.error("Enter priority");
-      }
+      };
+
       if (!selectedProjectStatus) {
         return toast.error("Enter status");
-      }
+      };
+
       if (!description) {
         return toast.error("Enter description");
-      }
+      };
 
       const response = await axios.post("/api/v1/project/create-project",
         {
@@ -213,8 +227,8 @@ const AddProject = () => {
         {
           headers: {
             Authorization: `${validToken}`
-          }
-        }
+          },
+        },
       );
 
       if (response?.data?.success) {
@@ -235,18 +249,18 @@ const AddProject = () => {
         setDescription("");
         toast.success("Project created successfully");
         navigate("/project");
-      }
+      };
     } catch (error) {
       console.log("Error while creating project:", error.message);
       toast.error("Error while creating project");
-    }
+    };
   };
 
   const handleSelectChangeResponsible = (e) => {
     const value = e.target.value;
     if (value && !selectedResponsible?.includes(value)) {
       setSelectedResponsible([...selectedResponsible, value]);
-    }
+    };
   };
 
   const handleRemoveResponsible = (value) => {
@@ -257,7 +271,7 @@ const AddProject = () => {
     const value = e.target.value;
     if (value && !selectedLeader?.includes(value)) {
       setSelectedLeader([...selectedLeader, value]);
-    }
+    };
   };
 
   const handleRemoveLeader = (value) => {
@@ -266,11 +280,11 @@ const AddProject = () => {
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
   if (!team?.role?.permissions?.project?.create) {
     return <Navigate to="/project" />;
-  }
+  };
 
   return (
     <>
@@ -284,13 +298,13 @@ const AddProject = () => {
             <div className="col-md-6">
               <div className="form-wrap">
                 <label className="col-form-label" htmlFor="name">Project Name <span className="text-danger">*</span></label>
-                <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+                <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} />
               </div>
             </div>
             <div className="col-md-6">
               <div className="form-wrap">
                 <label className="col-form-label" htmlFor="projectId">Project ID<span className="text-danger"> *</span></label>
-                <input className="form-control" type="text" name="projectId" id="projectId" value={projectId} onChange={(e) => setProjectId(e.target.value)} required />
+                <input className="form-control" type="text" name="projectId" id="projectId" value={projectId} onChange={(e) => setProjectId(e.target.value)} />
               </div>
             </div>
             <div className="col-md-6">
@@ -348,7 +362,7 @@ const AddProject = () => {
             <div className="col-md-6">
               <div className="form-wrap">
                 <label className="col-form-label" htmlFor="price">Price <span className="text-danger">*</span></label>
-                <input className="form-control" type="text" name="price" id="price" value={price} onChange={(e) => setPrice(e.target.value)} required />
+                <input className="form-control" type="text" name="price" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
               </div>
             </div>
             <div className="col-md-6">
@@ -411,13 +425,13 @@ const AddProject = () => {
             <div className="col-md-6">
               <div className="form-wrap">
                 <label className="col-form-label" htmlFor="start">Start Date <span className="text-danger">*</span></label>
-                <input type="date" className="form-control" name="start" id="start" value={start} onChange={(e) => setStart(e.target.value)} required />
+                <input type="date" className="form-control" name="start" id="start" value={start} onChange={(e) => setStart(e.target.value)} />
               </div>
             </div>
             <div className="col-md-6">
               <div className="form-wrap">
                 <label className="col-form-label" htmlFor="due">Due Date <span className="text-danger">*</span></label>
-                <input type="date" className="form-control" name="due" id="due" value={due} onChange={(e) => setDue(e.target.value)} required />
+                <input type="date" className="form-control" name="due" id="due" value={due} onChange={(e) => setDue(e.target.value)} />
               </div>
             </div>
             <div className="col-md-6">
@@ -436,7 +450,7 @@ const AddProject = () => {
             <div className="col-md-6">
               <div className="form-wrap">
                 <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
-                <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
+                <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
               </div>
             </div>
           </div>

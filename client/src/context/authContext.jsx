@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
@@ -10,15 +11,13 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [team, setTeam] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
-  const validToken = `Bearer ${token}`
+  const validToken = `Bearer ${token}`;
+  let isLoggedIn = !!token;
 
   const storeToken = (serverToken) => {
     setToken(serverToken);
     return localStorage.setItem("token", serverToken);
   };
-
-  let isLoggedIn = !!token;
 
   const logOutTeam = () => {
     setToken("");
@@ -38,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       setIsLoading(false);
       console.log("Error while fetching logged in team member:", error.message);
-    }
+    };
   };
 
   useEffect(() => {

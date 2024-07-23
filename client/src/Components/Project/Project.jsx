@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import axios from 'axios';
@@ -13,9 +14,12 @@ const Project = () => {
   const { validToken, team, isLoading } = useAuth();
   const [nameData, setNameData] = useState([]);
   const [name, setName] = useState("");
+  const [projectIdData, setProjectIdData] = useState([]);
+  const [projectId, setProjectId] = useState("");
   const [filters, setFilters] = useState({
     search: "",
     nameFilter: [],
+    projectIdFilter: [],
     sort: "",
     page: 1,
     limit: 10,
@@ -33,16 +37,17 @@ const Project = () => {
           page: filters.page,
           limit: filters.limit,
           nameFilter: filters.nameFilter.map(String),
+          projectIdFilter: filters.projectIdFilter.map(String),
         },
       });
 
       if (response?.data?.success) {
         setProject(response?.data?.project);
         setTotal(response?.data?.totalCount);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   const fetchAllProjectName = async () => {
@@ -53,21 +58,43 @@ const Project = () => {
         },
         params: {
           name,
-        }
+        },
       });
 
       if (response?.data?.success) {
         setNameData(response?.data?.project);
-      }
+      };
     } catch (error) {
       console.log(error.message);
-    }
+    };
   };
 
   useEffect(() => {
     fetchAllProjectName();
   }, [name]);
 
+  const fetchAllProjectId = async () => {
+    try {
+      const response = await axios.get("/api/v1/project/all-project", {
+        headers: {
+          Authorization: `${validToken}`
+        },
+        params: {
+          projectId,
+        },
+      });
+
+      if (response?.data?.success) {
+        setProjectIdData(response?.data?.project);
+      };
+    } catch (error) {
+      console.log(error.message);
+    };
+  };
+
+  useEffect(() => {
+    fetchAllProjectId();
+  }, [projectId]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -86,7 +113,7 @@ const Project = () => {
         [name]: value,
         page: 1,
       }));
-    }
+    };
   };
 
   useEffect(() => {
@@ -98,17 +125,17 @@ const Project = () => {
       const response = await axios.delete(`/api/v1/project/delete-project/${id}`, {
         headers: {
           Authorization: `${validToken}`
-        }
+        },
       });
 
       if (response?.data?.success) {
         toast.success("Project deleted successfully");
         fetchAllProject();
-      }
+      };
     } catch (error) {
       console.log("Error while deleting project:", error.message);
       toast.error("Error while deleting project");
-    }
+    };
   };
 
   const exportProjectListAsPdf = () => {
@@ -128,11 +155,14 @@ const Project = () => {
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
-  if (!team?.role?.permissions?.project?.access) {
+  const permissions = team?.role?.permissions?.project;
+  const fieldPermissions = team?.role?.permissions?.project?.fields;
+
+  if (!permissions?.access) {
     return <Navigate to="/" />;
-  }
+  };
 
   return (
     <>
@@ -176,7 +206,7 @@ const Project = () => {
                         <div className="export-list text-sm-end">
                           <ul>
                             {
-                              (team?.role?.permissions?.project?.export) ? (
+                              (permissions?.export) ? (
                                 <li>
                                   <div className="export-dropdwon">
                                     <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
@@ -186,7 +216,7 @@ const Project = () => {
                                     <div className="dropdown-menu  dropdown-menu-end">
                                       <ul>
                                         <li>
-                                          <Link to="#" onClick={() => setTimeout(() => { exportProjectListAsPdf() }, 1000)}>
+                                          <Link to="#" onClick={() => setTimeout(() => { exportProjectListAsPdf() }, 0)}>
                                             <i className="ti ti-file-type-pdf text-danger" />
                                             Export as PDF
                                           </Link>
@@ -200,7 +230,7 @@ const Project = () => {
                               )
                             }
                             {
-                              (team?.role?.permissions?.project?.create) ? (
+                              (permissions?.create) ? (
                                 <li>
                                   <Link to="/add-project" className="btn btn-primary">
                                     <i className="ti ti-square-rounded-plus" />
@@ -258,9 +288,9 @@ const Project = () => {
                                 <div className="accordion" id="accordionExample">
                                   <div className="filter-set-content">
                                     <div className="filter-set-content-head">
-                                      <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Project Name</Link>
+                                      <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Project Name</Link>
                                     </div>
-                                    <div className="filter-set-contents accordion-collapse collapse show" id="collapseTwo" data-bs-parent="#accordionExample">
+                                    <div className="filter-set-contents accordion-collapse collapse show" id="collapseOne" data-bs-parent="#accordionExample">
                                       <div className="filter-content-list">
                                         <div className="form-wrap icon-form">
                                           <span className="form-icon"><i className="ti ti-search" /></span>
@@ -269,7 +299,7 @@ const Project = () => {
                                         <ul>
                                           {
                                             nameData?.map((n) => (
-                                              <li key={n._id}>
+                                              <li key={n?._id}>
                                                 <div className="filter-checks">
                                                   <label className="checkboxs">
                                                     <input
@@ -283,12 +313,64 @@ const Project = () => {
                                                   </label>
                                                 </div>
                                                 <div className="collapse-inside-text">
-                                                  <h5>{n.name}</h5>
+                                                  <h5>{n?.name}</h5>
                                                 </div>
                                               </li>
                                             ))
                                           }
                                         </ul>
+                                        <div className="filter-reset-btns" style={{ marginTop: "1rem" }}>
+                                          <div className="row">
+                                            <div className="col-6">
+                                              <Link to="#" className="btn btn-light" onClick={() => setFilters((prev) => ({ ...prev, nameFilter: [] }))}>Reset</Link>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="accordion" id="accordionExample">
+                                  <div className="filter-set-content">
+                                    <div className="filter-set-content-head">
+                                      <Link to="#" className="collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Project Id</Link>
+                                    </div>
+                                    <div className="filter-set-contents accordion-collapse collapse" id="collapseTwo" data-bs-parent="#accordionExample">
+                                      <div className="filter-content-list">
+                                        <div className="form-wrap icon-form">
+                                          <span className="form-icon"><i className="ti ti-search" /></span>
+                                          <input type="text" className="form-control" placeholder="Search Project Id" onChange={(e) => setProjectId(e.target.value)} />
+                                        </div>
+                                        <ul>
+                                          {
+                                            projectIdData?.map((p) => (
+                                              <li key={p?._id}>
+                                                <div className="filter-checks">
+                                                  <label className="checkboxs">
+                                                    <input
+                                                      type="checkbox"
+                                                      name="projectIdFilter"
+                                                      value={p?.projectId}
+                                                      checked={filters.projectIdFilter.includes(p?.projectId)}
+                                                      onChange={handleFilterChange}
+                                                    />
+                                                    <span className="checkmarks" />
+                                                  </label>
+                                                </div>
+                                                <div className="collapse-inside-text">
+                                                  <h5>{p?.projectId}</h5>
+                                                </div>
+                                              </li>
+                                            ))
+                                          }
+                                        </ul>
+                                        <div className="filter-reset-btns" style={{ marginTop: "1rem" }}>
+                                          <div className="row">
+                                            <div className="col-6">
+                                              <Link to="#" className="btn btn-light" onClick={() => setFilters((prev) => ({ ...prev, projectIdFilter: [] }))}>Reset</Link>
+                                            </div>
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -296,7 +378,7 @@ const Project = () => {
                                 <div className="filter-reset-btns">
                                   <div className="row">
                                     <div className="col-6">
-                                      <Link to="#" className="btn btn-light" onClick={() => setFilters((prev) => ({ ...prev, nameFilter: [] }))}>Reset</Link>
+                                      <Link to="#" className="btn btn-light" onClick={() => setFilters((prev) => ({ ...prev, nameFilter: [], projectIdFilter: [] }))}>Reset All</Link>
                                     </div>
                                   </div>
                                 </div>
@@ -325,49 +407,56 @@ const Project = () => {
                           </th>
                           <th>#</th>
                           {
-                            (team?.role?.permissions?.project?.fields?.name?.show) ? (
+                            (fieldPermissions?.projectId?.show) ? (
+                              <th>Project Id</th>
+                            ) : (
+                              null
+                            )
+                          }
+                          {
+                            (fieldPermissions?.name?.show) ? (
                               <th>Project Name</th>
                             ) : (
                               null
                             )
                           }
                           {
-                            (team?.role?.permissions?.project?.fields?.customer?.show) ? (
+                            (fieldPermissions?.customer?.show) ? (
                               <th>Customer</th>
                             ) : (
                               null
                             )
                           }
                           {
-                            (team?.role?.permissions?.project?.fields?.priority?.show) ? (
+                            (fieldPermissions?.priority?.show) ? (
                               <th>Priority</th>
                             ) : (
                               null
                             )
                           }
                           {
-                            (team?.role?.permissions?.project?.fields?.start?.show) ? (
+                            (fieldPermissions?.start?.show) ? (
                               <th>Start Date</th>
                             ) : (
                               null
                             )
                           }
                           {
-                            (team?.role?.permissions?.project?.fields?.due?.show) ? (
+                            (fieldPermissions?.due?.show) ? (
                               <th>Due Date</th>
                             ) : (
                               null
                             )
                           }
                           {
-                            (team?.role?.permissions?.project?.fields?.type?.show) ? (
+                            (fieldPermissions?.type?.show) ? (
                               <th>Project Type</th>
                             ) : (
                               null
                             )
                           }
                           {
-                            (team?.role?.permissions?.project?.fields?.status?.show) ? (
+                            (fieldPermissions?.status?.show) ? (
                               <th>Status</th>
                             ) : (
                               null
@@ -385,49 +474,56 @@ const Project = () => {
                               </td>
                               <td> {(filters.page - 1) * filters.limit + index + 1}</td>
                               {
-                                (team?.role?.permissions?.project?.fields?.name?.show) ? (
+                                (fieldPermissions?.projectId?.show) ? (
+                                  <td>{p?.projectId}</td>
+                                ) : (
+                                  null
+                                )
+                              }
+                              {
+                                (fieldPermissions?.name?.show) ? (
                                   <td>{p?.name}</td>
                                 ) : (
                                   null
                                 )
                               }
                               {
-                                (team?.role?.permissions?.project?.fields?.customer?.show) ? (
+                                (fieldPermissions?.customer?.show) ? (
                                   <td>{p?.customer?.name}</td>
                                 ) : (
                                   null
                                 )
                               }
                               {
-                                (team?.role?.permissions?.project?.fields?.priority?.show) ? (
+                                (fieldPermissions?.priority?.show) ? (
                                   <td>{p?.priority}</td>
                                 ) : (
                                   null
                                 )
                               }
                               {
-                                (team?.role?.permissions?.project?.fields?.start?.show) ? (
+                                (fieldPermissions?.start?.show) ? (
                                   <td>{p?.start}</td>
                                 ) : (
                                   null
                                 )
                               }
                               {
-                                (team?.role?.permissions?.project?.fields?.due?.show) ? (
+                                (fieldPermissions?.due?.show) ? (
                                   <td>{p?.due}</td>
                                 ) : (
                                   null
                                 )
                               }
                               {
-                                (team?.role?.permissions?.project?.fields?.type?.show) ? (
+                                (fieldPermissions?.type?.show) ? (
                                   <td>{p?.type?.name}</td>
                                 ) : (
                                   null
                                 )
                               }
                               {
-                                (team?.role?.permissions?.project?.fields?.status?.show) ? (
+                                (fieldPermissions?.status?.show) ? (
                                   <td>{p?.status?.status}</td>
                                 ) : (
                                   null
@@ -440,7 +536,7 @@ const Project = () => {
                                   </Link>
                                   <div className="dropdown-menu dropdown-menu-right">
                                     {
-                                      (team?.role?.permissions?.project?.update) ? (
+                                      (permissions?.update) ? (
                                         <Link to={`/edit-project/${p?._id}`} className="dropdown-item">
                                           <i className="ti ti-edit text-blue"></i>
                                           Update
@@ -450,7 +546,7 @@ const Project = () => {
                                       )
                                     }
                                     {
-                                      (team?.role?.permissions?.project?.delete) ? (
+                                      (permissions?.delete) ? (
                                         <Link to="#" className="dropdown-item" onClick={() => handleDelete(p?._id)}>
                                           <i className="ti ti-trash text-danger"></i>
                                           Delete

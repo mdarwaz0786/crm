@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import axios from 'axios';
@@ -141,6 +142,13 @@ const EditRole = () => {
 
   const handleChange = (e) => {
     const { name, checked, type } = e.target;
+
+    // Prevent change if the checkbox is disabled
+    if (team?.role?.permissions?.role?.fields?.masters?.read) {
+      e.preventDefault();
+      return;
+    };
+
     const [master, permission] = name.split('.');
     if (type === 'checkbox') {
       setPermissions((prevPermissions) => ({
@@ -152,11 +160,18 @@ const EditRole = () => {
       }));
     } else {
       setName(e.target.value);
-    }
+    };
   };
 
   const handleFieldPermissionChange = (e) => {
     const { name, checked } = e.target;
+
+    // Prevent change if the checkbox is disabled
+    if (team?.role?.permissions?.role?.fields?.masters?.read) {
+      e.preventDefault();
+      return;
+    };
+
     const [field, permission] = name.split('.');
     setPermissions((prevPermissions) => ({
       ...prevPermissions,
@@ -184,10 +199,10 @@ const EditRole = () => {
       if (response?.data?.success) {
         setName(response?.data?.role?.name);
         setPermissions(response?.data?.role?.permissions);
-      }
+      };
     } catch (error) {
       console.error('Error while fetching single role:', error.message);
-    }
+    };
   };
 
   useEffect(() => {
@@ -195,7 +210,7 @@ const EditRole = () => {
   }, [id]);
 
   // Create the update object
-  const updateData = { permissions };
+  const updateData = {};
   const fieldPermissions = team?.role?.permissions?.role?.fields;
 
   const handleUpdate = async (e, id) => {
@@ -204,7 +219,11 @@ const EditRole = () => {
     // Conditionally include fields based on permissions
     if (fieldPermissions?.name?.show && !fieldPermissions?.name?.read) {
       updateData.name = name;
-    }
+    };
+
+    if (fieldPermissions?.masters?.show && !fieldPermissions?.masters?.read) {
+      updateData.permissions = permissions;
+    };
 
     try {
       const response = await axios.put(`/api/v1/role/update-role/${id}`, updateData, {
@@ -344,7 +363,7 @@ const EditRole = () => {
     } catch (error) {
       console.error('Error while updating role:', error.message);
       toast.error("Error while updating role");
-    }
+    };
   };
 
   const permissionLabels = {
@@ -371,11 +390,11 @@ const EditRole = () => {
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
   if (!team?.role?.permissions?.role?.update) {
     return <Navigate to="/role" />;
-  }
+  };
 
   return (
     <div className="page-wrapper custom-role" style={{ paddingBottom: "1rem" }}>
@@ -402,8 +421,8 @@ const EditRole = () => {
                       id="name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      required
                       readOnly={fieldPermissions?.name?.read}
+                      onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined}
                     />
                   </div>
                 </div>
@@ -429,6 +448,7 @@ const EditRole = () => {
                             checked={permissions[master]?.access || false}
                             onChange={handleChange}
                             disabled={fieldPermissions?.masters?.read}
+                            onKeyDown={fieldPermissions?.masters?.read ? (e) => e.preventDefault() : undefined}
                           />
                           <label className="form-check-label" htmlFor={`${master}.access`} style={{ marginLeft: '5px' }}>
                             Access
@@ -445,6 +465,7 @@ const EditRole = () => {
                                 checked={permissions[master]?.[action] || false}
                                 onChange={handleChange}
                                 disabled={fieldPermissions?.masters?.read}
+                                onKeyDown={fieldPermissions?.masters?.read ? (e) => e.preventDefault() : undefined}
                               />
                               <label className="form-check-label" htmlFor={`${master}.${action}`}>
                                 {action.charAt(0).toUpperCase() + action.slice(1)}
@@ -490,7 +511,7 @@ const EditRole = () => {
                 Object.entries(permissions[selectedMaster]?.fields || {}).map(([field, permission]) => (
                   <div className="col-md-6" key={field}>
                     <div className="form-group">
-                      <label className="col-form-label" style={{ marginLeft: "0rem", marginBottom: "0.2rem", }}>{field.charAt(0).toUpperCase() + field.slice(1)} :</label>
+                      <label className="col-form-label" style={{ marginLeft: "0rem", marginBottom: "0.2rem" }}>{field.charAt(0).toUpperCase() + field.slice(1)} :</label>
                       <div className="d-flex">
                         <div className="form-check mr-2">
                           <input
@@ -501,6 +522,7 @@ const EditRole = () => {
                             checked={permission.read}
                             onChange={handleFieldPermissionChange}
                             disabled={fieldPermissions?.masters?.read}
+                            onKeyDown={fieldPermissions?.masters?.read ? (e) => e.preventDefault() : undefined}
                           />
                           <label className="form-check-label" htmlFor={`${field}.read`}>Read Only</label>
                         </div>
@@ -513,6 +535,7 @@ const EditRole = () => {
                             checked={permission.show}
                             onChange={handleFieldPermissionChange}
                             disabled={fieldPermissions?.masters?.read}
+                            onKeyDown={fieldPermissions?.masters?.read ? (e) => e.preventDefault() : undefined}
                           />
                           <label className="form-check-label" htmlFor={`${field}.show`}>Show</label>
                         </div>

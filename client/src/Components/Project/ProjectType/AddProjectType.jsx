@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from 'axios';
@@ -16,7 +17,7 @@ const AddProjectType = () => {
     try {
       if (!name) {
         return toast.error("Enter type");
-      }
+      };
 
       const response = await axios.post("/api/v1/projectType/create-projectType", { name, description }, {
         headers: {
@@ -29,20 +30,20 @@ const AddProjectType = () => {
         setDescription("");
         toast.success("Project type created successfully");
         navigate("/project-type");
-      }
+      };
     } catch (error) {
       console.log("Error while creating project type:", error.message);
       toast.error("Error while creating project type");
-    }
+    };
   };
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
   if (!team?.role?.permissions?.projectType?.create) {
     return <Navigate to="/project-type" />;
-  }
+  };
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
@@ -55,13 +56,13 @@ const AddProjectType = () => {
           <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="name">Type <span className="text-danger">*</span></label>
-              <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+              <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
-              <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
+              <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
             </div>
           </div>
         </div>

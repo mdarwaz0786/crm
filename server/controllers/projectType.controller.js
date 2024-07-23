@@ -11,7 +11,7 @@ export const createProjectType = async (req, res) => {
     return res.status(200).json({ success: true, message: "Project type created successfully", projectType });
   } catch (error) {
     console.log("Error while creating project type:", error.message);
-    return res.status(500).json({ success: false, message: "Error while creating project type" });
+    return res.status(500).json({ success: false, message: `Error while creating project type: ${error.message}` });
   };
 };
 
@@ -31,12 +31,14 @@ const buildProjection = (permissions) => {
   if (projection._id === undefined) {
     projection._id = 1;
   };
+
   return projection;
 };
 
 // Helper function to filter fields based on projection
 const filterFields = (projectType, projection) => {
   const filteredProjectType = {};
+
   for (const key in projectType._doc) {
     if (projection[key]) {
       filteredProjectType[key] = projectType[key];
@@ -46,6 +48,7 @@ const filterFields = (projectType, projection) => {
   if (projection._id !== undefined && !filteredProjectType._id) {
     filteredProjectType._id = projectType._id;
   };
+
   return filteredProjectType;
 };
 
@@ -104,7 +107,7 @@ export const fetchAllProjectType = async (req, res) => {
     return res.status(200).json({ success: true, message: "All project type fetched successfully", projectType: filteredProjectType, totalCount });
   } catch (error) {
     console.log("Error while fetching all project type:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching all project type" });
+    return res.status(500).json({ success: false, message: `Error while fetching all project type: ${error.message}` });
   };
 };
 
@@ -125,7 +128,7 @@ export const fetchSingleProjectType = async (req, res) => {
     return res.status(200).json({ success: true, message: "Single project type fetched successfully", projectType: filteredProjectType });
   } catch (error) {
     console.log("Error while fetching single project type:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching single project type" });
+    return res.status(500).json({ success: false, message: `Error while fetching single project type: ${error.message}` });
   };
 };
 
@@ -144,7 +147,7 @@ export const updateProjectType = async (req, res) => {
     return res.status(200).json({ success: true, message: "Project type updated successfully", projectType });
   } catch (error) {
     console.log("Error while updating project type:", error.message);
-    return res.status(500).json({ success: false, message: "Error while updating project type" });
+    return res.status(500).json({ success: false, message: `Error while updating project type: ${error.message}` });
   };
 };
 
@@ -158,9 +161,9 @@ export const deleteProjectType = async (req, res) => {
       return res.status(400).json({ success: false, message: "Project type not found" });
     };
 
-    return res.status(200).json({ success: true, message: "Project type deleted successfully", projectType });
+    return res.status(200).json({ success: true, message: "Project type deleted successfully" });
   } catch (error) {
     console.log("Error while deleting project type:", error.message);
-    return res.status(500).json({ success: false, message: "Error while deleting project type" });
+    return res.status(500).json({ success: false, message: `Error while deleting project type: ${error.message}` });
   };
 };

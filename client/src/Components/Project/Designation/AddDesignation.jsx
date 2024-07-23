@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
@@ -16,7 +17,7 @@ const AddDesignation = () => {
     try {
       if (!name) {
         return toast.error("Enter name");
-      }
+      };
 
       const response = await axios.post("/api/v1/designation/create-designation", { name, description }, {
         headers: {
@@ -29,20 +30,20 @@ const AddDesignation = () => {
         setDescription("");
         toast.success("Designation created successfully");
         navigate("/designation");
-      }
+      };
     } catch (error) {
       console.log("Error while creating designation:", error.message);
       toast.error("Error while creating designation");
-    }
+    };
   };
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
   if (!team?.role?.permissions?.designation?.create) {
     return <Navigate to="/designation" />;
-  }
+  };
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
@@ -55,13 +56,13 @@ const AddDesignation = () => {
           <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
-              <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+              <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
-              <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
+              <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
             </div>
           </div>
         </div>

@@ -11,15 +11,20 @@ export const isLoggedIn = async (req, res, next) => {
 
     const jwtToken = token.replace("Bearer", "").trim();
     const isVerified = jwt.verify(jwtToken, process.env.JWT_SECRET_KEY);
-    const teamData = await Team.findOne({ username: isVerified.username }).populate("designation").populate("role").populate("reportingTo").exec();
+    const teamData = await Team.findOne({ username: isVerified.username })
+      .populate("designation")
+      .populate("role")
+      .populate("reportingTo")
+      .exec();
 
     req.team = teamData;
     req.token = jwtToken;
     req.teamId = teamData._id;
 
     next();
+
   } catch (error) {
-    console.log("Team member is not logged:", error.message);
-    return res.status(401).json({ success: false, message: "Team member is not logged in" });
+    console.log("Team member is not logged in:", error.message);
+    return res.status(401).json({ success: false, message: `Team member is not logged in: ${error.message}` });
   };
 };

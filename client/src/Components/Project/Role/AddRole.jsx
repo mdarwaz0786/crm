@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 import { useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -150,7 +151,7 @@ const AddRole = () => {
       }));
     } else {
       setName(e.target.value);
-    }
+    };
   };
 
   const handleFieldPermissionChange = (e) => {
@@ -175,7 +176,7 @@ const AddRole = () => {
     e.preventDefault();
     if (!name) {
       return toast.error("Enter name");
-    }
+    };
 
     try {
       const response = await axios.post("/api/v1/role/create-role", { name, permissions }, {
@@ -311,11 +312,11 @@ const AddRole = () => {
         });
         toast.success("Role created successfully");
         navigate("/role");
-      }
+      };
     } catch (error) {
       console.error('Error while creating role:', error.message);
       toast.error("Error while creating role");
-    }
+    };
   };
 
   const permissionLabels = {
@@ -342,13 +343,11 @@ const AddRole = () => {
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
-  const permission = team?.role?.permissions?.role;
-
-  if (!permission?.create) {
+  if (!team?.role?.permissions?.role.create) {
     return <Navigate to="/role" />;
-  }
+  };
 
   return (
     <div className="page-wrapper custom-role" style={{ paddingBottom: "1rem" }}>
@@ -373,7 +372,6 @@ const AddRole = () => {
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  required
                 />
               </div>
             </div>

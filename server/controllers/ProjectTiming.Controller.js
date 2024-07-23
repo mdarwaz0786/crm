@@ -11,7 +11,7 @@ export const createProjectTiming = async (req, res) => {
     return res.status(200).json({ success: true, message: "Project timing created successfully", projectTiming });
   } catch (error) {
     console.log("Error while creating project timing:", error.message);
-    return res.status(500).json({ success: false, message: "Error while creating project timing" });
+    return res.status(500).json({ success: false, message: `Error while creating project timing: ${error.message}` });
   };
 };
 
@@ -31,12 +31,14 @@ const buildProjection = (permissions) => {
   if (projection._id === undefined) {
     projection._id = 1;
   };
+
   return projection;
 };
 
 // Helper function to filter fields based on projection
 const filterFields = (projectTiming, projection) => {
   const filteredProjectTiming = {};
+
   for (const key in projectTiming._doc) {
     if (projection[key]) {
       filteredProjectTiming[key] = projectTiming[key];
@@ -46,6 +48,7 @@ const filterFields = (projectTiming, projection) => {
   if (projection._id !== undefined && !filteredProjectTiming._id) {
     filteredProjectTiming._id = projectTiming._id;
   };
+
   return filteredProjectTiming;
 };
 
@@ -103,8 +106,8 @@ export const fetchAllProjectTiming = async (req, res) => {
 
     return res.status(200).json({ success: true, message: "Project timing fetched successfully", projectTiming: filteredProjectTiming, totalCount });
   } catch (error) {
-    console.log("Error while fetching project timing:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching project timing" });
+    console.log("Error while fetching all project timing:", error.message);
+    return res.status(500).json({ success: false, message: `Error while fetching all project timing: ${error.message}` });
   };
 };
 
@@ -123,8 +126,8 @@ export const fetchSingleProjectTiming = async (req, res) => {
 
     return res.status(200).json({ success: true, message: "Project timing fetched successfully", projectTiming: filteredProjectTiming });
   } catch (error) {
-    console.log("Error while fetching project timing:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching project timing" });
+    console.log("Error while fetching single project timing:", error.message);
+    return res.status(500).json({ success: false, message: `Error while fetching single project timing: ${error.message}` });
   };
 };
 
@@ -143,7 +146,7 @@ export const updateProjectTiming = async (req, res) => {
     return res.status(200).json({ success: true, message: "Project timing updated successfully", projectTiming });
   } catch (error) {
     console.log("Error while updating project timing:", error.message);
-    return res.status(500).json({ success: false, message: "Error while updating project timing" });
+    return res.status(500).json({ success: false, message: `Error while updating project timing: ${error.message}` });
   };
 };
 
@@ -157,9 +160,9 @@ export const deleteProjectTiming = async (req, res) => {
       return res.status(400).json({ success: false, message: "Project timing not found" });
     };
 
-    return res.status(200).json({ success: true, message: "Project timing deleted successfully", projectTiming });
+    return res.status(200).json({ success: true, message: "Project timing deleted successfully" });
   } catch (error) {
     console.log("Error while deleting project timing:", error.message);
-    return res.status(500).json({ success: false, message: "Error while deleting project timing" });
+    return res.status(500).json({ success: false, message: `Error while deleting project timing: ${error.message}` });
   };
 };

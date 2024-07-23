@@ -11,10 +11,9 @@ export const createCustomer = async (req, res) => {
     return res.status(200).json({ success: true, message: "Customer created successfully", customer });
   } catch (error) {
     console.log("Error while creating customer:", error.message);
-    return res.status(500).json({ success: false, message: "Error while creating customer" });
+    return res.status(500).json({ success: false, message: `Error while creating customer: ${error.message}` })
   };
 };
-
 
 // Helper function to build the projection object based on user permissions
 const buildProjection = (permissions) => {
@@ -32,12 +31,14 @@ const buildProjection = (permissions) => {
   if (projection._id === undefined) {
     projection._id = 1;
   };
+
   return projection;
 };
 
 // Helper function to filter fields based on projection
 const filterFields = (customer, projection) => {
   const filteredCustomer = {};
+
   for (const key in customer._doc) {
     if (projection[key]) {
       filteredCustomer[key] = customer[key];
@@ -47,6 +48,7 @@ const filterFields = (customer, projection) => {
   if (projection._id !== undefined && !filteredCustomer._id) {
     filteredCustomer._id = customer._id;
   };
+
   return filteredCustomer;
 };
 
@@ -106,8 +108,8 @@ export const fetchAllCustomer = async (req, res) => {
 
     return res.status(200).json({ success: true, message: "Customer fetched successfully", customer: filteredCustomer, totalCount });
   } catch (error) {
-    console.log("Error while fetching customer:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching customer" });
+    console.log("Error while fetching all customer:", error.message);
+    return res.status(500).json({ success: false, message: `Error while fetching all customer: ${error.message}` });
   };
 };
 
@@ -127,8 +129,8 @@ export const fetchSingleCustomer = async (req, res) => {
 
     return res.status(200).json({ success: true, message: "Customer fetched successfully", customer: filteredCustomer });
   } catch (error) {
-    console.log("Error while fetching customer:", error.message);
-    return res.status(500).json({ success: false, message: "Error while fetching customer" });
+    console.log("Error while fetching single customer:", error.message);
+    return res.status(500).json({ success: false, message: `Error while fetching single customer: ${error.message}` });
   };
 };
 
@@ -147,7 +149,7 @@ export const updateCustomer = async (req, res) => {
     return res.status(200).json({ success: true, message: "Customer updated successfully", updatedCustomer });
   } catch (error) {
     console.log("Error while updating customer:", error.message);
-    return res.status(500).json({ success: false, message: "Error while updating customer" });
+    return res.status(500).json({ success: false, message: `Error while updating customer: ${error.message}` })
   };
 };
 
@@ -161,9 +163,9 @@ export const deleteCustomer = async (req, res) => {
       return res.status(400).json({ success: false, message: "Customer not found" });
     };
 
-    return res.status(200).json({ success: true, message: "Customer deleted successfully", deletedCustomer });
+    return res.status(200).json({ success: true, message: "Customer deleted successfully" });
   } catch (error) {
     console.log("Error while deleting customer:", error.message);
-    return res.status(500).json({ success: false, message: "Error while deleting customer" });
+    return res.status(500).json({ success: false, message: `Error while deleting customer: ${error.message}` });
   };
 };

@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -24,10 +25,10 @@ const EditProjectTiming = () => {
       if (response?.data?.success) {
         setName(response?.data?.projectTiming?.name);
         setDescription(response?.data?.projectTiming?.description);
-      }
+      };
     } catch (error) {
       console.log("Error while fetching single project timing:", error.message);
-    }
+    };
   };
 
   useEffect(() => {
@@ -44,11 +45,11 @@ const EditProjectTiming = () => {
     // Conditionally include fields based on permissions
     if (fieldPermissions?.name?.show && !fieldPermissions?.name?.read) {
       updateData.name = name;
-    }
+    };
 
     if (fieldPermissions?.description?.show && !fieldPermissions?.description?.read) {
       updateData.description = description;
-    }
+    };
 
     try {
       const response = await axios.put(`/api/v1/projectTiming/update-projectTiming/${id}`, updateData, {
@@ -62,20 +63,20 @@ const EditProjectTiming = () => {
         setDescription("");
         toast.success("Project timing updated successfully");
         navigate("/project-timing");
-      }
+      };
     } catch (error) {
       console.log("Error while updating project timing:", error.message);
       toast.error("Error while updating project timing");
-    }
+    };
   };
 
   if (isLoading) {
     return <Preloader />;
-  }
+  };
 
   if (!team?.role?.permissions?.projectTiming?.update) {
     return <Navigate to="/project-timing" />;
-  }
+  };
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
@@ -90,7 +91,7 @@ const EditProjectTiming = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
-                  <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required readOnly={fieldPermissions?.name?.read} />
+                  <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} readOnly={fieldPermissions?.name?.read} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -102,7 +103,7 @@ const EditProjectTiming = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
-                  <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required readOnly={fieldPermissions?.description?.read} />
+                  <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} readOnly={fieldPermissions?.description?.read} onKeyDown={fieldPermissions?.description?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
