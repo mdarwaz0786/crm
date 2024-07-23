@@ -16,53 +16,51 @@ import designationRoute from "./routes/designation.route.js";
 
 const __dirname = path.resolve();
 
-// configuration
+// Configuration
 dotenv.config();
 
-// connect MongoDB database
+// Connect MongoDB database
 connectDatabase();
 
-// rest object
+// REST API object
 const server = express();
 
-// middleware
+// Middleware
 server.use(express.json());
 server.use(cors());
 
-// test route
+// Test route
 server.use("/api/v1", testRoute);
-// customer route
+// Customer route
 server.use("/api/v1/customer", customerRoute);
-// projectType route
+// Project type route
 server.use("/api/v1/projectType", projectTypeRoute);
-// projectCategory route
+// Project category route
 server.use("/api/v1/projectCategory", projectCategoryRoute);
-// projectStatus route
+// Project Status route
 server.use("/api/v1/projectStatus", projectStatusRoute);
-// team route
+// Team member route
 server.use("/api/v1/team", teamRoute);
-// project route
+// Project route
 server.use("/api/v1/project", projectRoute);
-// project timing route
+// Project timing route
 server.use("/api/v1/projectTiming", projectTimingRoute);
-// role route
+// Role route
 server.use("/api/v1/role", roleRoute);
-// designation route
+// Designation route
 server.use("/api/v1/designation", designationRoute);
 
-// Middleware for serving client static files
+// Middleware for serving client static file
 server.use(express.static(path.join(__dirname, "/client/dist")), (req, res, next) => next());
 
-// Route for serving client index.html
+// Route for serving client index.html file
 server.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
 });
 
-// environment variable
+// Environment variable
 const port = process.env.PORT || 8080;
 const mode = process.env.NODE_MODE;
 
-// server listen 
-server.listen(port, () => {
-  console.log(`server is successfully running in ${mode} on port number ${port}`);
-});
+// Server listen 
+server.listen(port, () => console.log(`Server is successfully running in ${mode} on port number ${port}`));
