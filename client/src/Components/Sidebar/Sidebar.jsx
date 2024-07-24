@@ -46,7 +46,7 @@ const Sidebar = () => {
                 <h6 className="submenu-hdr">Main Menu</h6>
                 <ul>
                   <li className="submenu">
-                    <Link to="#" className="subdrop active">
+                    <Link to="#" className={currentPath === "/" ? "active subdrop" : ""}>
                       <i className="ti ti-layout-2" /><span>Dashboard</span><span className="menu-arrow" />
                     </Link>
                     <ul>
