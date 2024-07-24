@@ -5,7 +5,6 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
 
 const EditTeamMember = () => {
   const [name, setName] = useState("");
@@ -23,7 +22,7 @@ const EditTeamMember = () => {
   const [selectedReportingTo, setSelectedReportingTo] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, team, isLoading } = useAuth();
+  const { validToken, team } = useAuth();
 
   const fetchAllTeamMember = async () => {
     try {
@@ -166,7 +165,7 @@ const EditTeamMember = () => {
         setSelectedDesignation("");
         setSelectedReportingTo([]);
         toast.success("Team member updated successfully");
-        navigate("/team-member");
+        navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating team member:", error.message);
@@ -185,12 +184,8 @@ const EditTeamMember = () => {
     setSelectedReportingTo(selectedReportingTo?.filter((item) => item !== value));
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.team?.update) {
-    return <Navigate to="/team-member" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -198,7 +193,7 @@ const EditTeamMember = () => {
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Edit Team Member</h4>
-          <Link to="/team-member"><button className="btn btn-primary">Back</button></Link>
+          <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
           {
@@ -354,7 +349,7 @@ const EditTeamMember = () => {
           }
         </div>
         <div className="submit-button text-end">
-          <Link to="/team-member" className="btn btn-light sidebar-close">Cancel</Link>
+          <Link to="#" onClick={() => navigate(-1)} className="btn btn-light sidebar-close">Cancel</Link>
           <Link to="#" className="btn btn-primary" onClick={(e) => handleUpdate(e, id)}>Update</Link>
         </div>
       </div>

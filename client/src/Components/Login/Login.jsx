@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-semi */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext.jsx";
@@ -19,12 +20,12 @@ const Login = () => {
         setUsername("");
         setPassword("");
         toast.success("Login successful");
-        setTimeout(() => { navigate('/'); window.location.reload(); }, 3000);
-      }
+        setTimeout(() => { navigate('/'); window.location.reload(); }, 2000);
+      };
     } catch (error) {
-      console.log("error while login:", error.message);
+      console.log("Error while login:", error.message);
       toast.error("Error while login");
-    }
+    };
   };
 
   return (

@@ -5,14 +5,13 @@ import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from '../../../Preloader.jsx';
 
 const EditProjectCategory = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, team, isLoading } = useAuth();
+  const { validToken, team } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
@@ -62,7 +61,7 @@ const EditProjectCategory = () => {
         setName("");
         setDescription("");
         toast.success("Project category updated successfully");
-        navigate("/project-category");
+        navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating project category:", error.message);
@@ -70,12 +69,8 @@ const EditProjectCategory = () => {
     };
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.projectCategory?.update) {
-    return <Navigate to="/project-category" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -83,7 +78,7 @@ const EditProjectCategory = () => {
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Edit Project Category</h4>
-          <Link to="/project-category"><button className="btn btn-primary">Back</button></Link>
+          <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
           {
@@ -112,7 +107,7 @@ const EditProjectCategory = () => {
           }
         </div>
         <div className="submit-button text-end">
-          <Link to="/project-category" className="btn btn-light sidebar-close">Cancel</Link>
+          <Link to="#" onClick={() => navigate(-1)} className="btn btn-light sidebar-close">Cancel</Link>
           <Link to="#" className="btn btn-primary" onClick={(e) => handleUpdate(e, id)}>Update</Link>
         </div>
       </div>

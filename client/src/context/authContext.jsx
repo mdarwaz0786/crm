@@ -4,6 +4,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 export const AuthContext = createContext();
 
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
 
   const logOutTeam = () => {
     setToken("");
+    toast.success("Logout successful");
     return localStorage.removeItem("token");
   };
 

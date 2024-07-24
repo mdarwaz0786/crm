@@ -4,7 +4,6 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
 
 const AddCustomer = () => {
   const [name, setName] = useState("");
@@ -12,7 +11,7 @@ const AddCustomer = () => {
   const [mobile, setMobile] = useState("");
   const [address, setAddress] = useState("");
   const navigate = useNavigate();
-  const { validToken, team, isLoading } = useAuth();
+  const { validToken, team } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -45,7 +44,7 @@ const AddCustomer = () => {
         setMobile("");
         setAddress("");
         toast.success("Customer created successfully");
-        navigate("/customer");
+        navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating customer:", error.message);
@@ -53,12 +52,8 @@ const AddCustomer = () => {
     };
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.customer?.create) {
-    return <Navigate to="/customer" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -66,7 +61,7 @@ const AddCustomer = () => {
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Add Customer</h4>
-          <Link to="/customer"><button className="btn btn-primary">Back</button></Link>
+          <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
           <div className="col-md-6">
@@ -95,7 +90,7 @@ const AddCustomer = () => {
           </div>
         </div>
         <div className="submit-button text-end">
-          <Link to="/customer" className="btn btn-light sidebar-close">Cancel</Link>
+          <Link to="#" onClick={() => navigate(-1)} className="btn btn-light sidebar-close">Cancel</Link>
           <Link to="#" className="btn btn-primary" onClick={(e) => handleCreate(e)}>Create</Link>
         </div>
       </div>

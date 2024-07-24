@@ -5,7 +5,6 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
 
 const AddTeamMember = () => {
   const [name, setName] = useState("");
@@ -22,7 +21,7 @@ const AddTeamMember = () => {
   const [reportingTo, setReportingTo] = useState([]);
   const [selectedReportingTo, setSelectedReportingTo] = useState([]);
   const navigate = useNavigate();
-  const { validToken, team, isLoading } = useAuth();
+  const { validToken, team } = useAuth();
 
   const fetchAllTeamMember = async () => {
     try {
@@ -146,7 +145,7 @@ const AddTeamMember = () => {
         setSelectedRole("");
         setSelectedReportingTo([]);
         toast.success("Team member created successfully");
-        navigate("/team-member");
+        navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating team member:", error.message);
@@ -165,12 +164,8 @@ const AddTeamMember = () => {
     setSelectedReportingTo(selectedReportingTo?.filter((item) => item !== value));
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.team?.create) {
-    return <Navigate to="/team-member" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -178,7 +173,7 @@ const AddTeamMember = () => {
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Add Team Member</h4>
-          <Link to="/team-member"><button className="btn btn-primary">Back</button></Link>
+          <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
           <div className="col-md-6">
@@ -274,7 +269,7 @@ const AddTeamMember = () => {
           </div>
         </div>
         <div className="submit-button text-end">
-          <Link to="/team-member" className="btn btn-light sidebar-close">Cancel</Link>
+          <Link to="#" onClick={() => navigate(-1)} className="btn btn-light sidebar-close">Cancel</Link>
           <Link to="#" className="btn btn-primary" onClick={(e) => handleCreate(e)}>Create</Link>
         </div>
       </div>

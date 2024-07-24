@@ -4,12 +4,11 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
 const AddRole = () => {
-  const { validToken, team, isLoading } = useAuth();
+  const { validToken, team } = useAuth();
   const [selectedMaster, setSelectedMaster] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -311,7 +310,7 @@ const AddRole = () => {
           },
         });
         toast.success("Role created successfully");
-        navigate("/role");
+        navigate(-1);
       };
     } catch (error) {
       console.error('Error while creating role:', error.message);
@@ -341,12 +340,8 @@ const AddRole = () => {
     setModalIsOpen(false);
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.role.create) {
-    return <Navigate to="/role" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -354,7 +349,7 @@ const AddRole = () => {
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Add Role</h4>
-          <Link to="/role">
+          <Link to="#" onClick={() => navigate(-1)}>
             <button className="btn btn-primary">Back</button>
           </Link>
         </div>
@@ -425,7 +420,7 @@ const AddRole = () => {
             }
           </div>
           <div className="submit-button text-end">
-            <Link to="/role" className="btn btn-light sidebar-close">
+            <Link to="#" onClick={() => navigate(-1)} className="btn btn-light sidebar-close">
               Cancel
             </Link>
             <button className="btn btn-primary" type="submit">

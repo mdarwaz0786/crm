@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from "../../context/authContext.jsx";
-import Preloader from "../../Preloader.jsx";
 
 const AddProject = () => {
   const [customer, setCustomer] = useState([]);
@@ -30,7 +29,7 @@ const AddProject = () => {
   const [priority, setPriority] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { team, isLoading, validToken } = useAuth();
+  const { team, validToken } = useAuth();
 
   const fetchAllCustomer = async () => {
     try {
@@ -226,7 +225,7 @@ const AddProject = () => {
         },
         {
           headers: {
-            Authorization: `${validToken}`
+            Authorization: `${validToken}`,
           },
         },
       );
@@ -248,7 +247,7 @@ const AddProject = () => {
         setDue("");
         setDescription("");
         toast.success("Project created successfully");
-        navigate("/project");
+        navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating project:", error.message);
@@ -278,12 +277,8 @@ const AddProject = () => {
     setSelectedLeader(selectedLeader?.filter((item) => item !== value));
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.project?.create) {
-    return <Navigate to="/project" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -292,7 +287,7 @@ const AddProject = () => {
         <div className="content">
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <h4>Add Project</h4>
-            <Link to="/project"><button className="btn btn-primary">Back</button></Link>
+            <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
           </div>
           <div className="row">
             <div className="col-md-6">
@@ -455,7 +450,7 @@ const AddProject = () => {
             </div>
           </div>
           <div className="submit-button text-end">
-            <Link to="/project" className="btn btn-light">Cancel</Link>
+            <Link to="#" onClick={() => navigate(-1)} className="btn btn-light">Cancel</Link>
             <Link to="#" className="btn btn-primary" onClick={(e) => handleCreate(e)}>Create</Link>
           </div>
         </div>

@@ -5,14 +5,13 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
 const EditRole = () => {
   const [selectedMaster, setSelectedMaster] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { team, validToken, isLoading } = useAuth();
+  const { team, validToken } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
   const [name, setName] = useState("");
@@ -358,7 +357,7 @@ const EditRole = () => {
           },
         });
         toast.success("Role updated successfully");
-        navigate("/role");
+        navigate(-1);
       }
     } catch (error) {
       console.error('Error while updating role:', error.message);
@@ -388,12 +387,8 @@ const EditRole = () => {
     setModalIsOpen(false);
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.role?.update) {
-    return <Navigate to="/role" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -401,7 +396,7 @@ const EditRole = () => {
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Edit Role</h4>
-          <Link to="/role">
+          <Link to="#" onClick={() => navigate(-1)}>
             <button className="btn btn-primary">Back</button>
           </Link>
         </div>
@@ -490,7 +485,7 @@ const EditRole = () => {
             )
           }
           <div className="submit-button text-end">
-            <Link to="/role" className="btn btn-light sidebar-close">
+            <Link to="#" onClick={() => navigate(-1)} className="btn btn-light sidebar-close">
               Cancel
             </Link>
             <button className="btn btn-primary" type="submit">

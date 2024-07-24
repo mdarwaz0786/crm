@@ -4,13 +4,12 @@ import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from '../../../Preloader.jsx';
 
 const AddDesignation = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { validToken, team, isLoading } = useAuth();
+  const { validToken, team } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -29,7 +28,7 @@ const AddDesignation = () => {
         setName("");
         setDescription("");
         toast.success("Designation created successfully");
-        navigate("/designation");
+        navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating designation:", error.message);
@@ -37,12 +36,8 @@ const AddDesignation = () => {
     };
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.designation?.create) {
-    return <Navigate to="/designation" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -50,7 +45,7 @@ const AddDesignation = () => {
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Add Designation</h4>
-          <Link to="/designation"><button className="btn btn-primary">Back</button></Link>
+          <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
           <div className="col-md-6">
@@ -67,7 +62,7 @@ const AddDesignation = () => {
           </div>
         </div>
         <div className="submit-button text-end">
-          <Link to="/designation" className="btn btn-light sidebar-close">Cancel</Link>
+          <Link to="#" onClick={() => navigate(-1)} className="btn btn-light sidebar-close">Cancel</Link>
           <Link to="#" className="btn btn-primary" onClick={(e) => handleCreate(e)}>Create</Link>
         </div>
       </div>

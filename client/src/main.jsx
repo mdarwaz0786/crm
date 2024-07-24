@@ -6,7 +6,6 @@ import { ToastContainer } from 'react-toastify';
 import { AuthProvider } from './context/authContext.jsx';
 import 'react-toastify/dist/ReactToastify.css';
 import "./index.css";
-import "./style.scss";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>

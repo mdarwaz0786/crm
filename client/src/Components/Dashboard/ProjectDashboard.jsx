@@ -1,4 +1,42 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-extra-semi */
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from 'axios';
+import { useAuth } from "../../context/authContext.jsx";
+
 const ProjectDashboard = () => {
+  const [project, setProject] = useState([]);
+  const { validToken, team } = useAuth();
+  const [filters, setFilters] = useState({
+    sort: "Descending",
+  });
+
+  const fieldPermissions = team?.role?.permissions?.project?.fields;
+
+  const fetchAllProject = async () => {
+    try {
+      const response = await axios.get("/api/v1/project/all-project", {
+        headers: {
+          Authorization: `${validToken}`
+        },
+        params: {
+          sort: filters.sort,
+        },
+      });
+
+      if (response?.data?.success) {
+        setProject(response?.data?.project);
+      };
+    } catch (error) {
+      console.log(error.message);
+    };
+  };
+
+  useEffect(() => {
+    fetchAllProject();
+  }, [filters]);
+
   return (
     <>
       <div className="main-wrapper">
@@ -19,8 +57,8 @@ const ProjectDashboard = () => {
                             <input type="text" className="form-control  date-range bookingrange" />
                           </div>
                           <div className="head-icons mb-0">
-                            <a href="project-dashboard.html" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Refresh"><i className="ti ti-refresh-dot" /></a>
-                            <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header"><i className="ti ti-chevrons-up" /></a>
+                            <Link to="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Refresh"><i className="ti ti-refresh-dot" /></Link>
+                            <Link to="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header"><i className="ti ti-chevrons-up" /></Link>
                           </div>
                         </div>
                       </div>
@@ -37,38 +75,97 @@ const ProjectDashboard = () => {
                             <div className="card-select">
                               <ul>
                                 <li>
-                                  <a className="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
-                                    <i className="ti ti-calendar-check me-2" />Last 7 days
-                                  </a>
+                                  <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown" >
+                                    <i className="ti ti-calendar-check me-2" /> {filters.sort}
+                                  </Link>
                                   <div className="dropdown-menu dropdown-menu-end">
-                                    <a href="javascript:void(0);" className="dropdown-item">
-                                      Last 15 days
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
-                                      Last 30 days
-                                    </a>
+                                    <Link to="#" className="dropdown-item" onClick={() => setFilters((prev) => ({ ...prev, sort: "Ascending" }))} >
+                                      <i className="ti ti-circle-chevron-right" /> Ascending
+                                    </Link>
+                                    <Link to="#" className="dropdown-item" onClick={() => setFilters((prev) => ({ ...prev, sort: "Descending" }))} >
+                                      <i className="ti ti-circle-chevron-right" /> Descending
+                                    </Link>
                                   </div>
                                 </li>
                                 <li>
-                                  <a className="btn btn-primary add-popup" href="javascript:void(0);">
-                                    <i className="ti ti-square-rounded-plus me-1" />Add Project
-                                  </a>
+                                  <Link to="/add-project" className="btn btn-primary">
+                                    <i className="ti ti-square-rounded-plus me-1" />
+                                    Add Project
+                                  </Link>
                                 </li>
                               </ul>
                             </div>
                           </div>
                         </div>
                         <div className="table-responsive custom-table">
-                          <table className="table dataTable" id="recent-project">
+                          <table className="table table-bordered table-striped custom-border">
                             <thead className="thead-light">
                               <tr>
-                                <th>Priority</th>
-                                <th>Name</th>
-                                <th>Client</th>
-                                <th>Due Date</th>
+                                {
+                                  (fieldPermissions?.priority?.show) ? (
+                                    <th>Priority</th>
+                                  ) : (
+                                    null
+                                  )
+                                }
+                                {
+                                  (fieldPermissions?.name?.show) ? (
+                                    <th>Project Name</th>
+                                  ) : (
+                                    null
+                                  )
+                                }
+                                {
+                                  (fieldPermissions?.customer?.show) ? (
+                                    <th>Customer</th>
+                                  ) : (
+                                    null
+                                  )
+                                }
+                                {
+                                  (fieldPermissions?.due?.show) ? (
+                                    <th>Due Date</th>
+                                  ) : (
+                                    null
+                                  )
+                                }
                               </tr>
                             </thead>
                             <tbody>
+                              {
+                                project?.map((p) => (
+                                  <tr key={p?._id}>
+                                    {
+                                      (fieldPermissions?.priority?.show) ? (
+                                        <td><Link to={`edit-project/${p?._id}`}>{p?.priority}</Link></td>
+                                      ) : (
+                                        null
+                                      )
+                                    }
+                                    {
+                                      (fieldPermissions?.name?.show) ? (
+                                        <td><Link to={`edit-project/${p?._id}`}>{p?.name}</Link></td>
+                                      ) : (
+                                        null
+                                      )
+                                    }
+                                    {
+                                      (fieldPermissions?.customer?.show) ? (
+                                        <td><Link to={`edit-project/${p?._id}`}>{p?.customer?.name}</Link></td>
+                                      ) : (
+                                        null
+                                      )
+                                    }
+                                    {
+                                      (fieldPermissions?.due?.show) ? (
+                                        <td><Link to={`edit-project/${p?._id}`}>{p?.due}</Link></td>
+                                      ) : (
+                                        null
+                                      )
+                                    }
+                                  </tr>
+                                ))
+                              }
                             </tbody>
                           </table>
                         </div>
@@ -84,19 +181,19 @@ const ProjectDashboard = () => {
                             <div className="card-select">
                               <ul>
                                 <li>
-                                  <a className="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
+                                  <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown" >
                                     Last 3 months
-                                  </a>
+                                  </Link>
                                   <div className="dropdown-menu dropdown-menu-end">
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                       Last 3 months
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Last 6 months
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Last 12 months
-                                    </a>
+                                    </Link>
                                   </div>
                                 </li>
                               </ul>
@@ -118,32 +215,32 @@ const ProjectDashboard = () => {
                             <div className="card-select">
                               <ul>
                                 <li>
-                                  <a className="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
+                                  <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown" >
                                     Sales Pipeline
-                                  </a>
+                                  </Link>
                                   <div className="dropdown-menu dropdown-menu-end">
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                       Marketing Pipeline
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Sales Pipeline
-                                    </a>
+                                    </Link>
                                   </div>
                                 </li>
                                 <li>
-                                  <a className="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
+                                  <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
                                     Last 3 months
-                                  </a>
+                                  </Link>
                                   <div className="dropdown-menu dropdown-menu-end">
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                       Last 3 months
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Last 6 months
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Last 12 months
-                                    </a>
+                                    </Link>
                                   </div>
                                 </li>
                               </ul>
@@ -163,41 +260,41 @@ const ProjectDashboard = () => {
                             <div className="card-select">
                               <ul>
                                 <li>
-                                  <a className="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
+                                  <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
                                     Marketing Pipeline
-                                  </a>
+                                  </Link>
                                   <div className="dropdown-menu dropdown-menu-end">
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                       Marketing Pipeline
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Sales Pipeline
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Email
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Chats
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Operational
-                                    </a>
+                                    </Link>
                                   </div>
                                 </li>
                                 <li>
-                                  <a className="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
+                                  <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown" >
                                     Last 3 months
-                                  </a>
+                                  </Link>
                                   <div className="dropdown-menu dropdown-menu-end">
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                       Last 3 months
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Last 6 months
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Last 12 months
-                                    </a>
+                                    </Link>
                                   </div>
                                 </li>
                               </ul>
@@ -215,41 +312,41 @@ const ProjectDashboard = () => {
                             <div className="card-select">
                               <ul>
                                 <li>
-                                  <a className="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
+                                  <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown" >
                                     Marketing Pipeline
-                                  </a>
+                                  </Link>
                                   <div className="dropdown-menu dropdown-menu-end">
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                       Marketing Pipeline
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Sales Pipeline
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Email
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Chats
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Operational
-                                    </a>
+                                    </Link>
                                   </div>
                                 </li>
                                 <li>
-                                  <a className="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
+                                  <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
                                     Last 3 months
-                                  </a>
+                                  </Link>
                                   <div className="dropdown-menu dropdown-menu-end">
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                       Last 3 months
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Last 6 months
-                                    </a>
-                                    <a href="javascript:void(0);" className="dropdown-item">
+                                    </Link>
+                                    <Link to="#" className="dropdown-item">
                                       Last 12 months
-                                    </a>
+                                    </Link>
                                   </div>
                                 </li>
                               </ul>
@@ -266,171 +363,7 @@ const ProjectDashboard = () => {
           </div>
         </div>
         {/* /Page Wrapper */}
-        {/* Add New Project */}
-        <div className="toggle-popup">
-          <div className="sidebar-layout">
-            <div className="sidebar-header">
-              <h4>Add New Project</h4>
-              <a href="#" className="sidebar-close toggle-btn"><i className="ti ti-x" /></a>
-            </div>
-            <div className="toggle-body">
-              <form action="project-dashboard.html" className="toggle-height">
-                <div className="pro-create">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Name <span className="text-danger">*</span></label>
-                        <input type="text" className="form-control" />
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Project ID<span className="text-danger"> *</span></label>
-                        <input className="form-control" type="text" />
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Project Type <span className="text-danger">*</span></label>
-                        <select className="select2">
-                          <option>Choose</option>
-                          <option>Mobile App</option>
-                          <option>Meeting</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Client <span className="text-danger">*</span></label>
-                        <select className="select">
-                          <option>Select</option>
-                          <option>NovaWave LLC</option>
-                          <option>Silver Hawk</option>
-                          <option>Harbor View</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Category <span className="text-danger">*</span></label>
-                        <select className="select">
-                          <option>Select</option>
-                          <option>Harbor View</option>
-                          <option>LLC</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-lg-3 col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Project Timing <span className="text-danger">*</span></label>
-                        <select className="select">
-                          <option>Select</option>
-                          <option>Hourly</option>
-                          <option>Weekly</option>
-                          <option>Monthly</option>
-                          <option>Less than 1 Month</option>
-                          <option>Less than 3 months</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-lg-3 col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Price <span className="text-danger">*</span></label>
-                        <input className="form-control" type="text" />
-                      </div>
-                    </div>
-                    <div className="col-lg-3 col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Amount <span className="text-danger">*</span></label>
-                        <input className="form-control" type="text" />
-                      </div>
-                    </div>
-                    <div className="col-lg-3 col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Total <span className="text-danger">*</span></label>
-                        <input className="form-control" type="text" />
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Responsible Persons <span className="text-danger">*</span></label>
-                        <select className="multiple-img" multiple="multiple">
-                          <option data-image="/assets/img/profiles/avatar-19.jpg" selected>Darlee Robertson</option>
-                          <option data-image="/assets/img/profiles/avatar-20.jpg">Sharon Roy</option>
-                          <option data-image="/assets/img/profiles/avatar-21.jpg">Vaughan</option>
-                          <option data-image="/assets/img/profiles/avatar-23.jpg">Jessica</option>
-                          <option data-image="/assets/img/profiles/avatar-16.jpg">Carol Thomas</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Team Leader  <span className="text-danger">*</span></label>
-                        <select className="multiple-img" multiple="multiple">
-                          <option data-image="/assets/img/profiles/avatar-19.jpg">Darlee Robertson</option>
-                          <option data-image="/assets/img/profiles/avatar-20.jpg" selected>Sharon Roy</option>
-                          <option data-image="/assets/img/profiles/avatar-21.jpg">Vaughan</option>
-                          <option data-image="/assets/img/profiles/avatar-23.jpg">Jessica</option>
-                          <option data-image="/assets/img/profiles/avatar-16.jpg">Carol Thomas</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Start Date <span className="text-danger">*</span></label>
-                        <div className="icon-form">
-                          <span className="form-icon"><i className="ti ti-calendar-event" /></span>
-                          <input type="text" className="form-control datetimepicker" defaultValue="29-02-2020" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Due Date <span className="text-danger">*</span></label>
-                        <div className="icon-form">
-                          <span className="form-icon"><i className="ti ti-calendar-event" /></span>
-                          <input type="text" className="form-control datetimepicker" defaultValue="29-02-2020" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Priority</label>
-                        <select className="select">
-                          <option>Select</option>
-                          <option>High</option>
-                          <option>Low</option>
-                          <option>Medium</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Status</label>
-                        <select className="select">
-                          <option>Select</option>
-                          <option>Active</option>
-                          <option>Inactive</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-md-12">
-                      <div className="form-wrap">
-                        <label className="col-form-label">Description <span className="text-danger">*</span></label>
-                        <textarea className="form-control" rows={4} defaultValue={""} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="submit-button text-end">
-                  <a href="#" className="btn btn-light sidebar-close">Cancel</a>
-                  <button type="submit" className="btn btn-primary">Create</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        {/* /Add New Project */}
+
         {/* Delete Contact */}
         <div className="modal custom-modal fade" id="delete_contact" role="dialog">
           <div className="modal-dialog modal-dialog-centered">
@@ -448,8 +381,8 @@ const ProjectDashboard = () => {
                   <h3>Remove Contacts?</h3>
                   <p className="del-info">Are you sure you want to remove contact you selected.</p>
                   <div className="col-lg-12 text-center modal-btn">
-                    <a href="#" className="btn btn-light" data-bs-dismiss="modal">Cancel</a>
-                    <a href="contacts.html" className="btn btn-danger">Yes, Delete it</a>
+                    <Link to="#" className="btn btn-light" data-bs-dismiss="modal">Cancel</Link>
+                    <Link to="#" className="btn btn-danger">Yes, Delete it</Link>
                   </div>
                 </div>
               </div>
@@ -457,6 +390,7 @@ const ProjectDashboard = () => {
           </div>
         </div>
         {/* /Delete Contact */}
+
         {/* Create Contact */}
         <div className="modal custom-modal fade" id="create_contact" role="dialog">
           <div className="modal-dialog modal-dialog-centered">
@@ -474,8 +408,8 @@ const ProjectDashboard = () => {
                   <h3>Contact Created Successfully!!!</h3>
                   <p>View the details of contact, created</p>
                   <div className="col-lg-12 text-center modal-btn">
-                    <a href="#" className="btn btn-light" data-bs-dismiss="modal">Cancel</a>
-                    <a href="contact-details.html" className="btn btn-primary">View Details</a>
+                    <Link to="#" className="btn btn-light" data-bs-dismiss="modal">Cancel</Link>
+                    <Link to="#" className="btn btn-primary">View Details</Link>
                   </div>
                 </div>
               </div>
@@ -483,6 +417,7 @@ const ProjectDashboard = () => {
           </div>
         </div>
         {/* /Create Contact */}
+
         {/* Add Event Modal */}
         <div id="dwnld_report" className="modal custom-modal fade" role="dialog">
           <div className="modal-dialog modal-dialog-centered" role="document">
@@ -520,7 +455,7 @@ const ProjectDashboard = () => {
                     <select className="select">
                       <option>All Position</option>
                       <option>Installer</option>
-                      <option>Senior  Manager</option>
+                      <option>Senior Manager</option>
                       <option>Test Engineer</option>
                       <option>UI /UX Designer</option>
                     </select>
@@ -544,8 +479,8 @@ const ProjectDashboard = () => {
                     </select>
                   </div>
                   <div className="col-lg-12 text-end modal-btn">
-                    <a href="#" className="btn btn-light" data-bs-dismiss="modal">Cancel</a>
-                    <a href="#" className="btn btn-primary">Download Now</a>
+                    <Link to="#" className="btn btn-light" data-bs-dismiss="modal">Cancel</Link>
+                    <Link to="#" className="btn btn-primary">Download Now</Link>
                   </div>
                 </form>
               </div>

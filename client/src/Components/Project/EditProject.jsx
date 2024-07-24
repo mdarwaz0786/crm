@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from "../../context/authContext.jsx";
-import Preloader from "../../Preloader.jsx";
 
 const EditProject = () => {
   const [customer, setCustomer] = useState([]);
@@ -31,7 +30,7 @@ const EditProject = () => {
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { team, isLoading, validToken } = useAuth();
+  const { team, validToken } = useAuth();
 
   const fetchAllCustomer = async () => {
     try {
@@ -142,7 +141,7 @@ const EditProject = () => {
     try {
       const response = await axios.get(`/api/v1/project/single-project/${id}`, {
         headers: {
-          Authorization: `${validToken}`
+          Authorization: `${validToken}`,
         },
       });
 
@@ -238,7 +237,7 @@ const EditProject = () => {
     try {
       const response = await axios.put(`/api/v1/project/update-project/${id}`, updateData, {
         headers: {
-          Authorization: `${validToken}`
+          Authorization: `${validToken}`,
         },
       });
 
@@ -259,7 +258,7 @@ const EditProject = () => {
         setDue("");
         setDescription("");
         toast.success("Project updated successfully");
-        navigate("/project");
+        navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating project:", error.message);
@@ -289,12 +288,8 @@ const EditProject = () => {
     setSelectedLeader(selectedLeader?.filter((item) => item !== value));
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.project?.update) {
-    return <Navigate to="/project" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -303,7 +298,7 @@ const EditProject = () => {
         <div className="content">
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <h4>Update Project</h4>
-            <Link to="/project"><button className="btn btn-primary">Back</button></Link>
+            <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
           </div>
           <div className="row">
             {
@@ -550,7 +545,7 @@ const EditProject = () => {
             }
           </div>
           <div className="submit-button text-end">
-            <Link to="/project" className="btn btn-light">Cancel</Link>
+            <Link to="#" onClick={() => navigate(-1)} className="btn btn-light">Cancel</Link>
             <Link to="#" className="btn btn-primary" onClick={(e) => handleUpdate(e, id)}>Update</Link>
           </div>
         </div>

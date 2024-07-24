@@ -4,13 +4,12 @@ import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from '../../../Preloader.jsx';
 
 const AddProjectTiming = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { validToken, team, isLoading } = useAuth();
+  const { validToken, team } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -29,7 +28,7 @@ const AddProjectTiming = () => {
         setName("");
         setDescription("");
         toast.success("Project timing created successfully");
-        navigate("/project-timing");
+        navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating project timing:", error.message);
@@ -37,12 +36,8 @@ const AddProjectTiming = () => {
     };
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.projectTiming?.create) {
-    return <Navigate to="/project-timing" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -50,7 +45,7 @@ const AddProjectTiming = () => {
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Add Project Timing</h4>
-          <Link to="/project-timing"><button className="btn btn-primary">Back</button></Link>
+          <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
           <div className="col-md-6">
@@ -67,7 +62,7 @@ const AddProjectTiming = () => {
           </div>
         </div>
         <div className="submit-button text-end">
-          <Link to="/project-timing" className="btn btn-light sidebar-close">Cancel</Link>
+          <Link to="#" onClick={() => navigate(-1)} className="btn btn-light sidebar-close">Cancel</Link>
           <Link to="#" className="btn btn-primary" onClick={(e) => handleCreate(e)}>Create</Link>
         </div>
       </div>

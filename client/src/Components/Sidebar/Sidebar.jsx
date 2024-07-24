@@ -1,9 +1,19 @@
-import { Link } from "react-router-dom";
+/* eslint-disable no-extra-semi */
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/authContext.jsx";
 import usericon from "../../Assets/user-icon.png";
+import { useState } from "react";
 
 const Sidebar = () => {
   const { team, isLoggedIn } = useAuth();
+  const [active, setActive] = useState(null);
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const isMobile = window.innerWidth <= 768;
+
+  const handleActive = (element) => {
+    setActive(element);
+  };
 
   return (
     <div className="main-wrapper">
@@ -12,7 +22,7 @@ const Sidebar = () => {
           <div id="sidebar-menu" className="sidebar-menu">
             <ul>
               <li className="clinicdropdown">
-                <Link href="#">
+                <Link to="#">
                   <img src={usericon} className="img-fluid" alt="Profile" />
                   <div className="user-names">
                     {
@@ -36,32 +46,32 @@ const Sidebar = () => {
                 <h6 className="submenu-hdr">Main Menu</h6>
                 <ul>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#" className="subdrop active">
                       <i className="ti ti-layout-2" /><span>Dashboard</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><Link to="/">Deals Dashboard</Link></li>
-                      <li><Link to="/">Leads Dashboard</Link></li>
-                      <li><Link to="/">Project Dashboard</Link></li>
+                      <li><Link to="#">Deals Dashboard</Link></li>
+                      <li><Link to="#">Leads Dashboard</Link></li>
+                      <li><Link to="/" className={(active === "projectDashboard" || currentPath === "/") ? "active" : ""} id={isMobile && active === "projectDashboard" ? "mobile_btn" : ""} onClick={() => handleActive("projectDashboard")}>Project Dashboard</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="#"><i className="ti ti-brand-airtable" /><span>Application</span><span className="menu-arrow" /></a>
+                    <Link to="#"><i className="ti ti-brand-airtable" /><span>Application</span><span className="menu-arrow" /></Link>
                     <ul>
-                      <li><a href="chat.html">Chat</a></li>
+                      <li><Link to="#">Chat</Link></li>
                       <li className="submenu submenu-two">
-                        <a href="#">Call<span className="menu-arrow inside-submenu" /></a>
+                        <Link to="#">Call<span className="menu-arrow inside-submenu" /></Link>
                         <ul>
-                          <li><a href="video-call.html">Video Call</a></li>
-                          <li><a href="audio-call.html">Audio Call</a></li>
-                          <li><a href="call-history.html">Call History</a></li>
+                          <li><Link to="#">Video Call</Link></li>
+                          <li><Link to="#">Audio Call</Link></li>
+                          <li><Link to="#">Call History</Link></li>
                         </ul>
                       </li>
-                      <li><a href="calendar.html">Calendar</a></li>
-                      <li><a href="email.html">Email</a></li>
-                      <li><a href="todo.html">To Do</a></li>
-                      <li><a href="notes.html">Notes</a></li>
-                      <li><a href="file-manager.html">File Manager</a></li>
+                      <li><Link to="#">Calendar</Link></li>
+                      <li><Link to="#">Email</Link></li>
+                      <li><Link to="#">To Do</Link></li>
+                      <li><Link to="#">Notes</Link></li>
+                      <li><Link to="#">File Manager</Link></li>
                     </ul>
                   </li>
                 </ul>
@@ -73,14 +83,14 @@ const Sidebar = () => {
                       <i className="ti ti-file-invoice" /><span>Masters</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      {team?.role?.permissions?.customer?.access ? <li><Link to="/customer">Customer</Link></li> : null}
-                      {team?.role?.permissions?.team?.access ? <li><Link to="/team-member">Team Member</Link></li> : null}
-                      {team?.role?.permissions?.role?.access ? <li><Link to="/role">Role</Link></li> : null}
-                      {team?.role?.permissions?.designation?.access ? <li><Link to="/designation">Designation</Link></li> : null}
-                      {team?.role?.permissions?.projectType?.access ? <li><Link to="/project-type">Project Type</Link></li> : null}
-                      {team?.role?.permissions?.projectStatus?.access ? <li><Link to="/project-status">Project Status</Link></li> : null}
-                      {team?.role?.permissions?.projectCategory?.access ? <li><Link to="/project-category">Project Category</Link></li> : null}
-                      {team?.role?.permissions?.projectTiming?.access ? <li><Link to="/project-timing">Project Timing</Link></li> : null}
+                      {(team?.role?.permissions?.customer?.access) ? (<li><Link to="/customer" className={active === "customer" ? "active" : ""} id={isMobile && active === "customer" ? "mobile_btn" : ""} onClick={() => handleActive("customer")}>Customer</Link></li>) : (null)}
+                      {(team?.role?.permissions?.team?.access) ? (<li><Link to="/team-member" className={active === "teamMember" ? "active" : ""} id={isMobile && active === "teamMember" ? "mobile_btn" : ""} onClick={() => handleActive("teamMember")}>Team Member</Link></li>) : (null)}
+                      {(team?.role?.permissions?.role?.access) ? (<li><Link to="/role" className={active === "role" ? "active" : ""} id={isMobile && active === "role" ? "mobile_btn" : ""} onClick={() => handleActive("role")}>Role</Link></li>) : (null)}
+                      {(team?.role?.permissions?.designation?.access) ? (<li><Link to="/designation" className={active === "designation" ? "active" : ""} id={isMobile && active === "designation" ? "mobile_btn" : ""} onClick={() => handleActive("designation")}>Designation</Link></li>) : (null)}
+                      {(team?.role?.permissions?.projectType?.access) ? (<li><Link to="/project-type" className={active === "projectType" ? "active" : ""} id={isMobile && active === "projectType" ? "mobile_btn" : ""} onClick={() => handleActive("projectType")}>Project Type</Link></li>) : (null)}
+                      {(team?.role?.permissions?.projectStatus?.access) ? (<li><Link to="/project-status" className={active === "projectStatus" ? "active" : ""} id={isMobile && active === "projectStatus" ? "mobile_btn" : ""} onClick={() => handleActive("projectStatus")}>Project Status</Link></li>) : (null)}
+                      {(team?.role?.permissions?.projectCategory?.access) ? (<li><Link to="/project-category" className={active === "projectCategory" ? "active" : ""} id={isMobile && active === "projectCategory" ? "mobile_btn" : ""} onClick={() => handleActive("projectCategory")}>Project Category</Link></li>) : (null)}
+                      {(team?.role?.permissions?.projectTiming?.access) ? (<li><Link to="/project-timing" className={active === "projectTiming" ? "active" : ""} id={isMobile && active === "projectTiming" ? "mobile_btn" : ""} onClick={() => handleActive("projectTiming")}>Project Timing</Link></li>) : (null)}
                     </ul>
                   </li>
                 </ul>
@@ -88,48 +98,48 @@ const Sidebar = () => {
               <li>
                 <h6 className="submenu-hdr">CRM</h6>
                 <ul>
-                  {team?.role?.permissions?.project?.access ? <li><Link to="/project"><i className="ti ti-atom-2" /><span>Projects</span></Link></li> : null}
+                  {(team?.role?.permissions?.project?.access) ? (<li><Link to="/project" className={active === "projects" ? "active" : ""} id={isMobile && active === "projects" ? "mobile_btn" : ""} onClick={() => handleActive("projects")}><i className="ti ti-atom-2" /><span>Projects</span></Link></li>) : (null)}
                   <li>
-                    <a href="contacts.html"><i className="ti ti-user-up" /><span>Contacts</span></a>
+                    <Link to="#"><i className="ti ti-user-up" /><span>Contacts</span></Link>
                   </li>
                   <li>
-                    <a href="companies.html"><i className="ti ti-building-community" /><span>Companies</span></a>
+                    <Link to="#"><i className="ti ti-building-community" /><span>Companies</span></Link>
                   </li>
                   <li>
-                    <a href="deals.html"><i className="ti ti-medal" /><span>Deals</span></a>
+                    <Link to="#"><i className="ti ti-medal" /><span>Deals</span></Link>
                   </li>
                   <li>
-                    <a href="leads.html"><i className="ti ti-chart-arcs" /><span>Leads</span></a>
+                    <Link to="#"><i className="ti ti-chart-arcs" /><span>Leads</span></Link>
                   </li>
                   <li>
-                    <a href="pipeline.html"><i className="ti ti-timeline-event-exclamation" /><span>Pipeline</span></a>
+                    <Link to="#"><i className="ti ti-timeline-event-exclamation" /><span>Pipeline</span></Link>
                   </li>
                   <li>
-                    <a href="campaign.html"><i className="ti ti-brand-campaignmonitor" /><span>Campaign</span></a>
+                    <Link to="#"><i className="ti ti-brand-campaignmonitor" /><span>Campaign</span></Link>
                   </li>
                   <li>
-                    <a href="tasks.html"><i className="ti ti-list-check" /><span>Tasks</span></a>
+                    <Link to="#"><i className="ti ti-list-check" /><span>Tasks</span></Link>
                   </li>
                   <li>
-                    <a href="proposals.html"><i className="ti ti-file-star" /><span>Proposals</span></a>
+                    <Link to="#"><i className="ti ti-file-star" /><span>Proposals</span></Link>
                   </li>
                   <li>
-                    <a href="contracts.html"><i className="ti ti-file-check" /><span>Contracts</span></a>
+                    <Link to="#"><i className="ti ti-file-check" /><span>Contracts</span></Link>
                   </li>
                   <li>
-                    <a href="estimations.html"><i className="ti ti-file-report" /><span>Estimations</span></a>
+                    <Link to="#"><i className="ti ti-file-report" /><span>Estimations</span></Link>
                   </li>
                   <li>
-                    <a href="invoices.html"><i className="ti ti-file-invoice" /><span>Invoices</span></a>
+                    <Link to="#"><i className="ti ti-file-invoice" /><span>Invoices</span></Link>
                   </li>
                   <li>
-                    <a href="payments.html"><i className="ti ti-report-money" /><span>Payments</span></a>
+                    <Link to="#"><i className="ti ti-report-money" /><span>Payments</span></Link>
                   </li>
                   <li>
-                    <a href="analytics.html"><i className="ti ti-chart-bar" /><span>Analytics</span></a>
+                    <Link to="#"><i className="ti ti-chart-bar" /><span>Analytics</span></Link>
                   </li>
                   <li>
-                    <a href="activities.html"><i className="ti ti-bounce-right" /><span>Activities</span></a>
+                    <Link to="#"><i className="ti ti-bounce-right" /><span>Activities</span></Link>
                   </li>
                 </ul>
               </li>
@@ -137,16 +147,16 @@ const Sidebar = () => {
                 <h6 className="submenu-hdr">Reports</h6>
                 <ul>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-file-invoice" /><span>Reports</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="lead-reports.html">Lead Reports</a></li>
-                      <li><a href="deal-reports.html">Deal Reports</a></li>
-                      <li><a href="contact-reports.html">Contact Reports</a></li>
-                      <li><a href="company-reports.html">Company Reports</a></li>
-                      <li><a href="project-reports.html">Project Reports</a></li>
-                      <li><a href="task-reports.html">Task Reports</a></li>
+                      <li><Link to="#">Lead Reports</Link></li>
+                      <li><Link to="#">Deal Reports</Link></li>
+                      <li><Link to="#">Contact Reports</Link></li>
+                      <li><Link to="#">Company Reports</Link></li>
+                      <li><Link to="#">Project Reports</Link></li>
+                      <li><Link to="#">Task Reports</Link></li>
                     </ul>
                   </li>
                 </ul>
@@ -154,21 +164,21 @@ const Sidebar = () => {
               <li>
                 <h6 className="submenu-hdr">CRM Settings</h6>
                 <ul>
-                  <li><a href="sources.html"><i className="ti ti-artboard" /><span>Sources</span></a></li>
-                  <li><a href="lost-reason.html"><i className="ti ti-message-exclamation" /><span>Lost Reason</span></a>
+                  <li><Link to="#"><i className="ti ti-artboard" /><span>Sources</span></Link></li>
+                  <li><Link to="#"><i className="ti ti-message-exclamation" /><span>Lost Reason</span></Link>
                   </li>
-                  <li><a href="contact-stage.html"><i className="ti ti-steam" /><span>Contact Stage</span></a></li>
-                  <li><a href="industry.html"><i className="ti ti-building-factory" /><span>Industry</span></a></li>
-                  <li><a href="calls.html"><i className="ti ti-phone-check" /><span>Calls</span></a></li>
+                  <li><Link to="#"><i className="ti ti-steam" /><span>Contact Stage</span></Link></li>
+                  <li><Link to="#"><i className="ti ti-building-factory" /><span>Industry</span></Link></li>
+                  <li><Link to="#"><i className="ti ti-phone-check" /><span>Calls</span></Link></li>
                 </ul>
               </li>
               <li>
                 <h6 className="submenu-hdr">User Management</h6>
                 <ul>
-                  <li><a href="manage-users.html"><i className="ti ti-users" /><span>Manage Users</span></a></li>
-                  <li><a href="roles-permissions.html"><i className="ti ti-navigation-cog" /><span>Roles &amp;
-                    Permissions</span></a></li>
-                  <li><a href="delete-request.html"><i className="ti ti-flag-question" /><span>Delete Request</span></a>
+                  <li><Link to="#"><i className="ti ti-users" /><span>Manage Users</span></Link></li>
+                  <li><Link to="#"><i className="ti ti-navigation-cog" /><span>Roles &amp;
+                    Permissions</span></Link></li>
+                  <li><Link to="#"><i className="ti ti-flag-question" /><span>Delete Request</span></Link>
                   </li>
                 </ul>
               </li>
@@ -176,13 +186,13 @@ const Sidebar = () => {
                 <h6 className="submenu-hdr">Membership</h6>
                 <ul>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-file-invoice" /><span>Membership</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="membership-plans.html">Membership Plans</a></li>
-                      <li><a href="membership-addons.html">Membership Addons</a></li>
-                      <li><a href="membership-transactions.html">Transactions</a></li>
+                      <li><Link to="#">Membership Plans</Link></li>
+                      <li><Link to="#">Membership Addons</Link></li>
+                      <li><Link to="#">Transactions</Link></li>
                     </ul>
                   </li>
                 </ul>
@@ -190,94 +200,94 @@ const Sidebar = () => {
               <li>
                 <h6 className="submenu-hdr">Content</h6>
                 <ul>
-                  <li><a href="pages.html"><i className="ti ti-page-break" /><span>Pages</span></a></li>
+                  <li><Link to="#"><i className="ti ti-page-break" /><span>Pages</span></Link></li>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-map-pin-pin" /><span>Location</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="countries.html">Countries</a></li>
-                      <li><a href="states.html">States</a></li>
-                      <li><a href="cities.html">Cities</a></li>
+                      <li><Link to="#">Countries</Link></li>
+                      <li><Link to="#">States</Link></li>
+                      <li><Link to="#">Cities</Link></li>
                     </ul>
                   </li>
-                  <li><a href="testimonials.html"><i className="ti ti-quote" /><span>Testimonials</span></a></li>
-                  <li><a href="faq.html"><i className="ti ti-question-mark" /><span>FAQ</span></a></li>
+                  <li><Link to="#"><i className="ti ti-quote" /><span>Testimonials</span></Link></li>
+                  <li><Link to="#"><i className="ti ti-question-mark" /><span>FAQ</span></Link></li>
                 </ul>
               </li>
               <li>
                 <h6 className="submenu-hdr">Support</h6>
                 <ul>
-                  <li><a href="contact-messages.html"><i className="ti ti-page-break" /><span>Contact Messages</span></a>
+                  <li><Link to="#"><i className="ti ti-page-break" /><span>Contact Messages</span></Link>
                   </li>
-                  <li><a href="tickets.html"><i className="ti ti-ticket" /><span>Tickets</span></a></li>
+                  <li><Link to="#"><i className="ti ti-ticket" /><span>Tickets</span></Link></li>
                 </ul>
               </li>
               <li>
                 <h6 className="submenu-hdr">Settings</h6>
                 <ul>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-settings-cog" /><span>General Settings</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="profile.html">Profile</a></li>
-                      <li><a href="security.html">Security</a></li>
-                      <li><a href="notifications.html">Notifications</a></li>
-                      <li><a href="connected-apps.html">Connected Apps</a></li>
+                      <li><Link to="#">Profile</Link></li>
+                      <li><Link to="#">Security</Link></li>
+                      <li><Link to="#">Notifications</Link></li>
+                      <li><Link to="#">Connected Apps</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-world-cog" /><span>Website Settings</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="company-settings.html">Company Settings</a></li>
-                      <li><a href="localization.html">Localization</a></li>
-                      <li><a href="prefixes.html">Prefixes</a></li>
-                      <li><a href="preference.html">Preference</a></li>
-                      <li><a href="appearance.html">Appearance</a></li>
-                      <li><a href="language.html">Language</a></li>
+                      <li><Link to="#">Company Settings</Link></li>
+                      <li><Link to="#">Localization</Link></li>
+                      <li><Link to="#">Prefixes</Link></li>
+                      <li><Link to="#">Preference</Link></li>
+                      <li><Link to="#">Appearance</Link></li>
+                      <li><Link to="#">Language</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-apps" /><span>App Settings</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="invoice-settings.html">Invoice Settings</a></li>
-                      <li><a href="printers.html">Printers</a></li>
-                      <li><a href="custom-fields.html">Custom Fields</a></li>
+                      <li><Link to="#">Invoice Settings</Link></li>
+                      <li><Link to="#">Printers</Link></li>
+                      <li><Link to="#">Custom Fields</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-device-laptop" /><span>System Settings</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="email-settings.html">Email Settings</a></li>
-                      <li><a href="sms-gateways.html">SMS Gateways</a></li>
-                      <li><a href="gdpr-cookies.html">GDPR Cookies</a></li>
+                      <li><Link to="#">Email Settings</Link></li>
+                      <li><Link to="#">SMS Gateways</Link></li>
+                      <li><Link to="#">GDPR Cookies</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-moneybag" /><span>Financial Settings</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="payment-gateways.html">Payment Gateways</a></li>
-                      <li><a href="bank-accounts.html">Bank Accounts</a></li>
-                      <li><a href="tax-rates.html">Tax Rates</a></li>
-                      <li><a href="currencies.html">Currencies</a></li>
+                      <li><Link to="#">Payment Gateways</Link></li>
+                      <li><Link to="#">Bank Accounts</Link></li>
+                      <li><Link to="#">Tax Rates</Link></li>
+                      <li><Link to="#">Currencies</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-flag-cog" /><span>Other Settings</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="storage.html">Storage</a></li>
-                      <li><a href="ban-ip-address.html">Ban IP Address</a></li>
+                      <li><Link to="#">Storage</Link></li>
+                      <li><Link to="#">Ban IP Address</Link></li>
                     </ul>
                   </li>
                 </ul>
@@ -286,31 +296,31 @@ const Sidebar = () => {
                 <h6 className="submenu-hdr">Pages</h6>
                 <ul>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-lock-square-rounded" /><span>Authentication</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="login.html">Login</a></li>
-                      <li><a href="register.html">Register</a></li>
-                      <li><a href="forgot-password.html">Forgot Password</a></li>
-                      <li><a href="reset-password.html">Reset Password</a></li>
-                      <li><a href="email-verification.html">Email Verification</a></li>
-                      <li><a href="two-step-verification.html">2 Step Verification</a></li>
-                      <li><a href="lock-screen.html">Lock Screen</a></li>
+                      <li><Link to="#">Login</Link></li>
+                      <li><Link to="#">Register</Link></li>
+                      <li><Link to="#">Forgot Password</Link></li>
+                      <li><Link to="#">Reset Password</Link></li>
+                      <li><Link to="#">Email Verification</Link></li>
+                      <li><Link to="#">2 Step Verification</Link></li>
+                      <li><Link to="#">Lock Screen</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-error-404" /><span>Error Pages</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="error-404.html">404 Error</a></li>
-                      <li><a href="error-500.html">500 Error</a></li>
+                      <li><Link to="#">404 Error</Link></li>
+                      <li><Link to="#">500 Error</Link></li>
                     </ul>
                   </li>
-                  <li><a href="blank-page.html"><i className="ti ti-apps" /><span>Blank Page</span></a></li>
-                  <li><a href="coming-soon.html"><i className="ti ti-device-laptop" /><span>Coming Soon</span></a></li>
-                  <li><a href="under-maintenance.html"><i className="ti ti-moneybag" /><span>Under Maintenance</span></a>
+                  <li><Link to="#"><i className="ti ti-apps" /><span>Blank Page</span></Link></li>
+                  <li><Link to="#"><i className="ti ti-device-laptop" /><span>Coming Soon</span></Link></li>
+                  <li><Link to="#"><i className="ti ti-moneybag" /><span>Under Maintenance</span></Link>
                   </li>
                 </ul>
               </li>
@@ -318,124 +328,124 @@ const Sidebar = () => {
                 <h6 className="submenu-hdr">UI Interface</h6>
                 <ul>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-adjustments-check" /><span>Base UI</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="ui-alerts.html">Alerts</a></li>
-                      <li><a href="ui-accordion.html">Accordion</a></li>
-                      <li><a href="ui-avatar.html">Avatar</a></li>
-                      <li><a href="ui-badges.html">Badges</a></li>
-                      <li><a href="ui-borders.html">Border</a></li>
-                      <li><a href="ui-buttons.html">Buttons</a></li>
-                      <li><a href="ui-buttons-group.html">Button Group</a></li>
-                      <li><a href="ui-breadcrumb.html">Breadcrumb</a></li>
-                      <li><a href="ui-cards.html">Card</a></li>
-                      <li><a href="ui-carousel.html">Carousel</a></li>
-                      <li><a href="ui-colors.html">Colors</a></li>
-                      <li><a href="ui-dropdowns.html">Dropdowns</a></li>
-                      <li><a href="ui-grid.html">Grid</a></li>
-                      <li><a href="ui-images.html">Images</a></li>
-                      <li><a href="ui-lightbox.html">Lightbox</a></li>
-                      <li><a href="ui-media.html">Media</a></li>
-                      <li><a href="ui-modals.html">Modals</a></li>
-                      <li><a href="ui-offcanvas.html">Offcanvas</a></li>
-                      <li><a href="ui-pagination.html">Pagination</a></li>
-                      <li><a href="ui-popovers.html">Popovers</a></li>
-                      <li><a href="ui-progress.html">Progress</a></li>
-                      <li><a href="ui-placeholders.html">Placeholders</a></li>
-                      <li><a href="ui-rangeslider.html">Range Slider</a></li>
-                      <li><a href="ui-spinner.html">Spinner</a></li>
-                      <li><a href="ui-sweetalerts.html">Sweet Alerts</a></li>
-                      <li><a href="ui-nav-tabs.html">Tabs</a></li>
-                      <li><a href="ui-toasts.html">Toasts</a></li>
-                      <li><a href="ui-tooltips.html">Tooltips</a></li>
-                      <li><a href="ui-typography.html">Typography</a></li>
-                      <li><a href="ui-video.html">Video</a></li>
+                      <li><Link to="#">Alerts</Link></li>
+                      <li><Link to="#">Accordion</Link></li>
+                      <li><Link to="#">Avatar</Link></li>
+                      <li><Link to="#">Badges</Link></li>
+                      <li><Link to="#">Border</Link></li>
+                      <li><Link to="#">Buttons</Link></li>
+                      <li><Link to="#">Button Group</Link></li>
+                      <li><Link to="#">Breadcrumb</Link></li>
+                      <li><Link to="#">Card</Link></li>
+                      <li><Link to="#">Carousel</Link></li>
+                      <li><Link to="#">Colors</Link></li>
+                      <li><Link to="#">Dropdowns</Link></li>
+                      <li><Link to="#">Grid</Link></li>
+                      <li><Link to="#">Images</Link></li>
+                      <li><Link to="#">Lightbox</Link></li>
+                      <li><Link to="#">Media</Link></li>
+                      <li><Link to="#">Modals</Link></li>
+                      <li><Link to="#">Offcanvas</Link></li>
+                      <li><Link to="#">Pagination</Link></li>
+                      <li><Link to="#">Popovers</Link></li>
+                      <li><Link to="#">Progress</Link></li>
+                      <li><Link to="#">Placeholders</Link></li>
+                      <li><Link to="#">Range Slider</Link></li>
+                      <li><Link to="#">Spinner</Link></li>
+                      <li><Link to="#">Sweet Alerts</Link></li>
+                      <li><Link to="#">Tabs</Link></li>
+                      <li><Link to="#">Toasts</Link></li>
+                      <li><Link to="#">Tooltips</Link></li>
+                      <li><Link to="#">Typography</Link></li>
+                      <li><Link to="#">Video</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-box-align-bottom" /><span>Advanced UI</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="ui-ribbon.html">Ribbon</a></li>
-                      <li><a href="ui-clipboard.html">Clipboard</a></li>
-                      <li><a href="ui-drag-drop.html">Drag &amp; Drop</a></li>
-                      <li><a href="ui-rangeslider.html">Range Slider</a></li>
-                      <li><a href="ui-rating.html">Rating</a></li>
-                      <li><a href="ui-text-editor.html">Text Editor</a></li>
-                      <li><a href="ui-counter.html">Counter</a></li>
-                      <li><a href="ui-scrollbar.html">Scrollbar</a></li>
-                      <li><a href="ui-stickynote.html">Sticky Note</a></li>
-                      <li><a href="ui-timeline.html">Timeline</a></li>
+                      <li><Link to="#">Ribbon</Link></li>
+                      <li><Link to="#">Clipboard</Link></li>
+                      <li><Link to="#">Drag &amp; Drop</Link></li>
+                      <li><Link to="#">Range Slider</Link></li>
+                      <li><Link to="#">Rating</Link></li>
+                      <li><Link to="#">Text Editor</Link></li>
+                      <li><Link to="#">Counter</Link></li>
+                      <li><Link to="#">Scrollbar</Link></li>
+                      <li><Link to="#">Sticky Note</Link></li>
+                      <li><Link to="#">Timeline</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="#"><i className="ti ti-chart-donut-2" />
+                    <Link to="#"><i className="ti ti-chart-donut-2" />
                       <span>Charts</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="chart-apex.html">Apex Charts</a></li>
-                      <li><a href="chart-c3.html">Chart C3</a></li>
-                      <li><a href="chart-js.html">Chart Js</a></li>
-                      <li><a href="chart-morris.html">Morris Charts</a></li>
-                      <li><a href="chart-flot.html">Flot Charts</a></li>
-                      <li><a href="chart-peity.html">Peity Charts</a></li>
+                      <li><Link to="#">Apex Charts</Link></li>
+                      <li><Link to="#">Chart C3</Link></li>
+                      <li><Link to="#">Chart Js</Link></li>
+                      <li><Link to="#">Morris Charts</Link></li>
+                      <li><Link to="#">Flot Charts</Link></li>
+                      <li><Link to="#">Peity Charts</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="#"><i className="ti ti-icons" />
+                    <Link to="#"><i className="ti ti-icons" />
                       <span>Icons</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
-                      <li><a href="icon-fontawesome.html">Fontawesome Icons</a></li>
-                      <li><a href="icon-feather.html">Feather Icons</a></li>
-                      <li><a href="icon-ionic.html">Ionic Icons</a></li>
-                      <li><a href="icon-material.html">Material Icons</a></li>
-                      <li><a href="icon-pe7.html">Pe7 Icons</a></li>
-                      <li><a href="icon-simpleline.html">Simpleline Icons</a></li>
-                      <li><a href="icon-themify.html">Themify Icons</a></li>
-                      <li><a href="icon-weather.html">Weather Icons</a></li>
-                      <li><a href="icon-typicon.html">Typicon Icons</a></li>
-                      <li><a href="icon-flag.html">Flag Icons</a></li>
+                      <li><Link to="#">Fontawesome Icons</Link></li>
+                      <li><Link to="#">Feather Icons</Link></li>
+                      <li><Link to="#">Ionic Icons</Link></li>
+                      <li><Link to="#">Material Icons</Link></li>
+                      <li><Link to="#">Pe7 Icons</Link></li>
+                      <li><Link to="#">Simpleline Icons</Link></li>
+                      <li><Link to="#">Themify Icons</Link></li>
+                      <li><Link to="#">Weather Icons</Link></li>
+                      <li><Link to="#">Typicon Icons</Link></li>
+                      <li><Link to="#">Flag Icons</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="#">
+                    <Link to="#">
                       <i className="ti ti-forms" /><span>Forms</span><span className="menu-arrow" />
-                    </a>
+                    </Link>
                     <ul>
                       <li className="submenu submenu-two">
-                        <a href="#">Form Elements<span className="menu-arrow inside-submenu" /></a>
+                        <Link to="#">Form Elements<span className="menu-arrow inside-submenu" /></Link>
                         <ul>
-                          <li><a href="form-basic-inputs.html">Basic Inputs</a></li>
-                          <li><a href="form-checkbox-radios.html">Checkbox &amp; Radios</a></li>
-                          <li><a href="form-input-groups.html">Input Groups</a></li>
-                          <li><a href="form-grid-gutters.html">Grid &amp; Gutters</a></li>
-                          <li><a href="form-select.html">Form Select</a></li>
-                          <li><a href="form-mask.html">Input Masks</a></li>
-                          <li><a href="form-fileupload.html">File Uploads</a></li>
+                          <li><Link to="#">Basic Inputs</Link></li>
+                          <li><Link to="#">Checkbox &amp; Radios</Link></li>
+                          <li><Link to="#">Input Groups</Link></li>
+                          <li><Link to="#">Grid &amp; Gutters</Link></li>
+                          <li><Link to="#">Form Select</Link></li>
+                          <li><Link to="#">Input Masks</Link></li>
+                          <li><Link to="#">File Uploads</Link></li>
                         </ul>
                       </li>
                       <li className="submenu submenu-two">
-                        <a href="#">Layouts<span className="menu-arrow inside-submenu" /></a>
+                        <Link to="#">Layouts<span className="menu-arrow inside-submenu" /></Link>
                         <ul>
-                          <li><a href="form-horizontal.html">Horizontal Form</a></li>
-                          <li><a href="form-vertical.html">Vertical Form</a></li>
-                          <li><a href="form-floating-labels.html">Floating Labels</a></li>
+                          <li><Link to="#">Horizontal Form</Link></li>
+                          <li><Link to="#">Vertical Form</Link></li>
+                          <li><Link to="#">Floating Labels</Link></li>
                         </ul>
                       </li>
-                      <li><a href="form-validation.html">Form Validation</a></li>
-                      <li><a href="form-select2.html">Select2</a></li>
-                      <li><a href="form-wizard.html">Form Wizard</a></li>
+                      <li><Link to="#">Form Validation</Link></li>
+                      <li><Link to="#">Select2</Link></li>
+                      <li><Link to="#">Form Wizard</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
-                    <a href="#"><i className="ti ti-table" /><span>Tables</span><span className="menu-arrow" /></a>
+                    <Link to="#"><i className="ti ti-table" /><span>Tables</span><span className="menu-arrow" /></Link>
                     <ul>
-                      <li><a href="tables-basic.html">Basic Tables </a></li>
-                      <li><a href="data-tables.html">Data Table </a></li>
+                      <li><Link to="#">Basic Tables</Link></li>
+                      <li><Link to="#">Data Table</Link></li>
                     </ul>
                   </li>
                 </ul>
@@ -443,20 +453,20 @@ const Sidebar = () => {
               <li>
                 <h6 className="submenu-hdr">Help</h6>
                 <ul>
-                  <li><a href="#"><i className="ti ti-file-type-doc" /><span>Documentation</span></a></li>
-                  <li><a href="#"><i className="ti ti-arrow-capsule" /><span>Changelog v2.0.3</span></a>
+                  <li><Link to="#"><i className="ti ti-file-type-doc" /><span>Documentation</span></Link></li>
+                  <li><Link to="#"><i className="ti ti-arrow-capsule" /><span>Changelog v2.0.3</span></Link>
                   </li>
                   <li className="submenu">
-                    <a href="#"><i className="ti ti-brand-databricks" /><span>Multi Level</span><span className="menu-arrow" /></a>
+                    <Link to="#"><i className="ti ti-brand-databricks" /><span>Multi Level</span><span className="menu-arrow" /></Link>
                     <ul>
-                      <li><a href="#">Level 1.1</a></li>
-                      <li className="submenu submenu-two"><a href="#">Level 1.2<span className="menu-arrow inside-submenu" /></a>
+                      <li><Link to="#">Level 1.1</Link></li>
+                      <li className="submenu submenu-two"><Link to="#">Level 1.2<span className="menu-arrow inside-submenu" /></Link>
                         <ul>
-                          <li><a href="#">Level 2.1</a></li>
-                          <li className="submenu submenu-two submenu-three"><a href="#">Level 2.2<span className="menu-arrow inside-submenu inside-submenu-two" /></a>
+                          <li><Link to="#">Level 2.1</Link></li>
+                          <li className="submenu submenu-two submenu-three"><Link to="#">Level 2.2<span className="menu-arrow inside-submenu inside-submenu-two" /></Link>
                             <ul>
-                              <li><a href="#">Level 3.1</a></li>
-                              <li><a href="#">Level 3.2</a></li>
+                              <li><Link to="#">Level 3.1</Link></li>
+                              <li><Link to="#">Level 3.2</Link></li>
                             </ul>
                           </li>
                         </ul>

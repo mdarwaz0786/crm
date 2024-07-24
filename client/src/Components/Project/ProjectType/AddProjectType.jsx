@@ -4,13 +4,12 @@ import { useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
 
 const AddProjectType = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { validToken, team, isLoading } = useAuth();
+  const { validToken, team } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -29,7 +28,7 @@ const AddProjectType = () => {
         setName("");
         setDescription("");
         toast.success("Project type created successfully");
-        navigate("/project-type");
+        navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating project type:", error.message);
@@ -37,12 +36,8 @@ const AddProjectType = () => {
     };
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.projectType?.create) {
-    return <Navigate to="/project-type" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -50,7 +45,7 @@ const AddProjectType = () => {
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Add Project Type</h4>
-          <Link to="/project-type"><button className="btn btn-primary">Back</button></Link>
+          <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
           <div className="col-md-6">
@@ -67,7 +62,7 @@ const AddProjectType = () => {
           </div>
         </div>
         <div className="submit-button text-end">
-          <Link to="/project-type" className="btn btn-light">Cancel</Link>
+          <Link to="#" onClick={() => navigate(-1)} className="btn btn-light">Cancel</Link>
           <Link to="#" className="btn btn-primary" onClick={(e) => handleCreate(e)}>Create</Link>
         </div>
       </div>

@@ -5,7 +5,6 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
 
 const EditCustomer = () => {
   const [name, setName] = useState("");
@@ -14,7 +13,7 @@ const EditCustomer = () => {
   const [address, setAddress] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, team, isLoading } = useAuth();
+  const { validToken, team } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
@@ -76,7 +75,7 @@ const EditCustomer = () => {
         setMobile("");
         setAddress("");
         toast.success("Customer updated successfully");
-        navigate("/customer")
+        navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating customer:", error.message);
@@ -84,12 +83,8 @@ const EditCustomer = () => {
     };
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.customer?.update) {
-    return <Navigate to="/customer" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -97,7 +92,7 @@ const EditCustomer = () => {
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Edit Customer</h4>
-          <Link to="/customer"><button className="btn btn-primary">Back</button></Link>
+          <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
           {

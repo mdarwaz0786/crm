@@ -5,14 +5,13 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
 
 const EditProjectStatus = () => {
   const [status, setStatus] = useState("");
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, team, isLoading } = useAuth();
+  const { validToken, team } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
@@ -62,16 +61,12 @@ const EditProjectStatus = () => {
         setStatus("");
         setDescription("");
         toast.success("Project Status updated successfully");
-        navigate("/project-status");
+        navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating project status:", error.message);
       toast.error("Error while updating project status");
     };
-  };
-
-  if (isLoading) {
-    return <Preloader />;
   };
 
   if (!team?.role?.permissions?.projectStatus?.update) {
@@ -83,7 +78,7 @@ const EditProjectStatus = () => {
       <div className="content">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Edit Project Status</h4>
-          <Link to="/project-status"><button className="btn btn-primary">Back</button></Link>
+          <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
           {
@@ -112,7 +107,7 @@ const EditProjectStatus = () => {
           }
         </div>
         <div className="submit-button text-end">
-          <Link to="/project-status" className="btn btn-light sidebar-close">Cancel</Link>
+          <Link to="#" onClick={() => navigate(-1)} className="btn btn-light sidebar-close">Cancel</Link>
           <Link to="#" className="btn btn-primary" onClick={(e) => handleUpdate(e, id)}>Update</Link>
         </div>
       </div>

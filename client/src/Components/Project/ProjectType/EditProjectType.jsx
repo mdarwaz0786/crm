@@ -5,14 +5,13 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
 
 const EditProjectType = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, team, isLoading } = useAuth();
+  const { validToken, team } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
@@ -62,7 +61,7 @@ const EditProjectType = () => {
         setName("");
         setDescription("");
         toast.success("Project type updated successfully");
-        navigate("/project-type");
+        navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating project type:", error.message);
@@ -70,12 +69,8 @@ const EditProjectType = () => {
     };
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   if (!team?.role?.permissions?.projectType?.update) {
-    return <Navigate to="/project-type" />;
+    return <Navigate to="/" />;
   };
 
   return (
@@ -112,7 +107,7 @@ const EditProjectType = () => {
           }
         </div>
         <div className="submit-button text-end">
-          <Link to="/project-type" className="btn btn-light">Cancel</Link>
+          <Link to="#" onClick={() => navigate(-1)} className="btn btn-light">Cancel</Link>
           <Link to="#" className="btn btn-primary" onClick={(e) => handleUpdate(e, id)}>Update</Link>
         </div>
       </div>

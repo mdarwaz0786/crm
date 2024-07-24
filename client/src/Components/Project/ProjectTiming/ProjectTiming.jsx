@@ -5,19 +5,18 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
-import Preloader from "../../../Preloader.jsx";
 import html2pdf from "html2pdf.js";
 
 const ProjectTiming = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState("");
-  const { validToken, team, isLoading } = useAuth();
+  const { validToken, team } = useAuth();
   const [nameData, setNameData] = useState([]);
   const [name, setName] = useState("");
   const [filters, setFilters] = useState({
     search: "",
     nameFilter: [],
-    sort: "",
+    sort: "Descending",
     page: 1,
     limit: 10,
   });
@@ -26,7 +25,7 @@ const ProjectTiming = () => {
     try {
       const response = await axios.get("/api/v1/projectTiming/all-projectTiming", {
         headers: {
-          Authorization: `${validToken}`
+          Authorization: `${validToken}`,
         },
         params: {
           search: filters.search,
@@ -126,10 +125,6 @@ const ProjectTiming = () => {
     html2pdf().set(options).from(element).save();
   };
 
-  if (isLoading) {
-    return <Preloader />;
-  };
-
   const permissions = team?.role?.permissions?.projectTiming;
   const filedPermissions = team?.role?.permissions?.projectTiming?.fields;
 
@@ -227,7 +222,7 @@ const ProjectTiming = () => {
                       <ul>
                         <li>
                           <div className="sort-dropdown drop-down">
-                            <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown"><i className="ti ti-sort-ascending-2" />Sort </Link>
+                            <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown"><i className="ti ti-sort-ascending-2" />{filters.sort}</Link>
                             <div className="dropdown-menu  dropdown-menu-start">
                               <ul>
                                 <li>
