@@ -6,6 +6,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from "../../context/authContext.jsx";
 import Preloader from "../../Preloader.jsx";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const EditProject = () => {
   const [customer, setCustomer] = useState([]);
@@ -308,7 +310,7 @@ const EditProject = () => {
           <div className="row">
             {
               (fieldPermissions?.name?.show) ? (
-                <div className="col-md-6">
+                <div className="col-md-12">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="name">Project Name <span className="text-danger">*</span></label>
                     <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} readOnly={fieldPermissions?.name?.read} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
@@ -538,10 +540,35 @@ const EditProject = () => {
             }
             {
               (fieldPermissions?.description?.show) ? (
-                <div className="col-md-6">
+                <div className="col-md-12">
                   <div className="form-wrap">
-                    <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
-                    <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} readOnly={fieldPermissions?.description?.read} onKeyDown={fieldPermissions?.description?.read ? (e) => e.preventDefault() : undefined} />
+                    <label className="col-form-label" htmlFor="description">
+                      Description <span className="text-danger">*</span>
+                    </label>
+                    <ReactQuill
+                      className="custom-quill-editor"
+                      value={description}
+                      onChange={setDescription}
+                      modules={{
+                        toolbar: [
+                          [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                          [{ size: [] }],
+                          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                          [{ 'list': 'ordered' }, { 'list': 'bullet' },
+                          { 'indent': '-1' }, { 'indent': '+1' }],
+                          ['link', 'image', 'video'],
+                          ['clean']
+                        ],
+                      }}
+                      formats={[
+                        'header', 'font', 'size',
+                        'bold', 'italic', 'underline', 'strike', 'blockquote',
+                        'list', 'bullet', 'indent',
+                        'link', 'image', 'video'
+                      ]}
+                      placeholder="Write the description here..."
+                      row={6}
+                    />
                   </div>
                 </div>
               ) : (

@@ -7,6 +7,8 @@ import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from "../../context/authContext.jsx";
 import html2pdf from "html2pdf.js";
 import Preloader from "../../Preloader.jsx";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const Project = () => {
   const [project, setProject] = useState([]);
@@ -16,6 +18,8 @@ const Project = () => {
   const [name, setName] = useState("");
   const [projectIdData, setProjectIdData] = useState([]);
   const [projectId, setProjectId] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [filters, setFilters] = useState({
     search: "",
     nameFilter: [],
@@ -23,7 +27,24 @@ const Project = () => {
     sort: "Descending",
     page: 1,
     limit: 10,
+    dateRange: "",
   });
+
+  useEffect(() => {
+    const formatDate = (date) => {
+      if (!date) return "";
+      const day = date.getDate().toString().padStart(2, "0");
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+
+    if (startDate && endDate) {
+      setFilters((prevFilters) => ({ ...prevFilters, dateRange: `${formatDate(startDate)} - ${formatDate(endDate)}` }));
+    } else {
+      setFilters((prevFilters) => ({ ...prevFilters, dateRange: "" }));
+    };
+  }, [startDate, endDate]);
 
   const fetchAllProject = async () => {
     try {
@@ -36,6 +57,7 @@ const Project = () => {
           sort: filters.sort,
           page: filters.page,
           limit: filters.limit,
+          dateRange: filters.dateRange,
           nameFilter: filters.nameFilter.map(String),
           projectIdFilter: filters.projectIdFilter.map(String),
         },
@@ -272,6 +294,22 @@ const Project = () => {
                               </ul>
                             </div>
                           </div>
+                        </li>
+                        <li>
+                          <DatePicker
+                            className="form-control date-range"
+                            selected={startDate}
+                            onChange={(dates) => {
+                              const [start, end] = dates;
+                              setStartDate(start);
+                              setEndDate(end);
+                            }}
+                            startDate={startDate}
+                            endDate={endDate}
+                            selectsRange
+                            dateFormat="dd-MM-yyyy"
+                            placeholderText="Select date range"
+                          />
                         </li>
                       </ul>
                     </div>

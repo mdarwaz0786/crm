@@ -114,11 +114,23 @@ export const fetchAllProject = async (req, res) => {
       filter.projectId = { $in: Array.isArray(req.query.projectIdFilter) ? req.query.projectIdFilter : [req.query.projectIdFilter] };
     };
 
+    // Handle date range filter
+    if (req.query.dateRange) {
+      const [startDateString, endDateString] = req.query.dateRange.split(" - ");
+      const formatStartDate = startDateString.split("-");
+      const formatEndDate = endDateString.split("-");
+
+      const startDate = new Date(`${formatStartDate[2]}-${formatStartDate[1]}-${formatStartDate[0]}T00:00:00Z`);
+      const endDate = new Date(`${formatEndDate[2]}-${formatEndDate[1]}-${formatEndDate[0]}T23:59:59Z`);
+
+      filter.createdAt = { $gte: startDate, $lte: endDate };
+    };
+
     // Handle sorting
     if (req.query.sort === 'Ascending') {
-      sort = { createdAt: 1 }; // Sort by ascending order
+      sort = { createdAt: 1 };
     } else {
-      sort = { createdAt: -1 }; // Sort by descending order by default
+      sort = { createdAt: -1 };
     };
 
     // Handle pagination

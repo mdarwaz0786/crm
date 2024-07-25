@@ -4,31 +4,30 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from "../../context/authContext.jsx";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const ProjectDashboard = () => {
   const location = useLocation();
   const [project, setProject] = useState([]);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const { validToken, team } = useAuth();
   const [filters, setFilters] = useState({
     sort: "Descending",
     search: "",
     page: 1,
     limit: 5,
+    dateRange: "",
   });
 
   useEffect(() => {
     const { query } = location.state || {};
 
     if (query) {
-      setFilters((prevFilters) => ({
-        ...prevFilters,
-        search: query || "",
-        page: 1,
-      }));
+      setFilters((prevFilters) => ({ ...prevFilters, search: query || "", page: 1 }));
     };
   }, [location.state]);
-
-  const fieldPermissions = team?.role?.permissions?.project?.fields;
 
   const fetchAllProject = async () => {
     try {
@@ -41,6 +40,7 @@ const ProjectDashboard = () => {
           search: filters.search,
           page: filters.page,
           limit: filters.limit,
+          dateRange: filters.dateRange,
         },
       });
 
@@ -52,9 +52,28 @@ const ProjectDashboard = () => {
     };
   };
 
+
+  useEffect(() => {
+    const formatDate = (date) => {
+      if (!date) return "";
+      const day = date.getDate().toString().padStart(2, "0");
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+
+    if (startDate && endDate) {
+      setFilters((prevFilters) => ({ ...prevFilters, dateRange: `${formatDate(startDate)} - ${formatDate(endDate)}` }));
+    } else {
+      setFilters((prevFilters) => ({ ...prevFilters, dateRange: "" }));
+    };
+  }, [startDate, endDate]);
+
   useEffect(() => {
     fetchAllProject();
   }, [filters]);
+
+  const fieldPermissions = team?.role?.permissions?.project?.fields;
 
   return (
     <>
@@ -72,11 +91,23 @@ const ProjectDashboard = () => {
                       <div className="d-flex title-head">
                         <div className="daterange-picker d-flex align-items-center justify-content-center">
                           <div className="form-sort me-2">
-                            <i className="ti ti-calendar" />
-                            <input type="text" className="form-control  date-range bookingrange" />
+                            <DatePicker
+                              className="form-control"
+                              selected={startDate}
+                              onChange={(dates) => {
+                                const [start, end] = dates;
+                                setStartDate(start);
+                                setEndDate(end);
+                              }}
+                              startDate={startDate}
+                              endDate={endDate}
+                              selectsRange
+                              dateFormat="dd-MM-yyyy"
+                              placeholderText="Select date range"
+                            />
                           </div>
                           <div className="head-icons mb-0">
-                            <Link to="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Refresh"><i className="ti ti-refresh-dot" onClick={() => window.location.reload()} /></Link>
+                            <Link to="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Refresh" onClick={() => window.location.reload()}><i className="ti ti-refresh-dot" /></Link>
                             <Link to="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header"><i className="ti ti-chevrons-up" /></Link>
                           </div>
                         </div>

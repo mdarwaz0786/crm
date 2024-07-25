@@ -119,10 +119,30 @@
   margin-right: 1rem;
 }
 
+.date-range {
+  margin-left: 2rem;
+}
+
+.custom-quill-editor .ql-container {
+  height: 200px;
+}
+
+.custom-quill-editor .ql-editor {
+  height: 100%;
+}
+
 @media screen and (max-width: 767px) {
   .filter-reset-btns a {
     font-size: 0.85rem !important;
     width: 100% !important;
     padding: 0.5rem !important;
+  }
+
+  .date-range {
+    margin-left: 0rem;
+  }
+
+  .custom-quill-editor .ql-container {
+    height: 100px;
   }
 }
