@@ -1,9 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import usericon from "../../Assets/user-icon.png";
 import { useAuth } from "../../context/authContext.jsx";
+import { useState } from "react";
 
 const Header = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const { team, isLoggedIn } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <div className="main-wrapper">
@@ -41,10 +44,7 @@ const Header = () => {
                 </Link>
                 <form className="dropdown">
                   <div className="searchinputs" id="dropdownMenuClickable">
-                    <input type="text" placeholder="Search" />
-                    <div className="search-addon">
-                      <button type="submit"><i className="ti ti-command" /></button>
-                    </div>
+                    <input type="text" placeholder="Search Project" value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); navigate("/", { state: { query: searchQuery } }) }} />
                   </div>
                 </form>
               </div>

@@ -1,16 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-extra-semi */
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from "../../context/authContext.jsx";
 
 const ProjectDashboard = () => {
+  const location = useLocation();
   const [project, setProject] = useState([]);
   const { validToken, team } = useAuth();
   const [filters, setFilters] = useState({
     sort: "Descending",
+    search: "",
+    page: 1,
+    limit: 5,
   });
+
+  useEffect(() => {
+    const { query } = location.state || {};
+
+    if (query) {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        search: query || "",
+        page: 1,
+      }));
+    };
+  }, [location.state]);
 
   const fieldPermissions = team?.role?.permissions?.project?.fields;
 
@@ -22,6 +38,9 @@ const ProjectDashboard = () => {
         },
         params: {
           sort: filters.sort,
+          search: filters.search,
+          page: filters.page,
+          limit: filters.limit,
         },
       });
 
@@ -57,7 +76,7 @@ const ProjectDashboard = () => {
                             <input type="text" className="form-control  date-range bookingrange" />
                           </div>
                           <div className="head-icons mb-0">
-                            <Link to="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Refresh"><i className="ti ti-refresh-dot" /></Link>
+                            <Link to="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Refresh"><i className="ti ti-refresh-dot" onClick={() => window.location.reload()} /></Link>
                             <Link to="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Collapse" id="collapse-header"><i className="ti ti-chevrons-up" /></Link>
                           </div>
                         </div>
