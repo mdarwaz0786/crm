@@ -7,11 +7,12 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import Preloader from "../../../Preloader.jsx";
 
 const EditRole = () => {
   const [selectedMaster, setSelectedMaster] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { team, validToken } = useAuth();
+  const { team, validToken, isLoading } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
   const [name, setName] = useState("");
@@ -387,8 +388,12 @@ const EditRole = () => {
     setModalIsOpen(false);
   };
 
+  if (isLoading) {
+    return <Preloader />;
+  };
+
   if (!team?.role?.permissions?.role?.update) {
-    return <Navigate to="/" />;
+    return <Navigate to="/role" />;
   };
 
   return (

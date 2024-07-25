@@ -6,9 +6,10 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import Preloader from "../../../Preloader.jsx";
 
 const AddRole = () => {
-  const { validToken, team } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
   const [selectedMaster, setSelectedMaster] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -340,8 +341,12 @@ const AddRole = () => {
     setModalIsOpen(false);
   };
 
+  if (isLoading) {
+    return <Preloader />;
+  };
+
   if (!team?.role?.permissions?.role.create) {
-    return <Navigate to="/" />;
+    return <Navigate to="/role" />;
   };
 
   return (

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 const EditTeamMember = () => {
   const [name, setName] = useState("");
@@ -22,7 +23,7 @@ const EditTeamMember = () => {
   const [selectedReportingTo, setSelectedReportingTo] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, team } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
 
   const fetchAllTeamMember = async () => {
     try {
@@ -184,8 +185,12 @@ const EditTeamMember = () => {
     setSelectedReportingTo(selectedReportingTo?.filter((item) => item !== value));
   };
 
+  if (isLoading) {
+    return <Preloader />;
+  };
+
   if (!team?.role?.permissions?.team?.update) {
-    return <Navigate to="/" />;
+    return <Navigate to="/team-member" />;
   };
 
   return (

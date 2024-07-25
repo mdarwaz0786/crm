@@ -38,8 +38,8 @@ const Login = () => {
                 <img src="assets/img/logo.svg" className="img-fluid" alt="Logo" />
               </div>
               <div className="login-heading">
-                <h4>Sign In</h4>
-                <p>Access the CRMS panel using your email and passcode.</p>
+                <h4>Login</h4>
+                <p>Access the CRMS panel using your username and password.</p>
               </div>
               <div className="form-wrap">
                 <label className="col-form-label">Uername <span className="text-danger">*</span></label>
@@ -55,7 +55,7 @@ const Login = () => {
                 </div>
               </div>
               <div className="form-wrap">
-                <button type="submit" className="btn btn-primary" onClick={(e) => handleLogin(e)}>Sign In</button>
+                <button type="submit" className="btn btn-primary" onClick={(e) => handleLogin(e)}>Login</button>
               </div>
             </div>
           </div>

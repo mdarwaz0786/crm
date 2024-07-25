@@ -4,12 +4,13 @@ import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from '../../../Preloader.jsx';
 
 const AddProjectCategory = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { validToken, team } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -36,9 +37,12 @@ const AddProjectCategory = () => {
     };
   };
 
+  if (isLoading) {
+    return <Preloader />;
+  };
 
   if (!team?.role?.permissions?.projectCategory?.create) {
-    return <Navigate to="/" />;
+    return <Navigate to="/project-category" />;
   };
 
   return (

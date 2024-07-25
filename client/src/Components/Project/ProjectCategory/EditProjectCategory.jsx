@@ -5,13 +5,14 @@ import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from '../../../Preloader.jsx';
 
 const EditProjectCategory = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, team } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
@@ -69,8 +70,12 @@ const EditProjectCategory = () => {
     };
   };
 
+  if (isLoading) {
+    return <Preloader />;
+  };
+
   if (!team?.role?.permissions?.projectCategory?.update) {
-    return <Navigate to="/" />;
+    return <Navigate to="/project-category" />;
   };
 
   return (

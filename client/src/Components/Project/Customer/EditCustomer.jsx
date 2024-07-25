@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 const EditCustomer = () => {
   const [name, setName] = useState("");
@@ -13,7 +14,7 @@ const EditCustomer = () => {
   const [address, setAddress] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, team } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
@@ -83,8 +84,12 @@ const EditCustomer = () => {
     };
   };
 
+  if (isLoading) {
+    return <Preloader />;
+  };
+
   if (!team?.role?.permissions?.customer?.update) {
-    return <Navigate to="/" />;
+    return <Navigate to="/customer" />;
   };
 
   return (

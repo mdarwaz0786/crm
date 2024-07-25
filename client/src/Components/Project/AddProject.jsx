@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from "../../context/authContext.jsx";
+import Preloader from "../../Preloader.jsx";
 
 const AddProject = () => {
   const [customer, setCustomer] = useState([]);
@@ -29,7 +30,7 @@ const AddProject = () => {
   const [priority, setPriority] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { team, validToken } = useAuth();
+  const { team, validToken, isLoading } = useAuth();
 
   const fetchAllCustomer = async () => {
     try {
@@ -277,8 +278,12 @@ const AddProject = () => {
     setSelectedLeader(selectedLeader?.filter((item) => item !== value));
   };
 
+  if (isLoading) {
+    return <Preloader />;
+  };
+
   if (!team?.role?.permissions?.project?.create) {
-    return <Navigate to="/" />;
+    return <Navigate to="/project" />;
   };
 
   return (

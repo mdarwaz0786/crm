@@ -6,11 +6,12 @@ import { toast } from 'react-toastify';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
 import html2pdf from "html2pdf.js";
+import Preloader from "../../../Preloader.jsx";
 
 const TeamMember = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState("");
-  const { validToken, team } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
   const [nameData, setNameData] = useState([]);
   const [name, setName] = useState("");
   const [filters, setFilters] = useState({
@@ -127,6 +128,10 @@ const TeamMember = () => {
 
   const permissions = team?.role?.permissions?.team;
   const fieldPermissions = team?.role?.permissions?.team?.fields;
+
+  if (isLoading) {
+    return <Preloader />;
+  };
 
   if (!permissions?.access) {
     return <Navigate to="/" />;

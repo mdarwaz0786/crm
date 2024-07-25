@@ -4,12 +4,13 @@ import { useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 const AddProjectType = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const { validToken, team } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -36,8 +37,12 @@ const AddProjectType = () => {
     };
   };
 
+  if (isLoading) {
+    return <Preloader />;
+  };
+
   if (!team?.role?.permissions?.projectType?.create) {
-    return <Navigate to="/" />;
+    return <Navigate to="/project-type" />;
   };
 
   return (

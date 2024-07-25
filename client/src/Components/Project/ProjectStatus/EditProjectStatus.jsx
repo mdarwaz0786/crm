@@ -5,13 +5,14 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext.jsx";
+import Preloader from "../../../Preloader.jsx";
 
 const EditProjectStatus = () => {
   const [status, setStatus] = useState("");
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const { validToken, team } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
 
   const fetchSingleData = async (id) => {
     try {
@@ -69,8 +70,12 @@ const EditProjectStatus = () => {
     };
   };
 
+  if (isLoading) {
+    return <Preloader />;
+  };
+
   if (!team?.role?.permissions?.projectStatus?.update) {
-    return <Navigate to="/" />;
+    return <Navigate to="/project-status" />;
   };
 
   return (
