@@ -21,6 +21,8 @@ const Designation = () => {
     page: 1,
     limit: 10,
   });
+  const permissions = team?.role?.permissions?.designation;
+  const filedPermissions = team?.role?.permissions?.designation?.fields;
 
   const fetchAllData = async () => {
     try {
@@ -66,8 +68,10 @@ const Designation = () => {
   };
 
   useEffect(() => {
-    fetchAllDesignationName();
-  }, [name]);
+    if (!isLoading && team && permissions?.access) {
+      fetchAllDesignationName();
+    };
+  }, [name, isLoading, team, permissions?.access]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -90,8 +94,10 @@ const Designation = () => {
   };
 
   useEffect(() => {
-    fetchAllData();
-  }, [filters]);
+    if (!isLoading && team && permissions?.access) {
+      fetchAllData();
+    };
+  }, [filters, isLoading, team, permissions?.access]);
 
   const handleDelete = async (id) => {
     try {
@@ -125,9 +131,6 @@ const Designation = () => {
     };
     html2pdf().set(options).from(element).save();
   };
-
-  const permissions = team?.role?.permissions?.designation;
-  const filedPermissions = team?.role?.permissions?.designation?.fields;
 
   if (isLoading) {
     return <Preloader />;

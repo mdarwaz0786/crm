@@ -21,6 +21,8 @@ const Customer = () => {
     page: 1,
     limit: 10,
   });
+  const permissions = team?.role?.permissions?.customer;
+  const filedPermissions = team?.role?.permissions?.customer?.fields;
 
   const fetchAllData = async () => {
     try {
@@ -66,8 +68,10 @@ const Customer = () => {
   };
 
   useEffect(() => {
-    fetchAllCustomerName();
-  }, [name]);
+    if (!isLoading && team && permissions?.access) {
+      fetchAllCustomerName();
+    }
+  }, [name, isLoading, team, permissions?.access]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -90,8 +94,10 @@ const Customer = () => {
   };
 
   useEffect(() => {
-    fetchAllData();
-  }, [filters]);
+    if (!isLoading && team && permissions?.access) {
+      fetchAllData();
+    };
+  }, [filters, isLoading, team, permissions?.access]);
 
   const handleDelete = async (id) => {
     try {
@@ -125,9 +131,6 @@ const Customer = () => {
     };
     html2pdf().set(options).from(element).save();
   };
-
-  const permissions = team?.role?.permissions?.customer;
-  const filedPermissions = team?.role?.permissions?.customer?.fields;
 
   if (isLoading) {
     return <Preloader />;

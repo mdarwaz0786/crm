@@ -8,8 +8,8 @@ const router = express.Router();
 
 // routes
 router.post("/create-designation", isLoggedIn, checkMasterActionPermission("designation", "create"), createDesignation);
-router.get("/all-designation", isLoggedIn, checkMasterActionPermission("designation", "access"), fetchAllDesignation);
-router.get("/single-designation/:id", isLoggedIn, checkMasterActionPermission("designation", "access"), fetchSingleDesignation);
+router.get("/all-designation", isLoggedIn, fetchAllDesignation);
+router.get("/single-designation/:id", isLoggedIn, fetchSingleDesignation);
 router.put("/update-designation/:id", isLoggedIn, checkMasterActionPermission("designation", "update"), updateDesignation);
 router.delete("/delete-designation/:id", isLoggedIn, checkMasterActionPermission("designation", "delete"), deleteDesignation);
 

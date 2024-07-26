@@ -13,6 +13,7 @@ const EditDesignation = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
+  const fieldPermissions = team?.role?.permissions?.designation?.fields;
 
   const fetchSingleData = async (id) => {
     try {
@@ -35,12 +36,11 @@ const EditDesignation = () => {
     fetchSingleData(id);
   }, [id]);
 
-  // Create update object
-  const updateData = {};
-  const fieldPermissions = team?.role?.permissions?.designation?.fields;
-
   const handleUpdate = async (e, id) => {
     e.preventDefault();
+
+    // Create update object
+    const updateData = {};
 
     // Conditionally include fields based on permissions
     if (fieldPermissions?.name?.show && !fieldPermissions?.name?.read) {
@@ -88,10 +88,10 @@ const EditDesignation = () => {
         <div className="row">
           {
             (fieldPermissions?.name?.show) ? (
-              <div className="col-md-6">
+              <div className="col-md-12">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
-                  <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} readOnly={fieldPermissions?.name?.read} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.name?.read ? "readonly-style" : ""}`} name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -100,10 +100,10 @@ const EditDesignation = () => {
           }
           {
             (fieldPermissions?.description?.show) ? (
-              <div className="col-md-6">
+              <div className="col-md-12">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="description">Description <span className="text-danger">*</span></label>
-                  <textarea className="form-control" rows={1} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} readOnly={fieldPermissions?.description?.read} onKeyDown={fieldPermissions?.description?.read ? (e) => e.preventDefault() : undefined} />
+                  <textarea className={`form-control ${fieldPermissions?.description?.read ? "readonly-style" : ""}`} rows={4} name="description" id="description" value={description} onChange={(e) => setDescription(e.target.value)} onKeyDown={fieldPermissions?.description?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (

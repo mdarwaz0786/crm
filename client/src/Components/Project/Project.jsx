@@ -29,6 +29,8 @@ const Project = () => {
     limit: 10,
     dateRange: "",
   });
+  const permissions = team?.role?.permissions?.project;
+  const fieldPermissions = team?.role?.permissions?.project?.fields;
 
   useEffect(() => {
     const formatDate = (date) => {
@@ -64,8 +66,13 @@ const Project = () => {
       });
 
       if (response?.data?.success) {
-        setProject(response?.data?.project);
-        setTotal(response?.data?.totalCount);
+        const filteredProject = response?.data?.project?.filter((p) => {
+          const isLeader = p?.leader?.some((l) => l?._id === team?._id);
+          const isResponsible = p?.responsible?.some((r) => r?._id === team?._id);
+          return isLeader || isResponsible;
+        });
+        setProject(filteredProject);
+        setTotal(filteredProject?.length);
       };
     } catch (error) {
       console.log(error.message);
@@ -139,8 +146,10 @@ const Project = () => {
   };
 
   useEffect(() => {
-    fetchAllProject();
-  }, [filters]);
+    if (!isLoading && team) {
+      fetchAllProject();
+    };
+  }, [filters, team, isLoading]);
 
   const handleDelete = async (id) => {
     try {
@@ -174,9 +183,6 @@ const Project = () => {
     };
     html2pdf().set(options).from(element).save();
   };
-
-  const permissions = team?.role?.permissions?.project;
-  const fieldPermissions = team?.role?.permissions?.project?.fields;
 
   if (isLoading) {
     return <Preloader />;

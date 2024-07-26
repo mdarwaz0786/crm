@@ -8,8 +8,8 @@ const router = express.Router();
 
 // routes
 router.post("/create-customer", isLoggedIn, checkMasterActionPermission("customer", "create"), createCustomer);
-router.get("/all-customer", isLoggedIn, checkMasterActionPermission("customer", "access"), fetchAllCustomer);
-router.get("/single-customer/:id", isLoggedIn, checkMasterActionPermission("customer", "access"), fetchSingleCustomer);
+router.get("/all-customer", isLoggedIn, fetchAllCustomer);
+router.get("/single-customer/:id", isLoggedIn, fetchSingleCustomer);
 router.put("/update-customer/:id", isLoggedIn, checkMasterActionPermission("customer", "update"), updateCustomer);
 router.delete("/delete-customer/:id", isLoggedIn, checkMasterActionPermission("customer", "delete"), deleteCustomer);
 

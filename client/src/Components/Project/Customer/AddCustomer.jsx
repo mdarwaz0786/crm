@@ -69,7 +69,7 @@ const AddCustomer = () => {
           <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
         </div>
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-12">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
               <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} />
@@ -87,10 +87,10 @@ const AddCustomer = () => {
               <input type="text" className="form-control" name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} />
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-12">
             <div className="form-wrap">
               <label className="col-form-label" htmlFor="address">Address <span className="text-danger">*</span></label>
-              <textarea className="form-control" rows={1} name="description" id="description" value={address} onChange={(e) => setAddress(e.target.value)} />
+              <textarea className="form-control" rows={4} name="description" id="description" value={address} onChange={(e) => setAddress(e.target.value)} />
             </div>
           </div>
         </div>

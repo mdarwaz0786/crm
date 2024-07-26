@@ -131,6 +131,17 @@
   height: 100%;
 }
 
+.readonly-style {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+  user-select: none;
+}
+
+.readonly-style-checkbox {
+  cursor: not-allowed;
+  user-select: none;
+}
+
 @media screen and (max-width: 767px) {
   .filter-reset-btns a {
     font-size: 0.85rem !important;

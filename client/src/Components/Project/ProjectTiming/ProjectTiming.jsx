@@ -21,6 +21,8 @@ const ProjectTiming = () => {
     page: 1,
     limit: 10,
   });
+  const permissions = team?.role?.permissions?.projectTiming;
+  const filedPermissions = team?.role?.permissions?.projectTiming?.fields;
 
   const fetchAllData = async () => {
     try {
@@ -66,8 +68,10 @@ const ProjectTiming = () => {
   };
 
   useEffect(() => {
-    fetchAllProjectTimingName();
-  }, [name]);
+    if (!isLoading && team && permissions?.access) {
+      fetchAllProjectTimingName();
+    };
+  }, [name, isLoading, team, permissions?.access]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -90,8 +94,10 @@ const ProjectTiming = () => {
   };
 
   useEffect(() => {
-    fetchAllData();
-  }, [filters]);
+    if (!isLoading && team && permissions?.access) {
+      fetchAllData();
+    };
+  }, [filters, isLoading, team, permissions?.access]);
 
   const handleDelete = async (id) => {
     try {
@@ -125,9 +131,6 @@ const ProjectTiming = () => {
     };
     html2pdf().set(options).from(element).save();
   };
-
-  const permissions = team?.role?.permissions?.projectTiming;
-  const filedPermissions = team?.role?.permissions?.projectTiming?.fields;
 
   if (isLoading) {
     return <Preloader />;

@@ -8,8 +8,8 @@ const router = express.Router();
 
 // routes
 router.post("/create-projectCategory", isLoggedIn, checkMasterActionPermission("projectCategory", "create"), createProjectCategory);
-router.get("/all-projectCategory", isLoggedIn, checkMasterActionPermission("projectCategory", "access"), fetchAllProjectCategory);
-router.get("/single-projectCategory/:id", isLoggedIn, checkMasterActionPermission("projectCategory", "access"), fetchSingleProjectCategory);
+router.get("/all-projectCategory", isLoggedIn, fetchAllProjectCategory);
+router.get("/single-projectCategory/:id", isLoggedIn, fetchSingleProjectCategory);
 router.put("/update-projectCategory/:id", isLoggedIn, checkMasterActionPermission("projectCategory", "update"), updateProjectCategory);
 router.delete("/delete-projectCategory/:id", isLoggedIn, checkMasterActionPermission("projectCategory", "delete"), deleteProjectCategory);
 

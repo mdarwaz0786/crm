@@ -15,6 +15,7 @@ const EditCustomer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
+  const fieldPermissions = team?.role?.permissions?.customer?.fields;
 
   const fetchSingleData = async (id) => {
     try {
@@ -39,12 +40,11 @@ const EditCustomer = () => {
     fetchSingleData(id);
   }, [id]);
 
-  // Create update object
-  const updateData = {};
-  const fieldPermissions = team?.role?.permissions?.customer?.fields;
-
   const handleUpdate = async (e, id) => {
     e.preventDefault();
+
+    // Create update object
+    const updateData = {};
 
     // Conditionally include fields based on permissions
     if (fieldPermissions?.name?.show && !fieldPermissions?.name?.read) {
@@ -102,10 +102,10 @@ const EditCustomer = () => {
         <div className="row">
           {
             (fieldPermissions?.name?.show) ? (
-              <div className="col-md-6">
+              <div className="col-md-12">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
-                  <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} readOnly={fieldPermissions?.name?.read} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.name?.read ? "readonly-style" : ""}`} name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -117,7 +117,7 @@ const EditCustomer = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="email">Email <span className="text-danger">*</span></label>
-                  <input type="email" className="form-control" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} readOnly={fieldPermissions?.email?.read} onKeyDown={fieldPermissions?.email?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="email" className={`form-control ${fieldPermissions?.email?.read ? "readonly-style" : ""}`} name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={fieldPermissions?.email?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -129,7 +129,7 @@ const EditCustomer = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="mobile">Mobile <span className="text-danger">*</span></label>
-                  <input type="text" className="form-control" name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} readOnly={fieldPermissions?.mobile?.read} onKeyDown={fieldPermissions?.mobile?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.mobile?.read ? "readonly-style" : ""}`} name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} onKeyDown={fieldPermissions?.mobile?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -138,10 +138,10 @@ const EditCustomer = () => {
           }
           {
             (fieldPermissions?.address?.show) ? (
-              <div className="col-md-6">
+              <div className="col-md-12">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="address">Address <span className="text-danger">*</span></label>
-                  <textarea className="form-control" rows={1} name="description" id="description" value={address} onChange={(e) => setAddress(e.target.value)} readOnly={fieldPermissions?.address?.read} onKeyDown={fieldPermissions?.address?.read ? (e) => e.preventDefault() : undefined} />
+                  <textarea className={`form-control ${fieldPermissions?.description?.read ? "readonly-style" : ""}`} rows={4} name="description" id="description" value={address} onChange={(e) => setAddress(e.target.value)} onKeyDown={fieldPermissions?.address?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (

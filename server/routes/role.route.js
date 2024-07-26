@@ -8,8 +8,8 @@ const router = express.Router();
 
 // routes
 router.post("/create-role", isLoggedIn, checkMasterActionPermission("role", "create"), createRole);
-router.get("/all-role", isLoggedIn, checkMasterActionPermission("role", "access"), fetchAllRole);
-router.get("/single-role/:id", isLoggedIn, checkMasterActionPermission("role", "access"), fetchSingleRole);
+router.get("/all-role", isLoggedIn, fetchAllRole);
+router.get("/single-role/:id", isLoggedIn, fetchSingleRole);
 router.put("/update-role/:id", isLoggedIn, checkMasterActionPermission("role", "update"), updateRole);
 router.delete("/delete-role/:id", isLoggedIn, checkMasterActionPermission("role", "delete"), deleteRole);
 

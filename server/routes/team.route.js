@@ -10,8 +10,8 @@ const router = express.Router();
 router.post("/create-team", isLoggedIn, checkMasterActionPermission("team", "create"), createTeam);
 router.post("/login-team", loginTeam);
 router.get("/loggedin-team", isLoggedIn, loggedInTeam);
-router.get("/all-team", isLoggedIn, checkMasterActionPermission("team", "access"), fetchAllTeam);
-router.get("/single-team/:id", isLoggedIn, checkMasterActionPermission("team", "access"), fetchSingleTeam);
+router.get("/all-team", isLoggedIn, fetchAllTeam);
+router.get("/single-team/:id", isLoggedIn, fetchSingleTeam);
 router.put("/update-team/:id", isLoggedIn, checkMasterActionPermission("team", "update"), updateTeam);
 router.delete("/delete-team/:id", isLoggedIn, checkMasterActionPermission("team", "delete"), deleteTeam);
 

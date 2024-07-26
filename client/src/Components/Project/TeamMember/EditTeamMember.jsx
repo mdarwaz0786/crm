@@ -24,6 +24,7 @@ const EditTeamMember = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
+  const fieldPermissions = team?.role?.permissions?.team?.fields;
 
   const fetchAllTeamMember = async () => {
     try {
@@ -108,12 +109,11 @@ const EditTeamMember = () => {
     fetchSingleData(id);
   }, [id]);
 
-  // Create update object
-  const updateData = {};
-  const fieldPermissions = team?.role?.permissions?.team?.fields;
-
   const handleUpdate = async (e, id) => {
     e.preventDefault();
+
+    // Create update object
+    const updateData = {};
 
     // Conditionally include fields based on permissions
     if (fieldPermissions?.name?.show && !fieldPermissions?.name?.read) {
@@ -206,7 +206,7 @@ const EditTeamMember = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
-                  <input type="text" className="form-control" placeholder="Enter Name" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} readOnly={fieldPermissions?.name?.read} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.name?.read ? "readonly-style" : ""}`} placeholder="Enter Name" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -218,7 +218,7 @@ const EditTeamMember = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="email">Email <span className="text-danger">*</span></label>
-                  <input type="email" className="form-control" placeholder="Enter Email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} readOnly={fieldPermissions?.email?.read} onKeyDown={fieldPermissions?.email?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="email" className={`form-control ${fieldPermissions?.email?.read ? "readonly-style" : ""}`} placeholder="Enter Email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={fieldPermissions?.email?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -230,7 +230,7 @@ const EditTeamMember = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="mobile">Mobile <span className="text-danger">*</span></label>
-                  <input type="text" className="form-control" placeholder="Enter Mobile Number" name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} readOnly={fieldPermissions?.mobile?.read} onKeyDown={fieldPermissions?.mobile?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.mobile?.read ? "readonly-style" : ""}`} placeholder="Enter Mobile Number" name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} onKeyDown={fieldPermissions?.mobile?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -242,7 +242,7 @@ const EditTeamMember = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="joining">Joining Date <span className="text-danger">*</span></label>
-                  <input type="text" className="form-control" name="joining" id="joining" value={joining} onChange={(e) => setJoining(e.target.value)} readOnly={fieldPermissions?.joining?.read} onKeyDown={fieldPermissions?.joining?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.joining?.read ? "readonly-style" : ""}`} name="joining" id="joining" value={joining} onChange={(e) => setJoining(e.target.value)} onKeyDown={fieldPermissions?.joining?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -254,7 +254,7 @@ const EditTeamMember = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="dob">Date of Birth <span className="text-danger">*</span></label>
-                  <input type="text" className="form-control" name="dob" id="dob" value={dob} onChange={(e) => setDob(e.target.value)} readOnly={fieldPermissions?.dob?.read} onKeyDown={fieldPermissions?.dob?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.dob?.read ? "readonly-style" : ""}`} name="dob" id="dob" value={dob} onChange={(e) => setDob(e.target.value)} onKeyDown={fieldPermissions?.dob?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -266,7 +266,7 @@ const EditTeamMember = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label">Designation <span className="text-danger">*</span></label>
-                  <select className="form-select" name="designation" value={selectedDesignation} onChange={(e) => setSelectedDesignation(e.target.value)} disabled={fieldPermissions?.designation?.read} onKeyDown={fieldPermissions?.designation?.read ? (e) => e.preventDefault() : undefined}>
+                  <select className={`form-select ${fieldPermissions?.designation?.read ? "readonly-style" : ""}`} name="designation" value={selectedDesignation} onChange={(e) => setSelectedDesignation(e.target.value)} onKeyDown={fieldPermissions?.designation?.read ? (e) => e.preventDefault() : undefined}>
                     <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                     {
                       designation?.map((d) => (
@@ -285,7 +285,7 @@ const EditTeamMember = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="username">User Name <span className="text-danger">*</span></label>
-                  <input type="text" className="form-control" name="username" id="username" value={username} onChange={(e) => setUsername(e.target.value)} readOnly={fieldPermissions?.username?.read} onKeyDown={fieldPermissions?.username?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.username?.read ? "readonly-style" : ""}`} name="username" id="username" value={username} onChange={(e) => setUsername(e.target.value)} onKeyDown={fieldPermissions?.username?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -297,7 +297,7 @@ const EditTeamMember = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="password">Password<span className="text-danger">*</span></label>
-                  <input type="text" className="form-control" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} readOnly={fieldPermissions?.password?.read} onKeyDown={fieldPermissions?.password?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.password?.read ? "readonly-style" : ""}`} name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={fieldPermissions?.password?.read ? (e) => e.preventDefault() : undefined} />
                 </div>
               </div>
             ) : (
@@ -309,7 +309,7 @@ const EditTeamMember = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label">Reporting To <span className="text-danger">*</span></label>
-                  <select className="form-select" name="leader" value="" onChange={handleSelectChange} disabled={fieldPermissions?.reportingTo?.read} onKeyDown={fieldPermissions?.reportingTo?.read ? (e) => e.preventDefault() : undefined}>
+                  <select className={`form-select ${fieldPermissions?.reportingTo?.read ? "readonly-style" : ""}`} name="leader" value="" onChange={handleSelectChange} onKeyDown={fieldPermissions?.reportingTo?.read ? (e) => e.preventDefault() : undefined}>
                     <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                     {
                       reportingTo?.map((r) => (
@@ -322,7 +322,7 @@ const EditTeamMember = () => {
                       selectedReportingTo?.map((reporting, index) => (
                         <span key={index} className="selected-item">
                           {reportingTo?.find((r) => r?._id === reporting)?.name}
-                          <button type="button" className="remove-btn" onClick={() => handleRemove(reporting)} disabled={fieldPermissions?.reportingTo?.read} onKeyDown={fieldPermissions?.reportingTo?.read ? (e) => e.preventDefault() : undefined}>{"x"}</button>
+                          {(fieldPermissions?.reportingTo?.read) ? ("") : (<button type="button" className="remove-btn" onClick={() => handleRemove(reporting)} onKeyDown={fieldPermissions?.reportingTo?.read ? (e) => e.preventDefault() : undefined}>{"x"}</button>)}
                         </span>
                       ))
                     }
@@ -338,7 +338,7 @@ const EditTeamMember = () => {
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label">Role <span className="text-danger">*</span></label>
-                  <select className="form-select" name="role" value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)} disabled={fieldPermissions?.role?.read} onKeyDown={fieldPermissions?.role?.read ? (e) => e.preventDefault() : undefined}>
+                  <select className={`form-select ${fieldPermissions?.role?.read ? "readonly-style" : ""}`} name="role" value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)} onKeyDown={fieldPermissions?.role?.read ? (e) => e.preventDefault() : undefined}>
                     <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                     {
                       role?.map((r) => (

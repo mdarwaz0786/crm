@@ -380,6 +380,19 @@ const AddProject = () => {
             </div>
             <div className="col-md-6">
               <div className="form-wrap">
+                <label className="col-form-label">Status <span className="text-danger">*</span></label>
+                <select className="form-select" name="status" value={selectedProjectStatus} onChange={(e) => setSelectedProjectStatus(e.target.value)}>
+                  <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
+                  {
+                    projectStatus?.map((p) => (
+                      <option key={p?._id} value={p?._id}>{p?.status}</option>
+                    ))
+                  }
+                </select>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-wrap">
                 <label className="col-form-label">Responsible Persons <span className="text-danger">*</span></label>
                 <select className="form-select" name="responsible" value="" onChange={handleSelectChangeResponsible}>
                   <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
@@ -434,19 +447,6 @@ const AddProject = () => {
               <div className="form-wrap">
                 <label className="col-form-label" htmlFor="due">Due Date <span className="text-danger">*</span></label>
                 <input type="date" className="form-control" name="due" id="due" value={due} onChange={(e) => setDue(e.target.value)} />
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="form-wrap">
-                <label className="col-form-label">Status <span className="text-danger">*</span></label>
-                <select className="form-select" name="status" value={selectedProjectStatus} onChange={(e) => setSelectedProjectStatus(e.target.value)}>
-                  <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                  {
-                    projectStatus?.map((p) => (
-                      <option key={p?._id} value={p?._id}>{p?.status}</option>
-                    ))
-                  }
-                </select>
               </div>
             </div>
             <div className="col-md-12">

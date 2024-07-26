@@ -21,6 +21,8 @@ const ProjectCategory = () => {
     page: 1,
     limit: 10,
   });
+  const permissions = team?.role?.permissions?.projectType;
+  const filedPermissions = team?.role?.permissions?.projectType?.fields;
 
   const fetchAllData = async () => {
     try {
@@ -66,8 +68,10 @@ const ProjectCategory = () => {
   };
 
   useEffect(() => {
-    fetchAllProjectCategoryName();
-  }, [name]);
+    if (!isLoading && team && permissions?.access) {
+      fetchAllProjectCategoryName();
+    };
+  }, [name, isLoading, team, permissions?.access]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -90,8 +94,10 @@ const ProjectCategory = () => {
   };
 
   useEffect(() => {
-    fetchAllData();
-  }, [filters]);
+    if (!isLoading && team && permissions?.access) {
+      fetchAllData();
+    };
+  }, [filters, isLoading, team, permissions?.access]);
 
   const handleDelete = async (id) => {
     try {
@@ -125,9 +131,6 @@ const ProjectCategory = () => {
     };
     html2pdf().set(options).from(element).save();
   };
-
-  const permissions = team?.role?.permissions?.projectType;
-  const filedPermissions = team?.role?.permissions?.projectType?.fields;
 
   if (isLoading) {
     return <Preloader />;

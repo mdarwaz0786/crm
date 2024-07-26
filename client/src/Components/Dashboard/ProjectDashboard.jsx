@@ -12,20 +12,18 @@ const ProjectDashboard = () => {
   const [project, setProject] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const { validToken, team } = useAuth();
+  const { validToken, team, isLoading } = useAuth();
+  const fieldPermissions = team?.role?.permissions?.project?.fields;
   const [filters, setFilters] = useState({
     sort: "Descending",
     search: "",
-    page: 1,
-    limit: 5,
     dateRange: "",
   });
 
   useEffect(() => {
     const { query } = location.state || {};
-
     if (query) {
-      setFilters((prevFilters) => ({ ...prevFilters, search: query || "", page: 1 }));
+      setFilters((prevFilters) => ({ ...prevFilters, search: query || "" }));
     };
   }, [location.state]);
 
@@ -33,25 +31,27 @@ const ProjectDashboard = () => {
     try {
       const response = await axios.get("/api/v1/project/all-project", {
         headers: {
-          Authorization: `${validToken}`
+          Authorization: `${validToken}`,
         },
         params: {
           sort: filters.sort,
           search: filters.search,
-          page: filters.page,
-          limit: filters.limit,
           dateRange: filters.dateRange,
         },
       });
 
       if (response?.data?.success) {
-        setProject(response?.data?.project);
+        const filteredProject = response?.data?.project.filter((p) => {
+          const isLeader = p?.leader?.some((l) => l?._id === team?._id);
+          const isResponsible = p?.responsible?.some((r) => r?._id === team?._id);
+          return isLeader || isResponsible;
+        });
+        setProject(filteredProject);
       };
     } catch (error) {
       console.log(error.message);
     };
   };
-
 
   useEffect(() => {
     const formatDate = (date) => {
@@ -70,10 +70,10 @@ const ProjectDashboard = () => {
   }, [startDate, endDate]);
 
   useEffect(() => {
-    fetchAllProject();
-  }, [filters]);
-
-  const fieldPermissions = team?.role?.permissions?.project?.fields;
+    if (!isLoading && team) {
+      fetchAllProject();
+    };
+  }, [filters, team, isLoading]);
 
   return (
     <>

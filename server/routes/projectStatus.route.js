@@ -8,8 +8,8 @@ const router = express.Router();
 
 // routes
 router.post("/create-projectStatus", isLoggedIn, checkMasterActionPermission("projectStatus", "create"), createProjectStatus);
-router.get("/all-projectStatus", isLoggedIn, checkMasterActionPermission("projectStatus", "access"), fetchAllProjectStatus);
-router.get("/single-projectStatus/:id", isLoggedIn, checkMasterActionPermission("projectStatus", "access"), fetchSingleProjectStatus);
+router.get("/all-projectStatus", isLoggedIn, fetchAllProjectStatus);
+router.get("/single-projectStatus/:id", isLoggedIn, fetchSingleProjectStatus);
 router.put("/update-projectStatus/:id", isLoggedIn, checkMasterActionPermission("projectStatus", "update"), updateProjectStatus);
 router.delete("/delete-projectStatus/:id", isLoggedIn, checkMasterActionPermission("projectStatus", "delete"), deleteProjectStatus);
 

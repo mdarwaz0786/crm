@@ -13,6 +13,7 @@ const EditProjectTiming = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
+  const fieldPermissions = team?.role?.permissions?.projectTiming?.fields;
 
   const fetchSingleData = async (id) => {
     try {
@@ -35,12 +36,11 @@ const EditProjectTiming = () => {
     fetchSingleData(id);
   }, [id]);
 
-  // Create update object
-  const updateData = {};
-  const fieldPermissions = team?.role?.permissions?.projectTiming?.fields;
-
   const handleUpdate = async (e, id) => {
     e.preventDefault();
+
+    // Create update object
+    const updateData = {};
 
     // Conditionally include fields based on permissions
     if (fieldPermissions?.name?.show && !fieldPermissions?.name?.read) {

@@ -13,6 +13,7 @@ const EditRole = () => {
   const [selectedMaster, setSelectedMaster] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { team, validToken, isLoading } = useAuth();
+  const fieldPermissions = team?.role?.permissions?.role?.fields;
   const navigate = useNavigate();
   const { id } = useParams();
   const [name, setName] = useState("");
@@ -143,7 +144,7 @@ const EditRole = () => {
   const handleChange = (e) => {
     const { name, checked, type } = e.target;
 
-    // Prevent change if the checkbox is disabled
+    // Prevent change if the checkbox is read only
     if (team?.role?.permissions?.role?.fields?.masters?.read) {
       e.preventDefault();
       return;
@@ -166,7 +167,7 @@ const EditRole = () => {
   const handleFieldPermissionChange = (e) => {
     const { name, checked } = e.target;
 
-    // Prevent change if the checkbox is disabled
+    // Prevent change if the checkbox is read only
     if (team?.role?.permissions?.role?.fields?.masters?.read) {
       e.preventDefault();
       return;
@@ -209,12 +210,11 @@ const EditRole = () => {
     fetchSingleRole(id);
   }, [id]);
 
-  // Create the update object
-  const updateData = {};
-  const fieldPermissions = team?.role?.permissions?.role?.fields;
-
   const handleUpdate = async (e, id) => {
     e.preventDefault();
+
+    // Create the update object
+    const updateData = {};
 
     // Conditionally include fields based on permissions
     if (fieldPermissions?.name?.show && !fieldPermissions?.name?.read) {
@@ -416,12 +416,11 @@ const EditRole = () => {
                     </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={`form-control ${fieldPermissions?.name?.read ? "readonly-style" : ""}`}
                       name="name"
                       id="name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      readOnly={fieldPermissions?.name?.read}
                       onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined}
                     />
                   </div>
@@ -442,12 +441,11 @@ const EditRole = () => {
                           <label className="col-form-label" style={{ marginRight: "0.5rem" }}>{permissionLabels[master]} :</label>
                           <input
                             type="checkbox"
-                            className="form-check-input ml-2"
+                            className={`form-check-input ml-2 ${fieldPermissions?.masters?.read ? "readonly-style-checkbox" : ""}`}
                             id={`${master}.access`}
                             name={`${master}.access`}
                             checked={permissions[master]?.access || false}
                             onChange={handleChange}
-                            disabled={fieldPermissions?.masters?.read}
                             onKeyDown={fieldPermissions?.masters?.read ? (e) => e.preventDefault() : undefined}
                           />
                           <label className="form-check-label" htmlFor={`${master}.access`} style={{ marginLeft: '5px' }}>
@@ -459,12 +457,11 @@ const EditRole = () => {
                             <div className="form-check" key={`${master}-${action}`}>
                               <input
                                 type="checkbox"
-                                className="form-check-input"
+                                className={`form-check-input ${fieldPermissions?.masters?.read ? "readonly-style-checkbox" : ""}`}
                                 id={`${master}.${action}`}
                                 name={`${master}.${action}`}
                                 checked={permissions[master]?.[action] || false}
                                 onChange={handleChange}
-                                disabled={fieldPermissions?.masters?.read}
                                 onKeyDown={fieldPermissions?.masters?.read ? (e) => e.preventDefault() : undefined}
                               />
                               <label className="form-check-label" htmlFor={`${master}.${action}`}>
@@ -516,12 +513,11 @@ const EditRole = () => {
                         <div className="form-check mr-2">
                           <input
                             type="checkbox"
-                            className="form-check-input"
+                            className={`form-check-input ${fieldPermissions?.masters?.read ? "readonly-style-checkbox" : ""}`}
                             id={`${field}.read`}
                             name={`${field}.read`}
                             checked={permission.read}
                             onChange={handleFieldPermissionChange}
-                            disabled={fieldPermissions?.masters?.read}
                             onKeyDown={fieldPermissions?.masters?.read ? (e) => e.preventDefault() : undefined}
                           />
                           <label className="form-check-label" htmlFor={`${field}.read`}>Read Only</label>
@@ -529,12 +525,11 @@ const EditRole = () => {
                         <div className="form-check">
                           <input
                             type="checkbox"
-                            className="form-check-input"
+                            className={`form-check-input ${fieldPermissions?.name?.read ? "readonly-style-checkbox" : ""}`}
                             id={`${field}.show`}
                             name={`${field}.show`}
                             checked={permission.show}
                             onChange={handleFieldPermissionChange}
-                            disabled={fieldPermissions?.masters?.read}
                             onKeyDown={fieldPermissions?.masters?.read ? (e) => e.preventDefault() : undefined}
                           />
                           <label className="form-check-label" htmlFor={`${field}.show`}>Show</label>

@@ -309,35 +309,31 @@ const EditProject = () => {
           </div>
           <div className="row">
             {
-              (fieldPermissions?.name?.show) ? (
-                <div className="col-md-12">
+              (fieldPermissions?.name?.show) && (
+                <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="name">Project Name <span className="text-danger">*</span></label>
-                    <input type="text" className="form-control" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} readOnly={fieldPermissions?.name?.read} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
+                    <input type="text" className={`form-control ${fieldPermissions?.name?.read ? "readonly-style" : ""}`} name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
             {
-              (fieldPermissions?.projectId?.show) ? (
+              (fieldPermissions?.projectId?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="projectId">Project ID<span className="text-danger"> *</span></label>
-                    <input className="form-control" type="text" name="projectId" id="projectId" value={projectId} onChange={(e) => setProjectId(e.target.value)} readOnly={fieldPermissions?.projectId?.read} onKeyDown={fieldPermissions?.projectId?.read ? (e) => e.preventDefault() : undefined} />
+                    <input className={`form-control ${fieldPermissions?.projectId?.read ? "readonly-style" : ""}`} type="text" name="projectId" id="projectId" value={projectId} onChange={(e) => setProjectId(e.target.value)} onKeyDown={fieldPermissions?.projectId?.read ? (e) => e.preventDefault() : undefined} />
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
             {
-              (fieldPermissions?.type?.show) ? (
+              (fieldPermissions?.type?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Project Type <span className="text-danger">*</span></label>
-                    <select className="form-select" name="type" value={selectedProjectType} onChange={(e) => setSelectedProjectType(e.target.value)} disabled={fieldPermissions?.type?.read} onKeyDown={fieldPermissions?.type?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.type?.read ? "readonly-style" : ""}`} name="type" value={selectedProjectType} onChange={(e) => setSelectedProjectType(e.target.value)} onKeyDown={fieldPermissions?.type?.read ? (e) => e.preventDefault() : undefined}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         projectType?.map((p) => (
@@ -347,16 +343,14 @@ const EditProject = () => {
                     </select>
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
             {
-              (fieldPermissions?.customer?.show) ? (
+              (fieldPermissions?.customer?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Customer <span className="text-danger">*</span></label>
-                    <select className="form-select" name="customer" value={selectedCustomer} onChange={(e) => setSelectedCustomer(e.target.value)} disabled={fieldPermissions?.customer?.read} onKeyDown={fieldPermissions?.customer?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.customer?.read ? "readonly-style" : ""}`} name="customer" value={selectedCustomer} onChange={(e) => setSelectedCustomer(e.target.value)} onKeyDown={fieldPermissions?.customer?.read ? (e) => e.preventDefault() : undefined}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         customer?.map((c) => (
@@ -366,16 +360,14 @@ const EditProject = () => {
                     </select>
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
             {
-              (fieldPermissions?.category?.show) ? (
+              (fieldPermissions?.category?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Category <span className="text-danger">*</span></label>
-                    <select className="form-select" name="category" value={selectedProjectCategory} onChange={(e) => setSelectedProjectCategory(e.target.value)} disabled={fieldPermissions?.category?.read} onKeyDown={fieldPermissions?.category?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.category?.read ? "readonly-style" : ""}`} name="category" value={selectedProjectCategory} onChange={(e) => setSelectedProjectCategory(e.target.value)} onKeyDown={fieldPermissions?.category?.read ? (e) => e.preventDefault() : undefined}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         projectCategory?.map((p) => (
@@ -385,16 +377,14 @@ const EditProject = () => {
                     </select>
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
             {
-              (fieldPermissions?.timing?.show) ? (
+              (fieldPermissions?.timing?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Project Timing  <span className="text-danger">*</span></label>
-                    <select className="form-select" name="timing" value={selectedProjectTiming} onChange={(e) => setSelectedProjectTiming(e.target.value)} disabled={fieldPermissions?.timing?.read} onKeyDown={fieldPermissions?.timing?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.timing?.read ? "readonly-style" : ""}`} name="timing" value={selectedProjectTiming} onChange={(e) => setSelectedProjectTiming(e.target.value)} onKeyDown={fieldPermissions?.timing?.read ? (e) => e.preventDefault() : undefined}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         projectTiming?.map((p) => (
@@ -404,28 +394,24 @@ const EditProject = () => {
                     </select>
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
             {
-              (fieldPermissions?.price?.show) ? (
+              (fieldPermissions?.price?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="price">Price <span className="text-danger">*</span></label>
-                    <input className="form-control" type="text" name="price" id="price" value={price} onChange={(e) => setPrice(e.target.value)} readOnly={fieldPermissions?.price?.read} onKeyDown={fieldPermissions?.price?.read ? (e) => e.preventDefault() : undefined} />
+                    <input className={`form-control ${fieldPermissions?.price?.read ? "readonly-style" : ""}`} type="text" name="price" id="price" value={price} onChange={(e) => setPrice(e.target.value)} onKeyDown={fieldPermissions?.price?.read ? (e) => e.preventDefault() : undefined} />
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
             {
-              (fieldPermissions?.priority?.show) ? (
+              (fieldPermissions?.priority?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Priority <span className="text-danger">*</span></label>
-                    <select className="form-select" name="status" value={priority} onChange={(e) => setPriority(e.target.value)} disabled={fieldPermissions?.priority?.read} onKeyDown={fieldPermissions?.priority?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.priority?.read ? "readonly-style" : ""}`} name="status" value={priority} onChange={(e) => setPriority(e.target.value)} onKeyDown={fieldPermissions?.priority?.read ? (e) => e.preventDefault() : undefined}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       <option>High</option>
                       <option>Medium</option>
@@ -433,16 +419,31 @@ const EditProject = () => {
                     </select>
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
             {
-              (fieldPermissions?.responsible?.show) ? (
+              (fieldPermissions?.status?.show) && (
+                <div className="col-md-6">
+                  <div className="form-wrap">
+                    <label className="col-form-label">Status <span className="text-danger">*</span></label>
+                    <select className={`form-select ${fieldPermissions?.status?.read ? "readonly-style" : ""}`} name="status" value={selectedProjectStatus} onChange={(e) => setSelectedProjectStatus(e.target.value)} onKeyDown={fieldPermissions?.status?.read ? (e) => e.preventDefault() : undefined}>
+                      <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
+                      {
+                        projectStatus?.map((p) => (
+                          <option key={p?._id} value={p?._id}>{p?.status}</option>
+                        ))
+                      }
+                    </select>
+                  </div>
+                </div>
+              )
+            }
+            {
+              (fieldPermissions?.responsible?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Responsible Persons <span className="text-danger">*</span></label>
-                    <select className="form-select" name="responsible" value="" onChange={handleSelectChangeResponsible} disabled={fieldPermissions?.responsible?.read} onKeyDown={fieldPermissions?.responsible?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.responsible?.read ? "readonly-style" : ""}`} name="responsible" value="" onChange={handleSelectChangeResponsible} onKeyDown={fieldPermissions?.responsible?.read ? (e) => e.preventDefault() : undefined}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         teamMember?.map((t) => (
@@ -455,23 +456,21 @@ const EditProject = () => {
                         selectedResponsible?.map((responsible, index) => (
                           <span key={index} className="selected-item">
                             {teamMember?.find((t) => t?._id === responsible)?.name}
-                            <button type="button" className="remove-btn" onClick={() => handleRemoveResponsible(responsible)} disabled={fieldPermissions?.responsible?.read} onKeyDown={fieldPermissions?.response?.read ? (e) => e.preventDefault() : undefined}>{"x"}</button>
+                            {(fieldPermissions?.responsible?.read) ? (null) : (<button type="button" className="remove-btn" onClick={() => handleRemoveResponsible(responsible)} onKeyDown={fieldPermissions?.responsible?.read ? (e) => e.preventDefault() : undefined}>{"x"}</button>)}
                           </span>
                         ))
                       }
                     </div>
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
             {
-              (fieldPermissions?.leader?.show) ? (
+              (fieldPermissions?.leader?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Team Leader  <span className="text-danger">*</span></label>
-                    <select className="form-select" name="leader" value="" onChange={handleSelectChangeLeader} disabled={fieldPermissions?.leader?.read} onKeyDown={fieldPermissions?.leader?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.leader?.read ? "readonly-style" : ""}`} name="leader" value="" onChange={handleSelectChangeLeader} onKeyDown={fieldPermissions?.leader?.read ? (e) => e.preventDefault() : undefined}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         teamMember?.map((t) => (
@@ -484,69 +483,44 @@ const EditProject = () => {
                         selectedLeader?.map((leader, index) => (
                           <span key={index} className="selected-item">
                             {teamMember?.find((t) => t?._id === leader)?.name}
-                            <button type="button" className="remove-btn" onClick={() => handleRemoveLeader(leader)} disabled={fieldPermissions?.leader?.read} onKeyDown={fieldPermissions?.leader?.read ? (e) => e.preventDefault() : undefined}>{"x"}</button>
+                            {(fieldPermissions?.leader?.read) ? ("") : (<button type="button" className="remove-btn" onClick={() => handleRemoveLeader(leader)} onKeyDown={fieldPermissions?.leader?.read ? (e) => e.preventDefault() : undefined}>{"x"}</button>)}
                           </span>
                         ))
                       }
                     </div>
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
             {
-              (fieldPermissions?.start?.show) ? (
+              (fieldPermissions?.start?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="start">Start Date <span className="text-danger">*</span></label>
-                    <input type="text" className="form-control" name="start" id="start" value={start} onChange={(e) => setStart(e.target.value)} readOnly={fieldPermissions?.start?.read} onKeyDown={fieldPermissions?.start?.read ? (e) => e.preventDefault() : undefined} />
+                    <input type="text" className={`form-control ${fieldPermissions?.start?.read ? "readonly-style" : ""}`} name="start" id="start" value={start} onChange={(e) => setStart(e.target.value)} onKeyDown={fieldPermissions?.start?.read ? (e) => e.preventDefault() : undefined} />
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
             {
-              (fieldPermissions?.due?.show) ? (
+              (fieldPermissions?.due?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="due">Due Date <span className="text-danger">*</span></label>
-                    <input type="text" className="form-control" name="due" id="due" value={due} onChange={(e) => setDue(e.target.value)} readOnly={fieldPermissions?.due?.read} onKeyDown={fieldPermissions?.due?.read ? (e) => e.preventDefault() : undefined} />
+                    <input type="text" className={`form-control ${fieldPermissions?.due?.read ? "readonly-style" : ""}`} name="due" id="due" value={due} onChange={(e) => setDue(e.target.value)} onKeyDown={fieldPermissions?.due?.read ? (e) => e.preventDefault() : undefined} />
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
             {
-              (fieldPermissions?.status?.show) ? (
-                <div className="col-md-6">
-                  <div className="form-wrap">
-                    <label className="col-form-label">Status <span className="text-danger">*</span></label>
-                    <select className="form-select" name="status" value={selectedProjectStatus} onChange={(e) => setSelectedProjectStatus(e.target.value)} disabled={fieldPermissions?.status?.read} onKeyDown={fieldPermissions?.status?.read ? (e) => e.preventDefault() : undefined}>
-                      <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                      {
-                        projectStatus?.map((p) => (
-                          <option key={p?._id} value={p?._id}>{p?.status}</option>
-                        ))
-                      }
-                    </select>
-                  </div>
-                </div>
-              ) : (
-                null
-              )
-            }
-            {
-              (fieldPermissions?.description?.show) ? (
+              (fieldPermissions?.description?.show) && (
                 <div className="col-md-12">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="description">
                       Description <span className="text-danger">*</span>
                     </label>
                     <ReactQuill
-                      className="custom-quill-editor"
+                      className={`custom-quill-editor ${fieldPermissions?.description?.read ? "readonly-style" : ""}`}
                       value={description}
                       onChange={setDescription}
                       modules={{
@@ -564,15 +538,12 @@ const EditProject = () => {
                         'header', 'font', 'size',
                         'bold', 'italic', 'underline', 'strike', 'blockquote',
                         'list', 'bullet', 'indent',
-                        'link', 'image', 'video'
+                        'link', 'image', 'video',
                       ]}
                       placeholder="Write the description here..."
-                      row={6}
                     />
                   </div>
                 </div>
-              ) : (
-                null
               )
             }
           </div>
