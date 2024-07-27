@@ -6,6 +6,7 @@ import { useState } from "react";
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { team, isLoggedIn } = useAuth();
+  const permissions = team?.role?.permissions?.project;
   const navigate = useNavigate();
 
   return (
@@ -121,17 +122,21 @@ const Header = () => {
                             </Link>
                           </li>
                           <li>
-                            <Link to="/add-project">
-                              <div className="menu-details">
-                                <span className="menu-list-icon bg-danger">
-                                  <i className="ti ti-atom-2" />
-                                </span>
-                                <div className="menu-details-content">
-                                  <p>Projects</p>
-                                  <span>Add New Project</span>
-                                </div>
-                              </div>
-                            </Link>
+                            {
+                              (permissions?.create) && (
+                                <Link to="/add-project">
+                                  <div className="menu-details">
+                                    <span className="menu-list-icon bg-danger">
+                                      <i className="ti ti-atom-2" />
+                                    </span>
+                                    <div className="menu-details-content">
+                                      <p>Projects</p>
+                                      <span>Add New Project</span>
+                                    </div>
+                                  </div>
+                                </Link>
+                              )
+                            }
                           </li>
                         </ul>
                       </div>
@@ -325,7 +330,7 @@ const Header = () => {
                     isLoggedIn ? (
                       <>
                         <Link className="dropdown-item" to="#">
-                          <i className="ti ti-user" /> {team?.name}
+                          <i className="ti ti-user" /> {team?.name}{", "}{team?.role?.name}
                         </Link>
                       </>
                     ) : (
@@ -360,7 +365,7 @@ const Header = () => {
               isLoggedIn ? (
                 <>
                   <Link className="dropdown-item" to="#">
-                    <i className="ti ti-user" /> {team?.name}
+                    <i className="ti ti-user" /> {team?.name}{", "}{team?.role?.name}
                   </Link>
                 </>
               ) : (

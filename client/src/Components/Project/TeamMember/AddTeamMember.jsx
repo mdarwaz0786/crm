@@ -23,6 +23,7 @@ const AddTeamMember = () => {
   const [selectedReportingTo, setSelectedReportingTo] = useState([]);
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
+  const permissions = team?.role?.permissions?.team;
 
   const fetchAllTeamMember = async () => {
     try {
@@ -73,10 +74,12 @@ const AddTeamMember = () => {
   };
 
   useEffect(() => {
-    fetchAllTeamMember();
-    fetchAllDesignation();
-    fetchAllRole();
-  }, []);
+    if (!isLoading && team && permissions?.create) {
+      fetchAllTeamMember();
+      fetchAllDesignation();
+      fetchAllRole();
+    };
+  }, [isLoading, team, permissions?.create]);
 
   const formatDateToDDMMYYYY = (dateString) => {
     const date = new Date(dateString);
@@ -169,8 +172,8 @@ const AddTeamMember = () => {
     return <Preloader />;
   };
 
-  if (!team?.role?.permissions?.team?.create) {
-    return <Navigate to="/team-member" />;
+  if (!permissions?.create) {
+    return <Navigate to="/" />;
   };
 
   return (

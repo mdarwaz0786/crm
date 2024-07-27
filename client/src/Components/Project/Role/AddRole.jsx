@@ -10,6 +10,7 @@ import Preloader from "../../../Preloader.jsx";
 
 const AddRole = () => {
   const { validToken, team, isLoading } = useAuth();
+  const permission = team?.role?.permissions?.role;
   const [selectedMaster, setSelectedMaster] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -345,8 +346,8 @@ const AddRole = () => {
     return <Preloader />;
   };
 
-  if (!team?.role?.permissions?.role.create) {
-    return <Navigate to="/role" />;
+  if (!permission?.create) {
+    return <Navigate to="/" />;
   };
 
   return (

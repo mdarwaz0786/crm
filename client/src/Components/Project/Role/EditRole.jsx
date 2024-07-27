@@ -14,6 +14,7 @@ const EditRole = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { team, validToken, isLoading } = useAuth();
   const fieldPermissions = team?.role?.permissions?.role?.fields;
+  const permission = team?.role?.permissions?.role;
   const navigate = useNavigate();
   const { id } = useParams();
   const [name, setName] = useState("");
@@ -145,7 +146,7 @@ const EditRole = () => {
     const { name, checked, type } = e.target;
 
     // Prevent change if the checkbox is read only
-    if (team?.role?.permissions?.role?.fields?.masters?.read) {
+    if (fieldPermissions?.masters?.read) {
       e.preventDefault();
       return;
     };
@@ -168,7 +169,7 @@ const EditRole = () => {
     const { name, checked } = e.target;
 
     // Prevent change if the checkbox is read only
-    if (team?.role?.permissions?.role?.fields?.masters?.read) {
+    if (fieldPermissions?.masters?.read) {
       e.preventDefault();
       return;
     };
@@ -207,8 +208,10 @@ const EditRole = () => {
   };
 
   useEffect(() => {
-    fetchSingleRole(id);
-  }, [id]);
+    if (!isLoading && team && permission?.update && id) {
+      fetchSingleRole(id);
+    };
+  }, [id, isLoading, team, permission?.update]);
 
   const handleUpdate = async (e, id) => {
     e.preventDefault();
@@ -392,8 +395,8 @@ const EditRole = () => {
     return <Preloader />;
   };
 
-  if (!team?.role?.permissions?.role?.update) {
-    return <Navigate to="/role" />;
+  if (!permission?.update) {
+    return <Navigate to="/" />;
   };
 
   return (
@@ -407,7 +410,7 @@ const EditRole = () => {
         </div>
         <form onSubmit={(e) => handleUpdate(e, id)}>
           {
-            (fieldPermissions?.name?.show) ? (
+            (fieldPermissions?.name?.show) && (
               <div className="row mb-3">
                 <div className="col-md-12">
                   <div className="form-group">
@@ -420,18 +423,15 @@ const EditRole = () => {
                       name="name"
                       id="name"
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined}
+                      onChange={(e) => fieldPermissions?.name?.read ? null : setName(e.target.value)}
                     />
                   </div>
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.masters?.show) ? (
+            (fieldPermissions?.masters?.show) && (
               <div className="row">
                 {
                   Object.keys(permissionLabels).map((master) => (
@@ -446,7 +446,6 @@ const EditRole = () => {
                             name={`${master}.access`}
                             checked={permissions[master]?.access || false}
                             onChange={handleChange}
-                            onKeyDown={fieldPermissions?.masters?.read ? (e) => e.preventDefault() : undefined}
                           />
                           <label className="form-check-label" htmlFor={`${master}.access`} style={{ marginLeft: '5px' }}>
                             Access
@@ -462,7 +461,6 @@ const EditRole = () => {
                                 name={`${master}.${action}`}
                                 checked={permissions[master]?.[action] || false}
                                 onChange={handleChange}
-                                onKeyDown={fieldPermissions?.masters?.read ? (e) => e.preventDefault() : undefined}
                               />
                               <label className="form-check-label" htmlFor={`${master}.${action}`}>
                                 {action.charAt(0).toUpperCase() + action.slice(1)}
@@ -482,8 +480,6 @@ const EditRole = () => {
                   ))
                 }
               </div>
-            ) : (
-              null
             )
           }
           <div className="submit-button text-end">
@@ -518,7 +514,6 @@ const EditRole = () => {
                             name={`${field}.read`}
                             checked={permission.read}
                             onChange={handleFieldPermissionChange}
-                            onKeyDown={fieldPermissions?.masters?.read ? (e) => e.preventDefault() : undefined}
                           />
                           <label className="form-check-label" htmlFor={`${field}.read`}>Read Only</label>
                         </div>
@@ -530,7 +525,6 @@ const EditRole = () => {
                             name={`${field}.show`}
                             checked={permission.show}
                             onChange={handleFieldPermissionChange}
-                            onKeyDown={fieldPermissions?.masters?.read ? (e) => e.preventDefault() : undefined}
                           />
                           <label className="form-check-label" htmlFor={`${field}.show`}>Show</label>
                         </div>

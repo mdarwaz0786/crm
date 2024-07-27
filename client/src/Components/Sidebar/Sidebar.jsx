@@ -6,6 +6,7 @@ import { useState } from "react";
 
 const Sidebar = () => {
   const { team, isLoggedIn } = useAuth();
+  const permissions = team?.role?.permissions;
   const [active, setActive] = useState(null);
   const location = useLocation();
   const currentPath = location.pathname;
@@ -79,18 +80,50 @@ const Sidebar = () => {
               <li>
                 <ul>
                   <li className="submenu">
-                    <Link to="#" className={currentPath === "/customer" || currentPath === "/team-member" || currentPath === "/role" || currentPath === "/role" || currentPath === "/designation" || currentPath === "/project-type" || currentPath === "/project-status" || currentPath === "/project-category" || currentPath === "/project-timing" ? "active subdrop" : ""}>
+                    <Link to="#" className={currentPath === "/customer" || currentPath === "/edit-customer/:id" || currentPath === "/team-member" || currentPath === "/role" || currentPath === "/role" || currentPath === "/designation" || currentPath === "/project-type" || currentPath === "/project-status" || currentPath === "/project-category" || currentPath === "/project-timing" ? "active subdrop" : ""}>
                       <i className="ti ti-file-invoice" /><span>Masters</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      {(team?.role?.permissions?.customer?.access) ? (<li><Link to="/customer" className={active === "customer" || currentPath === "/customer" ? "active" : ""} id={isMobile && active === "customer" ? "mobile_btn" : ""} onClick={() => handleActive("customer")}>Customer</Link></li>) : (null)}
-                      {(team?.role?.permissions?.team?.access) ? (<li><Link to="/team-member" className={active === "teamMember" || currentPath === "/team-member" ? "active" : ""} id={isMobile && active === "teamMember" ? "mobile_btn" : ""} onClick={() => handleActive("teamMember")}>Team Member</Link></li>) : (null)}
-                      {(team?.role?.permissions?.role?.access) ? (<li><Link to="/role" className={active === "role" || currentPath === "/role" ? "active" : ""} id={isMobile && active === "role" ? "mobile_btn" : ""} onClick={() => handleActive("role")}>Role</Link></li>) : (null)}
-                      {(team?.role?.permissions?.designation?.access) ? (<li><Link to="/designation" className={active === "designation" || currentPath === "/designation" ? "active" : ""} id={isMobile && active === "designation" ? "mobile_btn" : ""} onClick={() => handleActive("designation")}>Designation</Link></li>) : (null)}
-                      {(team?.role?.permissions?.projectType?.access) ? (<li><Link to="/project-type" className={active === "projectType" || currentPath === "/project-type" ? "active" : ""} id={isMobile && active === "projectType" ? "mobile_btn" : ""} onClick={() => handleActive("projectType")}>Project Type</Link></li>) : (null)}
-                      {(team?.role?.permissions?.projectStatus?.access) ? (<li><Link to="/project-status" className={active === "projectStatus" || currentPath === "/project-status" ? "active" : ""} id={isMobile && active === "projectStatus" ? "mobile_btn" : ""} onClick={() => handleActive("projectStatus")}>Project Status</Link></li>) : (null)}
-                      {(team?.role?.permissions?.projectCategory?.access) ? (<li><Link to="/project-category" className={active === "projectCategory" || currentPath === "/project-category" ? "active" : ""} id={isMobile && active === "projectCategory" ? "mobile_btn" : ""} onClick={() => handleActive("projectCategory")}>Project Category</Link></li>) : (null)}
-                      {(team?.role?.permissions?.projectTiming?.access) ? (<li><Link to="/project-timing" className={active === "projectTiming" || currentPath === "/project-timing" ? "active" : ""} id={isMobile && active === "projectTiming" ? "mobile_btn" : ""} onClick={() => handleActive("projectTiming")}>Project Timing</Link></li>) : (null)}
+                      {
+                        (permissions?.customer?.access) && (
+                          <li><Link to="/customer" className={active === "customer" || currentPath === "/customer" ? "active" : ""} id={isMobile && active === "customer" ? "mobile_btn" : ""} onClick={() => handleActive("customer")}>Customer</Link></li>
+                        )
+                      }
+                      {
+                        (permissions?.team?.access) && (
+                          <li><Link to="/team-member" className={active === "teamMember" || currentPath === "/team-member" ? "active" : ""} id={isMobile && active === "teamMember" ? "mobile_btn" : ""} onClick={() => handleActive("teamMember")}>Team Member</Link></li>
+                        )
+                      }
+                      {
+                        (permissions?.role?.access) && (
+                          <li><Link to="/role" className={active === "role" || currentPath === "/role" ? "active" : ""} id={isMobile && active === "role" ? "mobile_btn" : ""} onClick={() => handleActive("role")}>Role</Link></li>
+                        )
+                      }
+                      {
+                        (permissions?.designation?.access) && (
+                          <li><Link to="/designation" className={active === "designation" || currentPath === "/designation" ? "active" : ""} id={isMobile && active === "designation" ? "mobile_btn" : ""} onClick={() => handleActive("designation")}>Designation</Link></li>
+                        )
+                      }
+                      {
+                        (permissions?.projectType?.access) && (
+                          <li><Link to="/project-type" className={active === "projectType" || currentPath === "/project-type" ? "active" : ""} id={isMobile && active === "projectType" ? "mobile_btn" : ""} onClick={() => handleActive("projectType")}>Project Type</Link></li>
+                        )
+                      }
+                      {
+                        (permissions?.projectStatus?.access) && (
+                          <li><Link to="/project-status" className={active === "projectStatus" || currentPath === "/project-status" ? "active" : ""} id={isMobile && active === "projectStatus" ? "mobile_btn" : ""} onClick={() => handleActive("projectStatus")}>Project Status</Link></li>
+                        )
+                      }
+                      {
+                        (permissions?.projectCategory?.access) && (
+                          <li><Link to="/project-category" className={active === "projectCategory" || currentPath === "/project-category" ? "active" : ""} id={isMobile && active === "projectCategory" ? "mobile_btn" : ""} onClick={() => handleActive("projectCategory")}>Project Category</Link></li>
+                        )
+                      }
+                      {
+                        (permissions?.projectTiming?.access) && (
+                          <li><Link to="/project-timing" className={active === "projectTiming" || currentPath === "/project-timing" ? "active" : ""} id={isMobile && active === "projectTiming" ? "mobile_btn" : ""} onClick={() => handleActive("projectTiming")}>Project Timing</Link></li>
+                        )
+                      }
                     </ul>
                   </li>
                 </ul>
@@ -98,7 +131,11 @@ const Sidebar = () => {
               <li>
                 <h6 className="submenu-hdr">CRM</h6>
                 <ul>
-                  {(team?.role?.permissions?.project?.access) ? (<li><Link to="/project" className={active === "projects" || currentPath === "/project" ? "active" : ""} id={isMobile && active === "projects" ? "mobile_btn" : ""} onClick={() => handleActive("projects")}><i className="ti ti-atom-2" /><span>Projects</span></Link></li>) : (null)}
+                  {
+                    (permissions?.project?.access) && (
+                      <li><Link to="/project" className={active === "projects" || currentPath === "/project" ? "active" : ""} id={isMobile && active === "projects" ? "mobile_btn" : ""} onClick={() => handleActive("projects")}><i className="ti ti-atom-2" /><span>Projects</span></Link></li>
+                    )
+                  }
                   <li>
                     <Link to="#"><i className="ti ti-user-up" /><span>Contacts</span></Link>
                   </li>

@@ -181,7 +181,7 @@ const ProjectType = () => {
                         <div className="export-list text-sm-end">
                           <ul>
                             {
-                              (permissions?.export) ? (
+                              (permissions?.export) && (
                                 <li>
                                   <div className="export-dropdwon">
                                     <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
@@ -200,20 +200,16 @@ const ProjectType = () => {
                                     </div>
                                   </div>
                                 </li>
-                              ) : (
-                                null
                               )
                             }
                             {
-                              (permissions?.create) ? (
+                              (permissions?.create) && (
                                 <li>
                                   <Link to="/add-project-type" className="btn btn-primary">
                                     <i className="ti ti-square-rounded-plus" />
                                     Add New Project Type
                                   </Link>
                                 </li>
-                              ) : (
-                                null
                               )
                             }
                           </ul>
@@ -330,17 +326,13 @@ const ProjectType = () => {
                           </th>
                           <th>#</th>
                           {
-                            (filedPermissions?.name?.show) ? (
+                            (filedPermissions?.name?.show) && (
                               <th>Name</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (filedPermissions?.description?.show) ? (
+                            (filedPermissions?.description?.show) && (
                               <th>Description</th>
-                            ) : (
-                              null
                             )
                           }
                           <th>Action</th>
@@ -355,17 +347,13 @@ const ProjectType = () => {
                               </td>
                               <td> {(filters.page - 1) * filters.limit + index + 1}</td>
                               {
-                                (filedPermissions?.name?.show) ? (
+                                (filedPermissions?.name?.show) && (
                                   <td>{d?.name}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (filedPermissions?.description?.show) ? (
+                                (filedPermissions?.description?.show) && (
                                   <td>{d?.description}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               <td>
@@ -375,23 +363,19 @@ const ProjectType = () => {
                                   </Link>
                                   <div className="dropdown-menu dropdown-menu-right">
                                     {
-                                      (permissions?.update) ? (
+                                      (permissions?.update) && (
                                         <Link to={`/edit-project-type/${d?._id}`} className="dropdown-item">
                                           <i className="ti ti-edit text-blue"></i>
                                           Update
                                         </Link>
-                                      ) : (
-                                        null
                                       )
                                     }
                                     {
-                                      (permissions?.delete) ? (
+                                      (permissions?.delete) && (
                                         <Link to="#" className="dropdown-item" onClick={() => { handleDelete(d?._id) }}>
                                           <i className="ti ti-trash text-danger"></i>
                                           Delete
                                         </Link>
-                                      ) : (
-                                        null
                                       )
                                     }
                                   </div>

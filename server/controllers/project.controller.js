@@ -73,6 +73,13 @@ export const fetchAllProject = async (req, res) => {
     let filter = {};
     let sort = {};
 
+    // Add filter to include project where the team member is either a leader or responsible
+    const teamId = req.team._id;
+    filter.$or = [
+      { leader: teamId },
+      { responsible: teamId },
+    ];
+
     // Handle universal searching across all fields
     if (req.query.search) {
       const searchRegex = new RegExp(req.query.search, 'i');
@@ -132,6 +139,7 @@ export const fetchAllProject = async (req, res) => {
     } else {
       sort = { createdAt: -1 };
     };
+
 
     // Handle pagination
     const page = parseInt(req.query.page) || 1;

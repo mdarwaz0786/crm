@@ -182,7 +182,7 @@ const TeamMember = () => {
                         <div className="export-list text-sm-end">
                           <ul>
                             {
-                              (permissions?.export) ? (
+                              (permissions?.export) && (
                                 <li>
                                   <div className="export-dropdwon">
                                     <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
@@ -201,20 +201,16 @@ const TeamMember = () => {
                                     </div>
                                   </div>
                                 </li>
-                              ) : (
-                                null
                               )
                             }
                             {
-                              (permissions?.create) ? (
+                              (permissions?.create) && (
                                 <li>
                                   <Link to="/add-team-member" className="btn btn-primary">
                                     <i className="ti ti-square-rounded-plus" />
                                     Add New Team Member
                                   </Link>
                                 </li>
-                              ) : (
-                                null
                               )
                             }
                           </ul>
@@ -331,45 +327,33 @@ const TeamMember = () => {
                           </th>
                           <th>#</th>
                           {
-                            (fieldPermissions?.name?.show) ? (
+                            (fieldPermissions?.name?.show) && (
                               <th>Name</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (fieldPermissions?.email?.show) ? (
+                            (fieldPermissions?.email?.show) && (
                               <th>Email</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (fieldPermissions?.mobile?.show) ? (
+                            (fieldPermissions?.mobile?.show) && (
                               <th>Mobile</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (fieldPermissions?.role?.show) ? (
+                            (fieldPermissions?.role?.show) && (
                               <th>Role</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (fieldPermissions?.designation?.show) ? (
+                            (fieldPermissions?.designation?.show) && (
                               <th>Designation</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (fieldPermissions?.joining?.show) ? (
+                            (fieldPermissions?.joining?.show) && (
                               <th>Joining Date</th>
-                            ) : (
-                              null
                             )
                           }
                           <th>Action</th>
@@ -384,45 +368,33 @@ const TeamMember = () => {
                               </td>
                               <td> {(filters.page - 1) * filters.limit + index + 1}</td>
                               {
-                                (fieldPermissions?.name?.show) ? (
+                                (fieldPermissions?.name?.show) && (
                                   <td>{d?.name}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (fieldPermissions?.email?.show) ? (
+                                (fieldPermissions?.email?.show) && (
                                   <td>{d?.email}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (fieldPermissions?.mobile?.show) ? (
+                                (fieldPermissions?.mobile?.show) && (
                                   <td>{d?.mobile}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (fieldPermissions?.role?.show) ? (
+                                (fieldPermissions?.role?.show) && (
                                   <td>{d?.role?.name}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (fieldPermissions?.designation?.show) ? (
+                                (fieldPermissions?.designation?.show) && (
                                   <td>{d?.designation?.name}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (fieldPermissions?.joining?.show) ? (
+                                (fieldPermissions?.joining?.show) && (
                                   <td>{d?.joining}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               <td>
@@ -432,23 +404,19 @@ const TeamMember = () => {
                                   </Link>
                                   <div className="dropdown-menu dropdown-menu-right">
                                     {
-                                      (permissions?.update) ? (
+                                      (permissions?.update) && (
                                         <Link to={`/edit-team-member/${d?._id}`} className="dropdown-item" >
                                           <i className="ti ti-edit text-blue"></i>
                                           Update
                                         </Link>
-                                      ) : (
-                                        null
                                       )
                                     }
                                     {
-                                      (permissions?.delete) ? (
+                                      (permissions?.delete) && (
                                         <Link to="#" className="dropdown-item" onClick={() => handleDelete(d?._id)}>
                                           <i className="ti ti-trash text-danger"></i>
                                           Delete
                                         </Link>
-                                      ) : (
-                                        null
                                       )
                                     }
                                   </div>

@@ -11,6 +11,7 @@ const AddProjectCategory = () => {
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
+  const permissions = team?.role?.permissions?.projectCategory;
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -41,8 +42,8 @@ const AddProjectCategory = () => {
     return <Preloader />;
   };
 
-  if (!team?.role?.permissions?.projectCategory?.create) {
-    return <Navigate to="/project-category" />;
+  if (!permissions?.create) {
+    return <Navigate to="/" />;
   };
 
   return (

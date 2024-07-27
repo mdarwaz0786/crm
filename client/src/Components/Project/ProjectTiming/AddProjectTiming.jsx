@@ -11,6 +11,7 @@ const AddProjectTiming = () => {
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
+  const permissions = team?.role?.permissions?.projectTiming;
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -41,8 +42,8 @@ const AddProjectTiming = () => {
     return <Preloader />;
   };
 
-  if (!team?.role?.permissions?.projectTiming?.create) {
-    return <Navigate to="/project-timing" />;
+  if (!permissions?.create) {
+    return <Navigate to="/" />;
   };
 
   return (

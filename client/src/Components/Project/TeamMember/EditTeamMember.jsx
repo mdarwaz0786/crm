@@ -25,6 +25,7 @@ const EditTeamMember = () => {
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
   const fieldPermissions = team?.role?.permissions?.team?.fields;
+  const permissions = team?.role?.permissions?.team;
 
   const fetchAllTeamMember = async () => {
     try {
@@ -75,10 +76,12 @@ const EditTeamMember = () => {
   };
 
   useEffect(() => {
-    fetchAllTeamMember();
-    fetchAllDesignation();
-    fetchAllRole();
-  }, []);
+    if (!isLoading && team && permissions?.update) {
+      fetchAllTeamMember();
+      fetchAllDesignation();
+      fetchAllRole();
+    };
+  }, [isLoading, team, permissions?.update]);
 
   const fetchSingleData = async (id) => {
     try {
@@ -106,8 +109,10 @@ const EditTeamMember = () => {
   };
 
   useEffect(() => {
-    fetchSingleData(id);
-  }, [id]);
+    if (!isLoading && team && permissions?.update && id) {
+      fetchSingleData(id);
+    };
+  }, [id, isLoading, team, permissions?.update]);
 
   const handleUpdate = async (e, id) => {
     e.preventDefault();
@@ -136,16 +141,24 @@ const EditTeamMember = () => {
       updateData.dob = dob;
     };
 
-    if (fieldPermissions?.role?.show && !fieldPermissions?.role?.read) {
-      updateData.role = selectedRole;
-    };
-
     if (fieldPermissions?.designation?.show && !fieldPermissions?.designation?.read) {
       updateData.designation = selectedDesignation;
     };
 
+    if (fieldPermissions?.username?.show && !fieldPermissions?.username?.read) {
+      updateData.username = username;
+    };
+
+    if (fieldPermissions?.password?.show && !fieldPermissions?.password?.read) {
+      updateData.password = password;
+    };
+
     if (fieldPermissions?.reportingTo?.show && !fieldPermissions?.reportingTo?.read) {
       updateData.reportingTo = selectedReportingTo;
+    };
+
+    if (fieldPermissions?.role?.show && !fieldPermissions?.role?.read) {
+      updateData.role = selectedRole;
     };
 
     e.preventDefault();
@@ -189,8 +202,8 @@ const EditTeamMember = () => {
     return <Preloader />;
   };
 
-  if (!team?.role?.permissions?.team?.update) {
-    return <Navigate to="/team-member" />;
+  if (!permissions?.update) {
+    return <Navigate to="/" />;
   };
 
   return (
@@ -202,71 +215,61 @@ const EditTeamMember = () => {
         </div>
         <div className="row">
           {
-            (fieldPermissions?.name?.show) ? (
+            (fieldPermissions?.name?.show) && (
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
-                  <input type="text" className={`form-control ${fieldPermissions?.name?.read ? "readonly-style" : ""}`} placeholder="Enter Name" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.name?.read ? "readonly-style" : ""}`} placeholder="Enter Name" name="name" id="name" value={name} onChange={(e) => fieldPermissions?.name?.read ? null : setName(e.target.value)} />
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.email?.show) ? (
+            (fieldPermissions?.email?.show) && (
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="email">Email <span className="text-danger">*</span></label>
-                  <input type="email" className={`form-control ${fieldPermissions?.email?.read ? "readonly-style" : ""}`} placeholder="Enter Email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={fieldPermissions?.email?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="email" className={`form-control ${fieldPermissions?.email?.read ? "readonly-style" : ""}`} placeholder="Enter Email" name="email" id="email" value={email} onChange={(e) => fieldPermissions?.email?.read ? null : setEmail(e.target.value)} />
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.mobile?.show) ? (
+            (fieldPermissions?.mobile?.show) && (
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="mobile">Mobile <span className="text-danger">*</span></label>
-                  <input type="text" className={`form-control ${fieldPermissions?.mobile?.read ? "readonly-style" : ""}`} placeholder="Enter Mobile Number" name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} onKeyDown={fieldPermissions?.mobile?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.mobile?.read ? "readonly-style" : ""}`} placeholder="Enter Mobile Number" name="mobile" id="mobile" value={mobile} onChange={(e) => fieldPermissions?.mobile?.read ? null : setMobile(e.target.value)} />
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.joining?.show) ? (
+            (fieldPermissions?.joining?.show) && (
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="joining">Joining Date <span className="text-danger">*</span></label>
-                  <input type="text" className={`form-control ${fieldPermissions?.joining?.read ? "readonly-style" : ""}`} name="joining" id="joining" value={joining} onChange={(e) => setJoining(e.target.value)} onKeyDown={fieldPermissions?.joining?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.joining?.read ? "readonly-style" : ""}`} name="joining" id="joining" value={joining} onChange={(e) => fieldPermissions?.joining?.read ? null : setJoining(e.target.value)} />
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.dob?.show) ? (
+            (fieldPermissions?.dob?.show) && (
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="dob">Date of Birth <span className="text-danger">*</span></label>
-                  <input type="text" className={`form-control ${fieldPermissions?.dob?.read ? "readonly-style" : ""}`} name="dob" id="dob" value={dob} onChange={(e) => setDob(e.target.value)} onKeyDown={fieldPermissions?.dob?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.dob?.read ? "readonly-style" : ""}`} name="dob" id="dob" value={dob} onChange={(e) => fieldPermissions?.dob?.read ? null : setDob(e.target.value)} />
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.designation?.show) ? (
+            (fieldPermissions?.designation?.show) && (
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label">Designation <span className="text-danger">*</span></label>
-                  <select className={`form-select ${fieldPermissions?.designation?.read ? "readonly-style" : ""}`} name="designation" value={selectedDesignation} onChange={(e) => setSelectedDesignation(e.target.value)} onKeyDown={fieldPermissions?.designation?.read ? (e) => e.preventDefault() : undefined}>
+                  <select className={`form-select ${fieldPermissions?.designation?.read ? "readonly-style" : ""}`} name="designation" value={selectedDesignation} onChange={(e) => fieldPermissions?.designation?.read ? null : setSelectedDesignation(e.target.value)} >
                     <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                     {
                       designation?.map((d) => (
@@ -276,40 +279,34 @@ const EditTeamMember = () => {
                   </select>
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.username?.show) ? (
+            (fieldPermissions?.username?.show) && (
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="username">User Name <span className="text-danger">*</span></label>
-                  <input type="text" className={`form-control ${fieldPermissions?.username?.read ? "readonly-style" : ""}`} name="username" id="username" value={username} onChange={(e) => setUsername(e.target.value)} onKeyDown={fieldPermissions?.username?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.username?.read ? "readonly-style" : ""}`} name="username" id="username" value={username} onChange={(e) => fieldPermissions?.username?.read ? null : setUsername(e.target.value)} />
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.password?.show) ? (
+            (fieldPermissions?.password?.show) && (
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="password">Password<span className="text-danger">*</span></label>
-                  <input type="text" className={`form-control ${fieldPermissions?.password?.read ? "readonly-style" : ""}`} name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={fieldPermissions?.password?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.password?.read ? "readonly-style" : ""}`} name="password" id="password" value={password} onChange={(e) => fieldPermissions?.password?.read ? null : setPassword(e.target.value)} />
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.reportingTo?.show) ? (
+            (fieldPermissions?.reportingTo?.show) && (
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label">Reporting To <span className="text-danger">*</span></label>
-                  <select className={`form-select ${fieldPermissions?.reportingTo?.read ? "readonly-style" : ""}`} name="leader" value="" onChange={handleSelectChange} onKeyDown={fieldPermissions?.reportingTo?.read ? (e) => e.preventDefault() : undefined}>
+                  <select className={`form-select ${fieldPermissions?.reportingTo?.read ? "readonly-style" : ""}`} name="leader" value="" onChange={(e) => fieldPermissions?.reportingTo?.read ? null : handleSelectChange(e)} >
                     <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                     {
                       reportingTo?.map((r) => (
@@ -322,23 +319,21 @@ const EditTeamMember = () => {
                       selectedReportingTo?.map((reporting, index) => (
                         <span key={index} className="selected-item">
                           {reportingTo?.find((r) => r?._id === reporting)?.name}
-                          {(fieldPermissions?.reportingTo?.read) ? ("") : (<button type="button" className="remove-btn" onClick={() => handleRemove(reporting)} onKeyDown={fieldPermissions?.reportingTo?.read ? (e) => e.preventDefault() : undefined}>{"x"}</button>)}
+                          {(fieldPermissions?.reportingTo?.read) ? (null) : (<button type="button" className="remove-btn" onClick={() => fieldPermissions?.reportingTo?.read ? null : handleRemove(reporting)} >{"x"}</button>)}
                         </span>
                       ))
                     }
                   </div>
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.role?.show) ? (
+            (fieldPermissions?.role?.show) && (
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label">Role <span className="text-danger">*</span></label>
-                  <select className={`form-select ${fieldPermissions?.role?.read ? "readonly-style" : ""}`} name="role" value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)} onKeyDown={fieldPermissions?.role?.read ? (e) => e.preventDefault() : undefined}>
+                  <select className={`form-select ${fieldPermissions?.role?.read ? "readonly-style" : ""}`} name="role" value={selectedRole} onChange={(e) => fieldPermissions?.role?.read ? null : setSelectedRole(e.target.value)} >
                     <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                     {
                       role?.map((r) => (
@@ -348,8 +343,6 @@ const EditTeamMember = () => {
                   </select>
                 </div>
               </div>
-            ) : (
-              null
             )
           }
         </div>

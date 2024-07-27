@@ -11,6 +11,7 @@ const AddProjectStatus = () => {
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
+  const permissions = team?.role?.permissions?.projectStatus;
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -41,8 +42,8 @@ const AddProjectStatus = () => {
     return <Preloader />;
   };
 
-  if (!team?.role?.permissions?.projectStatus?.create) {
-    return <Navigate to="/project-status" />;
+  if (!permissions?.create) {
+    return <Navigate to="/" />;
   };
 
   return (

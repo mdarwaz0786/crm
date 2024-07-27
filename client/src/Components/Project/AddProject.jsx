@@ -33,6 +33,7 @@ const AddProject = () => {
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
   const { team, validToken, isLoading } = useAuth();
+  const permissions = team?.role?.permissions?.project;
 
   const fetchAllCustomer = async () => {
     try {
@@ -131,13 +132,15 @@ const AddProject = () => {
   };
 
   useEffect(() => {
-    fetchAllCustomer();
-    fetchAllProjectCatgory();
-    fetchAllProjectType();
-    fetchAllProjectStatus();
-    fetchAllTeamMember();
-    fetchAllProjectTiming();
-  }, []);
+    if (!isLoading && team && permissions?.create) {
+      fetchAllCustomer();
+      fetchAllProjectCatgory();
+      fetchAllProjectType();
+      fetchAllProjectStatus();
+      fetchAllTeamMember();
+      fetchAllProjectTiming();
+    };
+  }, [isLoading, team, permissions?.create]);
 
   const formatDateToDDMMYYYY = (dateString) => {
     const date = new Date(dateString);
@@ -284,8 +287,8 @@ const AddProject = () => {
     return <Preloader />;
   };
 
-  if (!team?.role?.permissions?.project?.create) {
-    return <Navigate to="/project" />;
+  if (!permissions?.create) {
+    return <Navigate to="/" />;
   };
 
   return (

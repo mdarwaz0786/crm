@@ -34,6 +34,8 @@ const EditProject = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { team, validToken, isLoading } = useAuth();
+  const fieldPermissions = team?.role?.permissions?.project?.fields;
+  const permissions = team?.role?.permissions?.project;
 
   const fetchAllCustomer = async () => {
     try {
@@ -132,13 +134,15 @@ const EditProject = () => {
   };
 
   useEffect(() => {
-    fetchAllCustomer();
-    fetchAllProjectCatgory();
-    fetchAllProjectType();
-    fetchAllProjectStatus();
-    fetchAllTeamMember();
-    fetchAllProjectTiming();
-  }, []);
+    if (!isLoading && team && permissions?.update) {
+      fetchAllCustomer();
+      fetchAllProjectCatgory();
+      fetchAllProjectType();
+      fetchAllProjectStatus();
+      fetchAllTeamMember();
+      fetchAllProjectTiming();
+    };
+  }, [isLoading, team, permissions?.update]);
 
   const fetchSingleProject = async (id) => {
     try {
@@ -170,15 +174,16 @@ const EditProject = () => {
   };
 
   useEffect(() => {
-    fetchSingleProject(id);
-  }, [id]);
-
-  // Create update object
-  const updateData = {};
-  const fieldPermissions = team?.role?.permissions?.project?.fields;
+    if (!isLoading && team && permissions?.update && id) {
+      fetchSingleProject(id);
+    };
+  }, [isLoading, team, permissions?.update, id]);
 
   const handleUpdate = async (e, id) => {
     e.preventDefault();
+
+    // Create update object
+    const updateData = {};
 
     // Conditionally include fields based on fieldPermissions
     if (fieldPermissions?.name?.show && !fieldPermissions?.name?.read) {
@@ -295,8 +300,8 @@ const EditProject = () => {
     return <Preloader />;
   };
 
-  if (!team?.role?.permissions?.project?.update) {
-    return <Navigate to="/project" />;
+  if (!permissions?.update) {
+    return <Navigate to="/" />;
   };
 
   return (
@@ -310,10 +315,10 @@ const EditProject = () => {
           <div className="row">
             {
               (fieldPermissions?.name?.show) && (
-                <div className="col-md-6">
+                <div className="col-md-12">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="name">Project Name <span className="text-danger">*</span></label>
-                    <input type="text" className={`form-control ${fieldPermissions?.name?.read ? "readonly-style" : ""}`} name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
+                    <input type="text" className={`form-control ${fieldPermissions?.name?.read ? "readonly-style" : ""}`} name="name" id="name" value={name} onChange={(e) => fieldPermissions?.name?.read ? null : setName(e.target.value)} />
                   </div>
                 </div>
               )
@@ -323,7 +328,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="projectId">Project ID<span className="text-danger"> *</span></label>
-                    <input className={`form-control ${fieldPermissions?.projectId?.read ? "readonly-style" : ""}`} type="text" name="projectId" id="projectId" value={projectId} onChange={(e) => setProjectId(e.target.value)} onKeyDown={fieldPermissions?.projectId?.read ? (e) => e.preventDefault() : undefined} />
+                    <input type="text" className={`form-control ${fieldPermissions?.projectId?.read ? "readonly-style" : ""}`} name="projectId" id="projectId" value={projectId} onChange={(e) => fieldPermissions?.projectId?.read ? null : setProjectId(e.target.value)} />
                   </div>
                 </div>
               )
@@ -333,7 +338,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Project Type <span className="text-danger">*</span></label>
-                    <select className={`form-select ${fieldPermissions?.type?.read ? "readonly-style" : ""}`} name="type" value={selectedProjectType} onChange={(e) => setSelectedProjectType(e.target.value)} onKeyDown={fieldPermissions?.type?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.type?.read ? "readonly-style" : ""}`} name="type" value={selectedProjectType} onChange={(e) => fieldPermissions?.type?.read ? null : setSelectedProjectType(e.target.value)}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         projectType?.map((p) => (
@@ -350,7 +355,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Customer <span className="text-danger">*</span></label>
-                    <select className={`form-select ${fieldPermissions?.customer?.read ? "readonly-style" : ""}`} name="customer" value={selectedCustomer} onChange={(e) => setSelectedCustomer(e.target.value)} onKeyDown={fieldPermissions?.customer?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.customer?.read ? "readonly-style" : ""}`} name="customer" value={selectedCustomer} onChange={(e) => fieldPermissions?.customer?.read ? null : setSelectedCustomer(e.target.value)} >
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         customer?.map((c) => (
@@ -367,7 +372,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Category <span className="text-danger">*</span></label>
-                    <select className={`form-select ${fieldPermissions?.category?.read ? "readonly-style" : ""}`} name="category" value={selectedProjectCategory} onChange={(e) => setSelectedProjectCategory(e.target.value)} onKeyDown={fieldPermissions?.category?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.category?.read ? "readonly-style" : ""}`} name="category" value={selectedProjectCategory} onChange={(e) => fieldPermissions?.category?.read ? null : setSelectedProjectCategory(e.target.value)} >
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         projectCategory?.map((p) => (
@@ -384,7 +389,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Project Timing  <span className="text-danger">*</span></label>
-                    <select className={`form-select ${fieldPermissions?.timing?.read ? "readonly-style" : ""}`} name="timing" value={selectedProjectTiming} onChange={(e) => setSelectedProjectTiming(e.target.value)} onKeyDown={fieldPermissions?.timing?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.timing?.read ? "readonly-style" : ""}`} name="timing" value={selectedProjectTiming} onChange={(e) => fieldPermissions?.timing?.read ? null : setSelectedProjectTiming(e.target.value)} >
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         projectTiming?.map((p) => (
@@ -401,7 +406,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="price">Price <span className="text-danger">*</span></label>
-                    <input className={`form-control ${fieldPermissions?.price?.read ? "readonly-style" : ""}`} type="text" name="price" id="price" value={price} onChange={(e) => setPrice(e.target.value)} onKeyDown={fieldPermissions?.price?.read ? (e) => e.preventDefault() : undefined} />
+                    <input className={`form-control ${fieldPermissions?.price?.read ? "readonly-style" : ""}`} type="text" name="price" id="price" value={price} onChange={(e) => fieldPermissions?.price?.read ? null : setPrice(e.target.value)} />
                   </div>
                 </div>
               )
@@ -411,7 +416,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Priority <span className="text-danger">*</span></label>
-                    <select className={`form-select ${fieldPermissions?.priority?.read ? "readonly-style" : ""}`} name="status" value={priority} onChange={(e) => setPriority(e.target.value)} onKeyDown={fieldPermissions?.priority?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.priority?.read ? "readonly-style" : ""}`} name="status" value={priority} onChange={(e) => fieldPermissions?.priority?.read ? null : setPriority(e.target.value)} >
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       <option>High</option>
                       <option>Medium</option>
@@ -426,7 +431,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Status <span className="text-danger">*</span></label>
-                    <select className={`form-select ${fieldPermissions?.status?.read ? "readonly-style" : ""}`} name="status" value={selectedProjectStatus} onChange={(e) => setSelectedProjectStatus(e.target.value)} onKeyDown={fieldPermissions?.status?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.status?.read ? "readonly-style" : ""}`} name="status" value={selectedProjectStatus} onChange={(e) => fieldPermissions?.status?.read ? null : setSelectedProjectStatus(e.target.value)} >
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         projectStatus?.map((p) => (
@@ -443,7 +448,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Responsible Persons <span className="text-danger">*</span></label>
-                    <select className={`form-select ${fieldPermissions?.responsible?.read ? "readonly-style" : ""}`} name="responsible" value="" onChange={handleSelectChangeResponsible} onKeyDown={fieldPermissions?.responsible?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.responsible?.read ? "readonly-style" : ""}`} name="responsible" value="" onChange={(e) => fieldPermissions?.responsible?.read ? null : handleSelectChangeResponsible(e)}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         teamMember?.map((t) => (
@@ -456,7 +461,7 @@ const EditProject = () => {
                         selectedResponsible?.map((responsible, index) => (
                           <span key={index} className="selected-item">
                             {teamMember?.find((t) => t?._id === responsible)?.name}
-                            {(fieldPermissions?.responsible?.read) ? (null) : (<button type="button" className="remove-btn" onClick={() => handleRemoveResponsible(responsible)} onKeyDown={fieldPermissions?.responsible?.read ? (e) => e.preventDefault() : undefined}>{"x"}</button>)}
+                            {(fieldPermissions?.responsible?.read) ? (null) : (<button type="button" className="remove-btn" onClick={() => fieldPermissions?.responsible?.read ? null : handleRemoveResponsible(responsible)}>{"x"}</button>)}
                           </span>
                         ))
                       }
@@ -470,7 +475,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label">Team Leader  <span className="text-danger">*</span></label>
-                    <select className={`form-select ${fieldPermissions?.leader?.read ? "readonly-style" : ""}`} name="leader" value="" onChange={handleSelectChangeLeader} onKeyDown={fieldPermissions?.leader?.read ? (e) => e.preventDefault() : undefined}>
+                    <select className={`form-select ${fieldPermissions?.leader?.read ? "readonly-style" : ""}`} name="leader" value="" onChange={(e) => fieldPermissions?.leader?.read ? null : handleSelectChangeLeader(e)}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
                         teamMember?.map((t) => (
@@ -483,7 +488,7 @@ const EditProject = () => {
                         selectedLeader?.map((leader, index) => (
                           <span key={index} className="selected-item">
                             {teamMember?.find((t) => t?._id === leader)?.name}
-                            {(fieldPermissions?.leader?.read) ? ("") : (<button type="button" className="remove-btn" onClick={() => handleRemoveLeader(leader)} onKeyDown={fieldPermissions?.leader?.read ? (e) => e.preventDefault() : undefined}>{"x"}</button>)}
+                            {(fieldPermissions?.leader?.read) ? (null) : (<button type="button" className="remove-btn" onClick={() => fieldPermissions?.leader?.read ? null : handleRemoveLeader(leader)}>{"x"}</button>)}
                           </span>
                         ))
                       }
@@ -497,7 +502,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="start">Start Date <span className="text-danger">*</span></label>
-                    <input type="text" className={`form-control ${fieldPermissions?.start?.read ? "readonly-style" : ""}`} name="start" id="start" value={start} onChange={(e) => setStart(e.target.value)} onKeyDown={fieldPermissions?.start?.read ? (e) => e.preventDefault() : undefined} />
+                    <input type="text" className={`form-control ${fieldPermissions?.start?.read ? "readonly-style" : ""}`} name="start" id="start" value={start} onChange={(e) => fieldPermissions?.start?.read ? null : setStart(e.target.value)} />
                   </div>
                 </div>
               )
@@ -507,7 +512,7 @@ const EditProject = () => {
                 <div className="col-md-6">
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="due">Due Date <span className="text-danger">*</span></label>
-                    <input type="text" className={`form-control ${fieldPermissions?.due?.read ? "readonly-style" : ""}`} name="due" id="due" value={due} onChange={(e) => setDue(e.target.value)} onKeyDown={fieldPermissions?.due?.read ? (e) => e.preventDefault() : undefined} />
+                    <input type="text" className={`form-control ${fieldPermissions?.due?.read ? "readonly-style" : ""}`} name="due" id="due" value={due} onChange={(e) => fieldPermissions?.due?.read ? null : setDue(e.target.value)} />
                   </div>
                 </div>
               )
@@ -522,7 +527,9 @@ const EditProject = () => {
                     <ReactQuill
                       className={`custom-quill-editor ${fieldPermissions?.description?.read ? "readonly-style" : ""}`}
                       value={description}
-                      onChange={setDescription}
+                      name="description"
+                      id="description"
+                      onChange={(content) => fieldPermissions?.description?.read ? null : setDescription(content)}
                       modules={{
                         toolbar: [
                           [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],

@@ -182,7 +182,7 @@ const Role = () => {
                         <div className="export-list text-sm-end">
                           <ul>
                             {
-                              (permissions?.export) ? (
+                              (permissions?.export) && (
                                 <li>
                                   <div className="export-dropdwon">
                                     <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
@@ -201,20 +201,16 @@ const Role = () => {
                                     </div>
                                   </div>
                                 </li>
-                              ) : (
-                                null
                               )
                             }
                             {
-                              (permissions?.create) ? (
+                              (permissions?.create) && (
                                 <li>
                                   <Link to="/add-role" className="btn btn-primary">
                                     <i className="ti ti-square-rounded-plus" />
                                     Add New Role
                                   </Link>
                                 </li>
-                              ) : (
-                                null
                               )
                             }
                           </ul>
@@ -331,10 +327,8 @@ const Role = () => {
                           </th>
                           <th>#</th>
                           {
-                            (fieldPermissions?.name?.show) ? (
+                            (fieldPermissions?.name?.show) && (
                               <th>Name</th>
-                            ) : (
-                              null
                             )
                           }
                           <th>Action</th>
@@ -349,10 +343,8 @@ const Role = () => {
                               </td>
                               <td> {(filters.page - 1) * filters.limit + index + 1}</td>
                               {
-                                (fieldPermissions?.name?.show) ? (
+                                (fieldPermissions?.name?.show) && (
                                   <td>{d?.name}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               <td>
@@ -362,23 +354,19 @@ const Role = () => {
                                   </Link>
                                   <div className="dropdown-menu dropdown-menu-right">
                                     {
-                                      (permissions?.update) ? (
+                                      (permissions?.update) && (
                                         <Link to={`/edit-role/${d?._id}`} className="dropdown-item">
                                           <i className="ti ti-edit text-blue"></i>
                                           Update
                                         </Link>
-                                      ) : (
-                                        null
                                       )
                                     }
                                     {
-                                      (permissions?.delete) ? (
+                                      (permissions?.delete) && (
                                         <Link to="#" className="dropdown-item" onClick={() => handleDelete(d?._id)}>
                                           <i className="ti ti-trash text-danger"></i>
                                           Delete
                                         </Link>
-                                      ) : (
-                                        null
                                       )
                                     }
                                   </div>

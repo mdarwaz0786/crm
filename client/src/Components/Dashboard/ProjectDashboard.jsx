@@ -14,6 +14,7 @@ const ProjectDashboard = () => {
   const [endDate, setEndDate] = useState(null);
   const { validToken, team, isLoading } = useAuth();
   const fieldPermissions = team?.role?.permissions?.project?.fields;
+  const permissions = team?.role?.permissions?.project;
   const [filters, setFilters] = useState({
     sort: "Descending",
     search: "",
@@ -70,10 +71,10 @@ const ProjectDashboard = () => {
   }, [startDate, endDate]);
 
   useEffect(() => {
-    if (!isLoading && team) {
+    if (!isLoading && team && permissions?.access) {
       fetchAllProject();
     };
-  }, [filters, team, isLoading]);
+  }, [filters, team, isLoading, permissions?.access]);
 
   return (
     <>
@@ -138,10 +139,14 @@ const ProjectDashboard = () => {
                                   </div>
                                 </li>
                                 <li>
-                                  <Link to="/add-project" className="btn btn-primary">
-                                    <i className="ti ti-square-rounded-plus me-1" />
-                                    Add Project
-                                  </Link>
+                                  {
+                                    (permissions?.create) && (
+                                      <Link to="/add-project" className="btn btn-primary">
+                                        <i className="ti ti-square-rounded-plus me-1" />
+                                        Add Project
+                                      </Link>
+                                    )
+                                  }
                                 </li>
                               </ul>
                             </div>
@@ -152,31 +157,23 @@ const ProjectDashboard = () => {
                             <thead className="thead-light">
                               <tr>
                                 {
-                                  (fieldPermissions?.priority?.show) ? (
+                                  (fieldPermissions?.priority?.show) && (
                                     <th>Priority</th>
-                                  ) : (
-                                    null
                                   )
                                 }
                                 {
-                                  (fieldPermissions?.name?.show) ? (
+                                  (fieldPermissions?.name?.show) && (
                                     <th>Project Name</th>
-                                  ) : (
-                                    null
                                   )
                                 }
                                 {
-                                  (fieldPermissions?.customer?.show) ? (
+                                  (fieldPermissions?.customer?.show) && (
                                     <th>Customer</th>
-                                  ) : (
-                                    null
                                   )
                                 }
                                 {
-                                  (fieldPermissions?.due?.show) ? (
+                                  (fieldPermissions?.due?.show) && (
                                     <th>Due Date</th>
-                                  ) : (
-                                    null
                                   )
                                 }
                               </tr>
@@ -186,31 +183,23 @@ const ProjectDashboard = () => {
                                 project?.map((p) => (
                                   <tr key={p?._id}>
                                     {
-                                      (fieldPermissions?.priority?.show) ? (
-                                        <td><Link to={`edit-project/${p?._id}`}>{p?.priority}</Link></td>
-                                      ) : (
-                                        null
+                                      (fieldPermissions?.priority?.show) && (
+                                        <td><Link to={permissions.update ? `edit-project/${p?._id}` : "/"}>{p?.priority}</Link></td>
                                       )
                                     }
                                     {
-                                      (fieldPermissions?.name?.show) ? (
-                                        <td><Link to={`edit-project/${p?._id}`}>{p?.name}</Link></td>
-                                      ) : (
-                                        null
+                                      (fieldPermissions?.name?.show) && (
+                                        <td><Link to={permissions.update ? `edit-project/${p?._id}` : "/"}>{p?.name}</Link></td>
                                       )
                                     }
                                     {
-                                      (fieldPermissions?.customer?.show) ? (
-                                        <td><Link to={`edit-project/${p?._id}`}>{p?.customer?.name}</Link></td>
-                                      ) : (
-                                        null
+                                      (fieldPermissions?.customer?.show) && (
+                                        <td><Link to={permissions.update ? `edit-project/${p?._id}` : "/"}>{p?.customer?.name}</Link></td>
                                       )
                                     }
                                     {
-                                      (fieldPermissions?.due?.show) ? (
-                                        <td><Link to={`edit-project/${p?._id}`}>{p?.due}</Link></td>
-                                      ) : (
-                                        null
+                                      (fieldPermissions?.due?.show) && (
+                                        <td><Link to={permissions.update ? `edit-project/${p?._id}` : "/"}>{p?.due}</Link></td>
                                       )
                                     }
                                   </tr>

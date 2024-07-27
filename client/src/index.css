@@ -133,13 +133,12 @@
 
 .readonly-style {
   background-color: #e9ecef;
-  cursor: not-allowed;
-  user-select: none;
+  cursor: auto;
 }
 
 .readonly-style-checkbox {
-  cursor: not-allowed;
-  user-select: none;
+  cursor: auto;
+  background-color: #e9ecef;
 }
 
 @media screen and (max-width: 767px) {

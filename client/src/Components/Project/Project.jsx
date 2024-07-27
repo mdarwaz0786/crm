@@ -72,7 +72,7 @@ const Project = () => {
           return isLeader || isResponsible;
         });
         setProject(filteredProject);
-        setTotal(filteredProject?.length);
+        setTotal(response?.data?.totalCount);
       };
     } catch (error) {
       console.log(error.message);
@@ -91,7 +91,12 @@ const Project = () => {
       });
 
       if (response?.data?.success) {
-        setNameData(response?.data?.project);
+        const filteredProject = response?.data?.project?.filter((p) => {
+          const isLeader = p?.leader?.some((l) => l?._id === team?._id);
+          const isResponsible = p?.responsible?.some((r) => r?._id === team?._id);
+          return isLeader || isResponsible;
+        });
+        setNameData(filteredProject);
       };
     } catch (error) {
       console.log(error.message);
@@ -99,8 +104,10 @@ const Project = () => {
   };
 
   useEffect(() => {
-    fetchAllProjectName();
-  }, [name]);
+    if (!isLoading && team && permissions?.access) {
+      fetchAllProjectName();
+    };
+  }, [name, isLoading, team, permissions?.access]);
 
   const fetchAllProjectId = async () => {
     try {
@@ -114,7 +121,12 @@ const Project = () => {
       });
 
       if (response?.data?.success) {
-        setProjectIdData(response?.data?.project);
+        const filteredProject = response?.data?.project?.filter((p) => {
+          const isLeader = p?.leader?.some((l) => l?._id === team?._id);
+          const isResponsible = p?.responsible?.some((r) => r?._id === team?._id);
+          return isLeader || isResponsible;
+        });
+        setProjectIdData(filteredProject);
       };
     } catch (error) {
       console.log(error.message);
@@ -122,8 +134,10 @@ const Project = () => {
   };
 
   useEffect(() => {
-    fetchAllProjectId();
-  }, [projectId]);
+    if (!isLoading && team && permissions?.access) {
+      fetchAllProjectId();
+    };
+  }, [projectId, isLoading, team, permissions?.access]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -146,10 +160,10 @@ const Project = () => {
   };
 
   useEffect(() => {
-    if (!isLoading && team) {
+    if (!isLoading && team && permissions?.access) {
       fetchAllProject();
     };
-  }, [filters, team, isLoading]);
+  }, [filters, isLoading, team, permissions?.access]);
 
   const handleDelete = async (id) => {
     try {
@@ -234,7 +248,7 @@ const Project = () => {
                         <div className="export-list text-sm-end">
                           <ul>
                             {
-                              (permissions?.export) ? (
+                              (permissions?.export) && (
                                 <li>
                                   <div className="export-dropdwon">
                                     <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">
@@ -253,20 +267,16 @@ const Project = () => {
                                     </div>
                                   </div>
                                 </li>
-                              ) : (
-                                null
                               )
                             }
                             {
-                              (permissions?.create) ? (
+                              (permissions?.create) && (
                                 <li>
                                   <Link to="/add-project" className="btn btn-primary">
                                     <i className="ti ti-square-rounded-plus" />
                                     Add New Project
                                   </Link>
                                 </li>
-                              ) : (
-                                null
                               )
                             }
                           </ul>
@@ -451,59 +461,43 @@ const Project = () => {
                           </th>
                           <th>#</th>
                           {
-                            (fieldPermissions?.projectId?.show) ? (
+                            (fieldPermissions?.projectId?.show) && (
                               <th>Project Id</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (fieldPermissions?.name?.show) ? (
+                            (fieldPermissions?.name?.show) && (
                               <th>Project Name</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (fieldPermissions?.customer?.show) ? (
+                            (fieldPermissions?.customer?.show) && (
                               <th>Customer</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (fieldPermissions?.priority?.show) ? (
+                            (fieldPermissions?.priority?.show) && (
                               <th>Priority</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (fieldPermissions?.start?.show) ? (
+                            (fieldPermissions?.start?.show) && (
                               <th>Start Date</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (fieldPermissions?.due?.show) ? (
+                            (fieldPermissions?.due?.show) && (
                               <th>Due Date</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (fieldPermissions?.type?.show) ? (
+                            (fieldPermissions?.type?.show) && (
                               <th>Project Type</th>
-                            ) : (
-                              null
                             )
                           }
                           {
-                            (fieldPermissions?.status?.show) ? (
+                            (fieldPermissions?.status?.show) && (
                               <th>Status</th>
-                            ) : (
-                              null
                             )
                           }
                           <th>Action</th>
@@ -518,59 +512,43 @@ const Project = () => {
                               </td>
                               <td> {(filters.page - 1) * filters.limit + index + 1}</td>
                               {
-                                (fieldPermissions?.projectId?.show) ? (
+                                (fieldPermissions?.projectId?.show) && (
                                   <td>{p?.projectId}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (fieldPermissions?.name?.show) ? (
+                                (fieldPermissions?.name?.show) && (
                                   <td>{p?.name}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (fieldPermissions?.customer?.show) ? (
+                                (fieldPermissions?.customer?.show) && (
                                   <td>{p?.customer?.name}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (fieldPermissions?.priority?.show) ? (
+                                (fieldPermissions?.priority?.show) && (
                                   <td>{p?.priority}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (fieldPermissions?.start?.show) ? (
+                                (fieldPermissions?.start?.show) && (
                                   <td>{p?.start}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (fieldPermissions?.due?.show) ? (
+                                (fieldPermissions?.due?.show) && (
                                   <td>{p?.due}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (fieldPermissions?.type?.show) ? (
+                                (fieldPermissions?.type?.show) && (
                                   <td>{p?.type?.name}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               {
-                                (fieldPermissions?.status?.show) ? (
+                                (fieldPermissions?.status?.show) && (
                                   <td>{p?.status?.status}</td>
-                                ) : (
-                                  null
                                 )
                               }
                               <td>
@@ -580,23 +558,19 @@ const Project = () => {
                                   </Link>
                                   <div className="dropdown-menu dropdown-menu-right">
                                     {
-                                      (permissions?.update) ? (
+                                      (permissions?.update) && (
                                         <Link to={`/edit-project/${p?._id}`} className="dropdown-item">
                                           <i className="ti ti-edit text-blue"></i>
                                           Update
                                         </Link>
-                                      ) : (
-                                        null
                                       )
                                     }
                                     {
-                                      (permissions?.delete) ? (
+                                      (permissions?.delete) && (
                                         <Link to="#" className="dropdown-item" onClick={() => handleDelete(p?._id)}>
                                           <i className="ti ti-trash text-danger"></i>
                                           Delete
                                         </Link>
-                                      ) : (
-                                        null
                                       )
                                     }
                                   </div>

@@ -13,6 +13,7 @@ const AddCustomer = () => {
   const [address, setAddress] = useState("");
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
+  const permissions = team?.role?.permissions?.customer;
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -57,8 +58,8 @@ const AddCustomer = () => {
     return <Preloader />;
   };
 
-  if (!team?.role?.permissions?.customer?.create) {
-    return <Navigate to="/customer" />;
+  if (!permissions?.create) {
+    return <Navigate to="/" />;
   };
 
   return (

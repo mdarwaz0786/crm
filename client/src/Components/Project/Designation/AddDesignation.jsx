@@ -11,6 +11,7 @@ const AddDesignation = () => {
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
+  const permissions = team?.role?.permissions?.designation;
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -41,8 +42,8 @@ const AddDesignation = () => {
     return <Preloader />;
   };
 
-  if (!team?.role?.permissions?.designation?.create) {
-    return <Navigate to="/designation" />;
+  if (!permissions?.create) {
+    return <Navigate to="/" />;
   };
 
   return (

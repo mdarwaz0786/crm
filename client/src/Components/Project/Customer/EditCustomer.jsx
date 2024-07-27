@@ -16,6 +16,7 @@ const EditCustomer = () => {
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
   const fieldPermissions = team?.role?.permissions?.customer?.fields;
+  const permissions = team?.role?.permissions?.customer;
 
   const fetchSingleData = async (id) => {
     try {
@@ -37,8 +38,10 @@ const EditCustomer = () => {
   };
 
   useEffect(() => {
-    fetchSingleData(id);
-  }, [id]);
+    if (!isLoading && team && permissions?.update && id) {
+      fetchSingleData(id);
+    };
+  }, [id, isLoading, team, permissions?.update]);
 
   const handleUpdate = async (e, id) => {
     e.preventDefault();
@@ -88,8 +91,8 @@ const EditCustomer = () => {
     return <Preloader />;
   };
 
-  if (!team?.role?.permissions?.customer?.update) {
-    return <Navigate to="/customer" />;
+  if (!permissions?.update) {
+    return <Navigate to="/" />;
   };
 
   return (
@@ -101,51 +104,43 @@ const EditCustomer = () => {
         </div>
         <div className="row">
           {
-            (fieldPermissions?.name?.show) ? (
+            (fieldPermissions?.name?.show) && (
               <div className="col-md-12">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="name">Name <span className="text-danger">*</span></label>
-                  <input type="text" className={`form-control ${fieldPermissions?.name?.read ? "readonly-style" : ""}`} name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={fieldPermissions?.name?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.name?.read ? "readonly-style" : ""}`} name="name" id="name" value={name} onChange={(e) => fieldPermissions?.name?.read ? null : setName(e.target.value)} />
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.email?.show) ? (
+            (fieldPermissions?.email?.show) && (
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="email">Email <span className="text-danger">*</span></label>
-                  <input type="email" className={`form-control ${fieldPermissions?.email?.read ? "readonly-style" : ""}`} name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={fieldPermissions?.email?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="email" className={`form-control ${fieldPermissions?.email?.read ? "readonly-style" : ""}`} name="email" id="email" value={email} onChange={(e) => fieldPermissions?.email?.read ? null : setEmail(e.target.value)} />
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.mobile?.show) ? (
+            (fieldPermissions?.mobile?.show) && (
               <div className="col-md-6">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="mobile">Mobile <span className="text-danger">*</span></label>
-                  <input type="text" className={`form-control ${fieldPermissions?.mobile?.read ? "readonly-style" : ""}`} name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} onKeyDown={fieldPermissions?.mobile?.read ? (e) => e.preventDefault() : undefined} />
+                  <input type="text" className={`form-control ${fieldPermissions?.mobile?.read ? "readonly-style" : ""}`} name="mobile" id="mobile" value={mobile} onChange={(e) => fieldPermissions?.mobile?.read ? null : setMobile(e.target.value)} />
                 </div>
               </div>
-            ) : (
-              null
             )
           }
           {
-            (fieldPermissions?.address?.show) ? (
+            (fieldPermissions?.address?.show) && (
               <div className="col-md-12">
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="address">Address <span className="text-danger">*</span></label>
-                  <textarea className={`form-control ${fieldPermissions?.description?.read ? "readonly-style" : ""}`} rows={4} name="description" id="description" value={address} onChange={(e) => setAddress(e.target.value)} onKeyDown={fieldPermissions?.address?.read ? (e) => e.preventDefault() : undefined} />
+                  <textarea className={`form-control ${fieldPermissions?.address?.read ? "readonly-style" : ""}`} rows={4} name="description" id="description" value={address} onChange={(e) => fieldPermissions?.address?.read ? null : setAddress(e.target.value)} />
                 </div>
               </div>
-            ) : (
-              null
             )
           }
         </div>
