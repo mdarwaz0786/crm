@@ -104,10 +104,10 @@ export const fetchAllProjectStatus = async (req, res) => {
     const filteredProjectStatus = projectStatus.map((projectStatus) => filterFields(projectStatus, projection));
     const totalCount = await ProjectStatus.countDocuments(filter);
 
-    return res.status(200).json({ success: true, message: "Project status fetched successfully", projectStatus: filteredProjectStatus, totalCount });
+    return res.status(200).json({ success: true, message: "All project status fetched successfully", projectStatus: filteredProjectStatus, totalCount });
   } catch (error) {
     console.log("Error while fetching all project status:", error.message);
-    return res.status(500).json({ success: false, message: `Error while fetching allproject status: ${error.message}` });
+    return res.status(500).json({ success: false, message: `Error while fetching all project status: ${error.message}` });
   };
 };
 
@@ -125,7 +125,7 @@ export const fetchSingleProjectStatus = async (req, res) => {
     const projection = buildProjection(permissions);
     const filteredProjectStatus = filterFields(projectStatus, projection);
 
-    return res.status(200).json({ success: true, message: "Project status fetched successfully", projectStatus: filteredProjectStatus });
+    return res.status(200).json({ success: true, message: "Single project status fetched successfully", projectStatus: filteredProjectStatus });
   } catch (error) {
     console.log("Error while fetching project status:", error.message);
     return res.status(500).json({ success: false, message: `Error while fetching single project status: ${error.message}` });

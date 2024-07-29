@@ -104,7 +104,7 @@ export const fetchAllProjectTiming = async (req, res) => {
     const filteredProjectTiming = projectTiming.map((projectTiming) => filterFields(projectTiming, projection));
     const totalCount = await ProjectTiming.countDocuments(filter);
 
-    return res.status(200).json({ success: true, message: "Project timing fetched successfully", projectTiming: filteredProjectTiming, totalCount });
+    return res.status(200).json({ success: true, message: "All project timing fetched successfully", projectTiming: filteredProjectTiming, totalCount });
   } catch (error) {
     console.log("Error while fetching all project timing:", error.message);
     return res.status(500).json({ success: false, message: `Error while fetching all project timing: ${error.message}` });
@@ -124,7 +124,7 @@ export const fetchSingleProjectTiming = async (req, res) => {
     const projection = buildProjection(permissions);
     const filteredProjectTiming = filterFields(projectTiming, projection);
 
-    return res.status(200).json({ success: true, message: "Project timing fetched successfully", projectTiming: filteredProjectTiming });
+    return res.status(200).json({ success: true, message: "Single project timing fetched successfully", projectTiming: filteredProjectTiming });
   } catch (error) {
     console.log("Error while fetching single project timing:", error.message);
     return res.status(500).json({ success: false, message: `Error while fetching single project timing: ${error.message}` });

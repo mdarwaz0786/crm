@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const validToken = `Bearer ${token}`;
   let isLoggedIn = !!token;
+  let status;
 
   const storeToken = (serverToken) => {
     setToken(serverToken);
@@ -22,7 +23,9 @@ export const AuthProvider = ({ children }) => {
 
   const logOutTeam = () => {
     setToken("");
-    toast.success("Logout successful");
+    if (status !== 401) {
+      toast.success("Logout successful");
+    };
     return localStorage.removeItem("token");
   };
 
@@ -38,7 +41,13 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.log("Error while fetching logged in team member:", error.message);
+      if (error.response && error.response.status === 401) {
+        status = error.response.status;
+        logOutTeam();
+        toast.error("Please log in");
+      } else {
+        console.log("Error while fetching logged in team member:", error.message);
+      };
     };
   };
 

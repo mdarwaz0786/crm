@@ -1,35 +1,35 @@
 import { Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage/MainPage.jsx";
+import ProjectDashboard from "./Components/Dashboard/ProjectDashboard.jsx";
 import Project from "./Components/Project/Project.jsx";
-import ProjectType from './Components/Project/ProjectType/projectType.jsx';
-import ProjectCategory from './Components/Project/ProjectCategory/ProjectCategory.jsx';
-import ProjectStatus from './Components/Project/ProjectStatus/ProjectStatus.jsx';
-import Customer from './Components/Project/Customer/Customer.jsx';
-import TeamMember from "./Components/Project/TeamMember/TeamMember.jsx";
 import AddProject from "./Components/Project/AddProject.jsx";
 import EditProject from "./Components/Project/EditProject.jsx";
+import ProjectType from './Components/Project/ProjectType/projectType.jsx';
 import AddProjectType from "./Components/Project/ProjectType/AddProjectType.jsx";
 import EditProjectType from "./Components/Project/ProjectType/EditProjectType.jsx";
-import AddCustomer from "./Components/Project/Customer/AddCustomer.jsx";
-import EditCustomer from "./Components/Project/Customer/EditCustomer.jsx";
-import AddTeamMember from "./Components/Project/TeamMember/AddTeamMember.jsx";
-import EditTeamMember from "./Components/Project/TeamMember/EditTeamMember.jsx";
+import ProjectCategory from './Components/Project/ProjectCategory/ProjectCategory.jsx';
 import AddProjectCategory from "./Components/Project/ProjectCategory/AddProjectCategory.jsx";
 import EditProjectCategory from "./Components/Project/ProjectCategory/EditProjectCategory.jsx";
+import ProjectStatus from './Components/Project/ProjectStatus/ProjectStatus.jsx';
 import AddProjectStatus from "./Components/Project/ProjectStatus/AddProjectStatus.jsx";
 import EditProjectStatus from "./Components/Project/ProjectStatus/EditProjectStatus.jsx";
+import Customer from './Components/Project/Customer/Customer.jsx';
+import AddCustomer from "./Components/Project/Customer/AddCustomer.jsx";
+import EditCustomer from "./Components/Project/Customer/EditCustomer.jsx";
+import TeamMember from "./Components/Project/TeamMember/TeamMember.jsx";
+import AddTeamMember from "./Components/Project/TeamMember/AddTeamMember.jsx";
+import EditTeamMember from "./Components/Project/TeamMember/EditTeamMember.jsx";
 import ProjectTiming from "./Components/Project/ProjectTiming/ProjectTiming.jsx";
 import AddProjectTiming from "./Components/Project/ProjectTiming/AddProjectTiming.jsx";
 import EditProjectTiming from "./Components/Project/ProjectTiming/EditProjectTiming.jsx";
-import ProjectDashboard from "./Components/Dashboard/ProjectDashboard.jsx";
-import Login from "./Components/Login/Login.jsx";
-import Logout from "./Components/Logout/Logout.jsx";
 import Role from "./Components/Project/Role/Role.jsx";
 import AddRole from "./Components/Project/Role/AddRole.jsx";
 import EditRole from "./Components/Project/Role/EditRole.jsx";
 import Designation from "./Components/Project/Designation/Designation.jsx";
 import AddDesignation from "./Components/Project/Designation/AddDesignation.jsx";
 import EditDesignation from "./Components/Project/Designation/EditDesignation.jsx";
+import Login from "./Components/Login/Login.jsx";
+import Logout from "./Components/Logout/Logout.jsx";
 
 const App = () => {
   return (

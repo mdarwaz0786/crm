@@ -104,7 +104,7 @@ export const fetchAllDesignation = async (req, res) => {
     const filteredDesignation = designation.map((designation) => filterFields(designation, projection));
     const totalCount = await Designation.countDocuments(filter);
 
-    return res.status(200).json({ success: true, message: "Designation fetched successfully", designation: filteredDesignation, totalCount });
+    return res.status(200).json({ success: true, message: "All designation fetched successfully", designation: filteredDesignation, totalCount });
   } catch (error) {
     console.log("Error while fetching all designation:", error.message);
     return res.status(500).json({ success: false, message: `Error while fetching all designation: ${error.message}` });
@@ -125,7 +125,7 @@ export const fetchSingleDesignation = async (req, res) => {
     const projection = buildProjection(permissions);
     const filteredDesignation = filterFields(designation, projection);
 
-    return res.status(200).json({ success: true, message: "Designation fetched successfully", designation: filteredDesignation });
+    return res.status(200).json({ success: true, message: "Single designation fetched successfully", designation: filteredDesignation });
   } catch (error) {
     console.log("Error while fetching single designation:", error.message);
     return res.status(500).json({ success: false, message: `Error while fetching single designation: ${error.message}` });

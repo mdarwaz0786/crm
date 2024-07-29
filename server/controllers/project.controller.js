@@ -159,12 +159,16 @@ export const fetchAllProject = async (req, res) => {
       .populate("timing")
       .exec();
 
+    if (!project) {
+      return res.status(404).json({ success: false, message: "Project not found" });
+    };
+
     const permissions = req.team.role.permissions;
     const projection = buildProjection(permissions);
     const filteredProject = project.map((project) => filterFields(project, projection));
     const totalCount = await Project.countDocuments(filter);
 
-    return res.status(200).json({ success: true, message: "All projects fetched successfully", project: filteredProject, totalCount });
+    return res.status(200).json({ success: true, message: "All project fetched successfully", project: filteredProject, totalCount });
   } catch (error) {
     console.log("Error while fetching all project:", error.message);
     return res.status(500).json({ success: false, message: `Error while fetching all project: ${error.message}` });

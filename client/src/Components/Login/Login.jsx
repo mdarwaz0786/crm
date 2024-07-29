@@ -19,12 +19,17 @@ const Login = () => {
         storeToken(response?.data?.token);
         setUsername("");
         setPassword("");
-        toast.success("Login successful");
-        setTimeout(() => { navigate('/'); window.location.reload(); }, 2000);
+        toast.success(response?.data?.message);
+        navigate('/');
+        window.location.reload();
       };
     } catch (error) {
       console.log("Error while login:", error.message);
-      toast.error("Error while login");
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      };
     };
   };
 

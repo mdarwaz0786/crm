@@ -6,7 +6,7 @@ export const isLoggedIn = async (req, res, next) => {
     const token = req.header("Authorization");
 
     if (!token) {
-      return res.status(401).json({ success: false, message: "Token not found" });
+      return res.status(404).json({ success: false, message: "Token not found" });
     };
 
     const jwtToken = token.replace("Bearer", "").trim();

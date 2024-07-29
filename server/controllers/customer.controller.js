@@ -106,7 +106,7 @@ export const fetchAllCustomer = async (req, res) => {
     const filteredCustomer = customer.map((customer) => filterFields(customer, projection));
     const totalCount = await Customer.countDocuments(filter);
 
-    return res.status(200).json({ success: true, message: "Customer fetched successfully", customer: filteredCustomer, totalCount });
+    return res.status(200).json({ success: true, message: "All customer fetched successfully", customer: filteredCustomer, totalCount });
   } catch (error) {
     console.log("Error while fetching all customer:", error.message);
     return res.status(500).json({ success: false, message: `Error while fetching all customer: ${error.message}` });
@@ -127,7 +127,7 @@ export const fetchSingleCustomer = async (req, res) => {
     const projection = buildProjection(permissions);
     const filteredCustomer = filterFields(customer, projection);
 
-    return res.status(200).json({ success: true, message: "Customer fetched successfully", customer: filteredCustomer });
+    return res.status(200).json({ success: true, message: "Single customer fetched successfully", customer: filteredCustomer });
   } catch (error) {
     console.log("Error while fetching single customer:", error.message);
     return res.status(500).json({ success: false, message: `Error while fetching single customer: ${error.message}` });

@@ -529,6 +529,7 @@ const EditProject = () => {
                       value={description}
                       name="description"
                       id="description"
+                      readOnly={fieldPermissions?.description?.read}
                       onChange={(content) => fieldPermissions?.description?.read ? null : setDescription(content)}
                       modules={{
                         toolbar: [

@@ -24,7 +24,7 @@ export const loginTeam = async (req, res) => {
     const team = await Team.findOne({ username });
 
     if (!team) {
-      return res.status(404).json({ success: false, message: "Team not found" });
+      return res.status(404).json({ success: false, message: "Invalid Username" });
     };
 
     if (password !== team.password) {
@@ -33,7 +33,7 @@ export const loginTeam = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Team member login successfully",
+      message: "Login successful",
       _id: team._id,
       name: team.name,
       email: team.email,
@@ -62,7 +62,7 @@ export const loginTeam = async (req, res) => {
     });
   } catch (error) {
     console.log("Error while login team member:", error.message);
-    return res.status(500).json({ success: false, message: `Error while login team member: ${error.message}` });
+    return res.status(500).json({ success: false, message: `Error while login member: ${error.message}` });
   };
 };
 

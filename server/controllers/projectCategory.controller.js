@@ -104,7 +104,7 @@ export const fetchAllProjectCategory = async (req, res) => {
     const filteredProjectCategory = projectCategory.map((projectCategory) => filterFields(projectCategory, projection));
     const totalCount = await ProjectCategory.countDocuments(filter);
 
-    return res.status(200).json({ success: true, message: "Project category fetched successfully", projectCategory: filteredProjectCategory, totalCount });
+    return res.status(200).json({ success: true, message: "All project category fetched successfully", projectCategory: filteredProjectCategory, totalCount });
   } catch (error) {
     console.log("Error while fetching all project category:", error.message);
     return res.status(500).json({ success: false, message: `Error while fetching all project category: ${error.message}` });
@@ -125,7 +125,7 @@ export const fetchSingleProjectCategory = async (req, res) => {
     const projection = buildProjection(permissions);
     const filteredProjectCategory = filterFields(projectCategory, projection);
 
-    return res.status(200).json({ success: true, message: "Project category fetched successfully", projectCategory: filteredProjectCategory });
+    return res.status(200).json({ success: true, message: "Singele project category fetched successfully", projectCategory: filteredProjectCategory });
   } catch (error) {
     console.log("Error while fetching single project category:", error.message);
     return res.status(500).json({ success: false, message: `Error while fetching single project category: ${error.message}` });
