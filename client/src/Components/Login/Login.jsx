@@ -20,8 +20,7 @@ const Login = () => {
         setUsername("");
         setPassword("");
         toast.success(response?.data?.message);
-        navigate('/');
-        window.location.reload();
+        setTimeout(() => { navigate('/'); window.location.reload(); }, 2000);
       };
     } catch (error) {
       console.log("Error while login:", error.message);

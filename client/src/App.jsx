@@ -30,6 +30,7 @@ import AddDesignation from "./Components/Project/Designation/AddDesignation.jsx"
 import EditDesignation from "./Components/Project/Designation/EditDesignation.jsx";
 import Login from "./Components/Login/Login.jsx";
 import Logout from "./Components/Logout/Logout.jsx";
+import Loader from "./Loader.jsx";
 
 const App = () => {
   return (
@@ -65,6 +66,7 @@ const App = () => {
           <Route path="add-designation" element={<AddDesignation />} />
           <Route path="edit-designation/:id" element={<EditDesignation />} />
         </Route>
+        <Route path="/loader" element={<Loader />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
       </Routes>

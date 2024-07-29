@@ -138,7 +138,7 @@
 
 .readonly-style-checkbox {
   cursor: auto;
-  background-color: #e9ecef;
+  background-color: #dbe1e7;
 }
 
 @media screen and (max-width: 767px) {
@@ -150,9 +150,5 @@
 
   .date-range {
     margin-left: 0rem;
-  }
-
-  .custom-quill-editor .ql-container {
-    height: 100px;
   }
 }
