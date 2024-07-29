@@ -26,7 +26,7 @@ const Project = () => {
     projectIdFilter: [],
     sort: "Descending",
     page: 1,
-    limit: 10,
+    limit: 5,
     dateRange: "",
   });
   const permissions = team?.role?.permissions?.project;
@@ -42,9 +42,9 @@ const Project = () => {
     };
 
     if (startDate && endDate) {
-      setFilters((prevFilters) => ({ ...prevFilters, dateRange: `${formatDate(startDate)} - ${formatDate(endDate)}` }));
+      setFilters((prevFilters) => ({ ...prevFilters, dateRange: `${formatDate(startDate)} - ${formatDate(endDate)}`, page: 1 }));
     } else {
-      setFilters((prevFilters) => ({ ...prevFilters, dateRange: "" }));
+      setFilters((prevFilters) => ({ ...prevFilters, dateRange: "", page: 1 }));
     };
   }, [startDate, endDate]);
 
@@ -325,6 +325,8 @@ const Project = () => {
                             selectsRange
                             dateFormat="dd-MM-yyyy"
                             placeholderText="Select date range"
+                            isClearable
+                            isLoading
                           />
                         </li>
                       </ul>
@@ -510,7 +512,7 @@ const Project = () => {
                               <td>
                                 <label className="checkboxs"><input type="checkbox" /><span className="checkmarks"></span></label>
                               </td>
-                              <td> {(filters.page - 1) * filters.limit + index + 1}</td>
+                              <td>{(filters.page - 1) * filters.limit + index + 1}</td>
                               {
                                 (fieldPermissions?.projectId?.show) && (
                                   <td>{p?.projectId}</td>
@@ -582,13 +584,18 @@ const Project = () => {
                       </tbody>
                     </table>
                   </div>
+                  {
+                    (total === 0) && (
+                      <h5 style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>No Data Found</h5>
+                    )
+                  }
                   <div className="row align-items-center">
                     <div className="col-md-6">
                       <div className="datatable-length">
                         <div className="dataTables_length" id="project-list_length">
                           <label>
                             Show
-                            <select name="project-list_length" value={filters.limit} onChange={(e) => setFilters((prev) => ({ ...prev, limit: e.target.value }))} aria-controls="project-list" className="form-select form-select-sm">
+                            <select name="project-list_length" value={filters.limit} onChange={(e) => { const newLimit = parseInt(e.target.value, 10); setFilters((prev) => ({ ...prev, limit: newLimit, page: 1 })) }} aria-controls="project-list" className="form-select form-select-sm">
                               <option value="10">10</option>
                               <option value="15">15</option>
                               <option value="20">20</option>

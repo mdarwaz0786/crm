@@ -434,7 +434,7 @@ const TeamMember = () => {
                         <div className="dataTables_length" id="project-list_length">
                           <label>
                             Show
-                            <select name="project-list_length" value={filters.limit} onChange={(e) => setFilters((prev) => ({ ...prev, limit: e.target.value }))} aria-controls="project-list" className="form-select form-select-sm">
+                            <select name="project-list_length" value={filters.limit} onChange={(e) => { const newLimit = parseInt(e.target.value, 10); setFilters((prev) => ({ ...prev, limit: newLimit, page: 1 })) }} aria-controls="project-list" className="form-select form-select-sm">
                               <option value="10">10</option>
                               <option value="15">15</option>
                               <option value="20">20</option>
@@ -446,6 +446,11 @@ const TeamMember = () => {
                         </div>
                       </div>
                     </div>
+                    {
+                      (total === 0) && (
+                        <h5 style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>No Data Found</h5>
+                      )
+                    }
                     <div className="col-md-6">
                       <div className="datatable-paginate">
                         <div className="dataTables_paginate paging_simple_numbers" id="project-list_paginate">
