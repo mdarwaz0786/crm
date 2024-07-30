@@ -43,11 +43,11 @@ const Header = () => {
                 <Link to="#" className="responsive-search">
                   <i className="fa fa-search" />
                 </Link>
-                <form className="dropdown">
-                  <div className="searchinputs" id="dropdownMenuClickable">
+                <div className="dropdown">
+                  <div className="searchinputs">
                     <input type="text" placeholder="Search Project" value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); navigate("/", { state: { query: searchQuery } }) }} />
                   </div>
-                </form>
+                </div>
               </div>
             </li>
             {/* /Search */}

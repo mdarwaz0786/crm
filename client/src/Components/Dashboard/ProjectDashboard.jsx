@@ -144,16 +144,16 @@ const ProjectDashboard = () => {
                                     </Link>
                                   </div>
                                 </li>
-                                <li>
-                                  {
-                                    (permissions?.create) && (
-                                      <Link to="/add-project" className="btn btn-primary">
+                                {
+                                  (permissions?.create) && (
+                                    <li>
+                                      <Link to="/add-project" className="btn btn-primary" style={{ width: "8.2rem" }}>
                                         <i className="ti ti-square-rounded-plus me-1" />
                                         Add Project
                                       </Link>
-                                    )
-                                  }
-                                </li>
+                                    </li>
+                                  )
+                                }
                               </ul>
                             </div>
                           </div>
@@ -214,6 +214,11 @@ const ProjectDashboard = () => {
                             </tbody>
                           </table>
                         </div>
+                        {
+                          (project.length === 0) && (
+                            <h5 style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>No Data Found</h5>
+                          )
+                        }
                       </div>
                     </div>
                   </div>

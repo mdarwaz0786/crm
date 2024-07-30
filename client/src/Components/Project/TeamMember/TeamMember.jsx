@@ -428,6 +428,11 @@ const TeamMember = () => {
                       </tbody>
                     </table>
                   </div>
+                  {
+                    (total === 0) && (
+                      <h5 style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>No Data Found</h5>
+                    )
+                  }
                   <div className="row align-items-center">
                     <div className="col-md-6">
                       <div className="datatable-length">
@@ -446,11 +451,6 @@ const TeamMember = () => {
                         </div>
                       </div>
                     </div>
-                    {
-                      (total === 0) && (
-                        <h5 style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>No Data Found</h5>
-                      )
-                    }
                     <div className="col-md-6">
                       <div className="datatable-paginate">
                         <div className="dataTables_paginate paging_simple_numbers" id="project-list_paginate">
