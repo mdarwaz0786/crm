@@ -10,7 +10,7 @@ const Sidebar = () => {
   const [active, setActive] = useState(null);
   const location = useLocation();
   const currentPath = location.pathname;
-  const isMobile = window.innerWidth <= 768;
+  const isMobile = window.innerWidth <= 991;
 
   const handleActive = (element) => {
     setActive(element);
@@ -328,7 +328,7 @@ const Sidebar = () => {
                 </ul>
               </li>
 
-              {/* <li>
+              <li>
                 <h6 className="submenu-hdr">Pages</h6>
                 <ul>
                   <li className="submenu">
@@ -336,13 +336,13 @@ const Sidebar = () => {
                       <i className="ti ti-lock-square-rounded" /><span>Authentication</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Login</Link></li>
-                      <li><Link to="#">Register</Link></li>
-                      <li><Link to="#">Forgot Password</Link></li>
-                      <li><Link to="#">Reset Password</Link></li>
-                      <li><Link to="#">Email Verification</Link></li>
-                      <li><Link to="#">2 Step Verification</Link></li>
-                      <li><Link to="#">Lock Screen</Link></li>
+                      <li><Link to="#" id={isMobile && active === "login" ? "mobile_btn" : ""} onClick={() => handleActive("login")}>Login</Link></li>
+                      <li><Link to="#" id={isMobile && active === "register" ? "mobile_btn" : ""} onClick={() => handleActive("register")}>Register</Link></li>
+                      <li><Link to="#" id={isMobile && active === "forgotPassword" ? "mobile_btn" : ""} onClick={() => handleActive("forgotPassword")}>Forgot Password</Link></li>
+                      <li><Link to="#" id={isMobile && active === "resetPassword" ? "mobile_btn" : ""} onClick={() => handleActive("resetPassword")}>Reset Password</Link></li>
+                      <li><Link to="#" id={isMobile && active === "emailVerification" ? "mobile_btn" : ""} onClick={() => handleActive("emailVerification")}>Email Verification</Link></li>
+                      <li><Link to="#" id={isMobile && active === "stepVerification" ? "mobile_btn" : ""} onClick={() => handleActive("stepVerification")}>2 Step Verification</Link></li>
+                      <li><Link to="#" id={isMobile && active === "lockScreen" ? "mobile_btn" : ""} onClick={() => handleActive("lockScreen")}>Lock Screen</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
@@ -350,18 +350,17 @@ const Sidebar = () => {
                       <i className="ti ti-error-404" /><span>Error Pages</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">404 Error</Link></li>
-                      <li><Link to="#">500 Error</Link></li>
+                      <li><Link to="#" id={isMobile && active === "404Error" ? "mobile_btn" : ""} onClick={() => handleActive("404Error")}>404 Error</Link></li>
+                      <li><Link to="#" id={isMobile && active === "500Error" ? "mobile_btn" : ""} onClick={() => handleActive("500Error")}>500 Error</Link></li>
                     </ul>
                   </li>
-                  <li><Link to="#"><i className="ti ti-apps" /><span>Blank Page</span></Link></li>
-                  <li><Link to="#"><i className="ti ti-device-laptop" /><span>Coming Soon</span></Link></li>
-                  <li><Link to="#"><i className="ti ti-moneybag" /><span>Under Maintenance</span></Link>
-                  </li>
+                  <li><Link to="#" id={isMobile && active === "blankPage" ? "mobile_btn" : ""} onClick={() => handleActive("blankPage")}><i className="ti ti-apps" /><span>Blank Page</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "comingSoon" ? "mobile_btn" : ""} onClick={() => handleActive("comingSoon")}><i className="ti ti-device-laptop" /><span>Coming Soon</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "underMaintenance" ? "mobile_btn" : ""} onClick={() => handleActive("underMaintenance")}><i className="ti ti-moneybag" /><span>Under Maintenance</span></Link></li>
                 </ul>
-              </li> */}
+              </li>
 
-              {/* <li>
+              <li>
                 <h6 className="submenu-hdr">UI Interface</h6>
                 <ul>
                   <li className="submenu">
@@ -369,36 +368,36 @@ const Sidebar = () => {
                       <i className="ti ti-adjustments-check" /><span>Base UI</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Alerts</Link></li>
-                      <li><Link to="#">Accordion</Link></li>
-                      <li><Link to="#">Avatar</Link></li>
-                      <li><Link to="#">Badges</Link></li>
-                      <li><Link to="#">Border</Link></li>
-                      <li><Link to="#">Buttons</Link></li>
-                      <li><Link to="#">Button Group</Link></li>
-                      <li><Link to="#">Breadcrumb</Link></li>
-                      <li><Link to="#">Card</Link></li>
-                      <li><Link to="#">Carousel</Link></li>
-                      <li><Link to="#">Colors</Link></li>
-                      <li><Link to="#">Dropdowns</Link></li>
-                      <li><Link to="#">Grid</Link></li>
-                      <li><Link to="#">Images</Link></li>
-                      <li><Link to="#">Lightbox</Link></li>
-                      <li><Link to="#">Media</Link></li>
-                      <li><Link to="#">Modals</Link></li>
-                      <li><Link to="#">Offcanvas</Link></li>
-                      <li><Link to="#">Pagination</Link></li>
-                      <li><Link to="#">Popovers</Link></li>
-                      <li><Link to="#">Progress</Link></li>
-                      <li><Link to="#">Placeholders</Link></li>
-                      <li><Link to="#">Range Slider</Link></li>
-                      <li><Link to="#">Spinner</Link></li>
-                      <li><Link to="#">Sweet Alerts</Link></li>
-                      <li><Link to="#">Tabs</Link></li>
-                      <li><Link to="#">Toasts</Link></li>
-                      <li><Link to="#">Tooltips</Link></li>
-                      <li><Link to="#">Typography</Link></li>
-                      <li><Link to="#">Video</Link></li>
+                      <li><Link to="#" id={isMobile && active === "alerts" ? "mobile_btn" : ""} onClick={() => handleActive("alerts")}>Alerts</Link></li>
+                      <li><Link to="#" id={isMobile && active === "accordion" ? "mobile_btn" : ""} onClick={() => handleActive("accordion")}>Accordion</Link></li>
+                      <li><Link to="#" id={isMobile && active === "avatar" ? "mobile_btn" : ""} onClick={() => handleActive("avatar")}>Avatar</Link></li>
+                      <li><Link to="#" id={isMobile && active === "badges" ? "mobile_btn" : ""} onClick={() => handleActive("badges")}>Badges</Link></li>
+                      <li><Link to="#" id={isMobile && active === "border" ? "mobile_btn" : ""} onClick={() => handleActive("border")}>Border</Link></li>
+                      <li><Link to="#" id={isMobile && active === "buttons" ? "mobile_btn" : ""} onClick={() => handleActive("buttons")}>Buttons</Link></li>
+                      <li><Link to="#" id={isMobile && active === "buttonGroup" ? "mobile_btn" : ""} onClick={() => handleActive("buttonGroup")}>Button Group</Link></li>
+                      <li><Link to="#" id={isMobile && active === "breadcrumb" ? "mobile_btn" : ""} onClick={() => handleActive("breadcrumb")}>Breadcrumb</Link></li>
+                      <li><Link to="#" id={isMobile && active === "card" ? "mobile_btn" : ""} onClick={() => handleActive("card")}>Card</Link></li>
+                      <li><Link to="#" id={isMobile && active === "carousel" ? "mobile_btn" : ""} onClick={() => handleActive("carousel")}>Carousel</Link></li>
+                      <li><Link to="#" id={isMobile && active === "colors" ? "mobile_btn" : ""} onClick={() => handleActive("colors")}>Colors</Link></li>
+                      <li><Link to="#" id={isMobile && active === "dropdowns" ? "mobile_btn" : ""} onClick={() => handleActive("dropdowns")}>Dropdowns</Link></li>
+                      <li><Link to="#" id={isMobile && active === "grid" ? "mobile_btn" : ""} onClick={() => handleActive("grid")}>Grid</Link></li>
+                      <li><Link to="#" id={isMobile && active === "images" ? "mobile_btn" : ""} onClick={() => handleActive("images")}>Images</Link></li>
+                      <li><Link to="#" id={isMobile && active === "lightbox" ? "mobile_btn" : ""} onClick={() => handleActive("lightbox")}>Lightbox</Link></li>
+                      <li><Link to="#" id={isMobile && active === "media" ? "mobile_btn" : ""} onClick={() => handleActive("media")}>Media</Link></li>
+                      <li><Link to="#" id={isMobile && active === "modals" ? "mobile_btn" : ""} onClick={() => handleActive("modals")}>Modals</Link></li>
+                      <li><Link to="#" id={isMobile && active === "offcanvas" ? "mobile_btn" : ""} onClick={() => handleActive("offcanvas")}>Offcanvas</Link></li>
+                      <li><Link to="#" id={isMobile && active === "pagination" ? "mobile_btn" : ""} onClick={() => handleActive("pagination")}>Pagination</Link></li>
+                      <li><Link to="#" id={isMobile && active === "popovers" ? "mobile_btn" : ""} onClick={() => handleActive("popovers")}>Popovers</Link></li>
+                      <li><Link to="#" id={isMobile && active === "progress" ? "mobile_btn" : ""} onClick={() => handleActive("progress")}>Progress</Link></li>
+                      <li><Link to="#" id={isMobile && active === "placeholders" ? "mobile_btn" : ""} onClick={() => handleActive("placeholders")}>Placeholders</Link></li>
+                      <li><Link to="#" id={isMobile && active === "rangeSlider" ? "mobile_btn" : ""} onClick={() => handleActive("rangeSlider")}>Range Slider</Link></li>
+                      <li><Link to="#" id={isMobile && active === "spinner" ? "mobile_btn" : ""} onClick={() => handleActive("spinner")}>Spinner</Link></li>
+                      <li><Link to="#" id={isMobile && active === "sweetAlerts" ? "mobile_btn" : ""} onClick={() => handleActive("sweetAlerts")}>Sweet Alerts</Link></li>
+                      <li><Link to="#" id={isMobile && active === "tabs" ? "mobile_btn" : ""} onClick={() => handleActive("tabs")}>Tabs</Link></li>
+                      <li><Link to="#" id={isMobile && active === "toasts" ? "mobile_btn" : ""} onClick={() => handleActive("toasts")}>Toasts</Link></li>
+                      <li><Link to="#" id={isMobile && active === "tooltips" ? "mobile_btn" : ""} onClick={() => handleActive("tooltips")}>Tooltips</Link></li>
+                      <li><Link to="#" id={isMobile && active === "typography" ? "mobile_btn" : ""} onClick={() => handleActive("typography")}>Typography</Link></li>
+                      <li><Link to="#" id={isMobile && active === "video" ? "mobile_btn" : ""} onClick={() => handleActive("video")}>Video</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
@@ -406,16 +405,16 @@ const Sidebar = () => {
                       <i className="ti ti-box-align-bottom" /><span>Advanced UI</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Ribbon</Link></li>
-                      <li><Link to="#">Clipboard</Link></li>
-                      <li><Link to="#">Drag &amp; Drop</Link></li>
-                      <li><Link to="#">Range Slider</Link></li>
-                      <li><Link to="#">Rating</Link></li>
-                      <li><Link to="#">Text Editor</Link></li>
-                      <li><Link to="#">Counter</Link></li>
-                      <li><Link to="#">Scrollbar</Link></li>
-                      <li><Link to="#">Sticky Note</Link></li>
-                      <li><Link to="#">Timeline</Link></li>
+                      <li><Link to="#" id={isMobile && active === "ribbon" ? "mobile_btn" : ""} onClick={() => handleActive("ribbon")}>Ribbon</Link></li>
+                      <li><Link to="#" id={isMobile && active === "clipboard" ? "mobile_btn" : ""} onClick={() => handleActive("clipboard")}>Clipboard</Link></li>
+                      <li><Link to="#" id={isMobile && active === "dragDrop" ? "mobile_btn" : ""} onClick={() => handleActive("dragDrop")}>Drag & Drop</Link></li>
+                      <li><Link to="#" id={isMobile && active === "rangeSliderAdvanced" ? "mobile_btn" : ""} onClick={() => handleActive("rangeSliderAdvanced")}>Range Slider</Link></li>
+                      <li><Link to="#" id={isMobile && active === "rating" ? "mobile_btn" : ""} onClick={() => handleActive("rating")}>Rating</Link></li>
+                      <li><Link to="#" id={isMobile && active === "textEditor" ? "mobile_btn" : ""} onClick={() => handleActive("textEditor")}>Text Editor</Link></li>
+                      <li><Link to="#" id={isMobile && active === "counter" ? "mobile_btn" : ""} onClick={() => handleActive("counter")}>Counter</Link></li>
+                      <li><Link to="#" id={isMobile && active === "scrollbar" ? "mobile_btn" : ""} onClick={() => handleActive("scrollbar")}>Scrollbar</Link></li>
+                      <li><Link to="#" id={isMobile && active === "stickyNote" ? "mobile_btn" : ""} onClick={() => handleActive("stickyNote")}>Sticky Note</Link></li>
+                      <li><Link to="#" id={isMobile && active === "timeline" ? "mobile_btn" : ""} onClick={() => handleActive("timeline")}>Timeline</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
@@ -423,12 +422,12 @@ const Sidebar = () => {
                       <span>Charts</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Apex Charts</Link></li>
-                      <li><Link to="#">Chart C3</Link></li>
-                      <li><Link to="#">Chart Js</Link></li>
-                      <li><Link to="#">Morris Charts</Link></li>
-                      <li><Link to="#">Flot Charts</Link></li>
-                      <li><Link to="#">Peity Charts</Link></li>
+                      <li><Link to="#" id={isMobile && active === "apexCharts" ? "mobile_btn" : ""} onClick={() => handleActive("apexCharts")}>Apex Charts</Link></li>
+                      <li><Link to="#" id={isMobile && active === "chartC3" ? "mobile_btn" : ""} onClick={() => handleActive("chartC3")}>Chart C3</Link></li>
+                      <li><Link to="#" id={isMobile && active === "chartJs" ? "mobile_btn" : ""} onClick={() => handleActive("chartJs")}>Chart Js</Link></li>
+                      <li><Link to="#" id={isMobile && active === "morrisCharts" ? "mobile_btn" : ""} onClick={() => handleActive("morrisCharts")}>Morris Charts</Link></li>
+                      <li><Link to="#" id={isMobile && active === "flotCharts" ? "mobile_btn" : ""} onClick={() => handleActive("flotCharts")}>Flot Charts</Link></li>
+                      <li><Link to="#" id={isMobile && active === "peityCharts" ? "mobile_btn" : ""} onClick={() => handleActive("peityCharts")}>Peity Charts</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
@@ -436,16 +435,16 @@ const Sidebar = () => {
                       <span>Icons</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Fontawesome Icons</Link></li>
-                      <li><Link to="#">Feather Icons</Link></li>
-                      <li><Link to="#">Ionic Icons</Link></li>
-                      <li><Link to="#">Material Icons</Link></li>
-                      <li><Link to="#">Pe7 Icons</Link></li>
-                      <li><Link to="#">Simpleline Icons</Link></li>
-                      <li><Link to="#">Themify Icons</Link></li>
-                      <li><Link to="#">Weather Icons</Link></li>
-                      <li><Link to="#">Typicon Icons</Link></li>
-                      <li><Link to="#">Flag Icons</Link></li>
+                      <li><Link to="#" id={isMobile && active === "fontawesomeIcons" ? "mobile_btn" : ""} onClick={() => handleActive("fontawesomeIcons")}>Fontawesome Icons</Link></li>
+                      <li><Link to="#" id={isMobile && active === "featherIcons" ? "mobile_btn" : ""} onClick={() => handleActive("featherIcons")}>Feather Icons</Link></li>
+                      <li><Link to="#" id={isMobile && active === "ionicIcons" ? "mobile_btn" : ""} onClick={() => handleActive("ionicIcons")}>Ionic Icons</Link></li>
+                      <li><Link to="#" id={isMobile && active === "materialIcons" ? "mobile_btn" : ""} onClick={() => handleActive("materialIcons")}>Material Icons</Link></li>
+                      <li><Link to="#" id={isMobile && active === "pe7Icons" ? "mobile_btn" : ""} onClick={() => handleActive("pe7Icons")}>Pe7 Icons</Link></li>
+                      <li><Link to="#" id={isMobile && active === "simplelineIcons" ? "mobile_btn" : ""} onClick={() => handleActive("simplelineIcons")}>Simpleline Icons</Link></li>
+                      <li><Link to="#" id={isMobile && active === "themifyIcons" ? "mobile_btn" : ""} onClick={() => handleActive("themifyIcons")}>Themify Icons</Link></li>
+                      <li><Link to="#" id={isMobile && active === "weatherIcons" ? "mobile_btn" : ""} onClick={() => handleActive("weatherIcons")}>Weather Icons</Link></li>
+                      <li><Link to="#" id={isMobile && active === "typiconIcons" ? "mobile_btn" : ""} onClick={() => handleActive("typiconIcons")}>Typicon Icons</Link></li>
+                      <li><Link to="#" id={isMobile && active === "flagIcons" ? "mobile_btn" : ""} onClick={() => handleActive("flagIcons")}>Flag Icons</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
@@ -456,55 +455,55 @@ const Sidebar = () => {
                       <li className="submenu submenu-two">
                         <Link to="#">Form Elements<span className="menu-arrow inside-submenu" /></Link>
                         <ul>
-                          <li><Link to="#">Basic Inputs</Link></li>
-                          <li><Link to="#">Checkbox &amp; Radios</Link></li>
-                          <li><Link to="#">Input Groups</Link></li>
-                          <li><Link to="#">Grid &amp; Gutters</Link></li>
-                          <li><Link to="#">Form Select</Link></li>
-                          <li><Link to="#">Input Masks</Link></li>
-                          <li><Link to="#">File Uploads</Link></li>
+                          <li><Link to="#" id={isMobile && active === "basicInputs" ? "mobile_btn" : ""} onClick={() => handleActive("basicInputs")}>Basic Inputs</Link></li>
+                          <li><Link to="#" id={isMobile && active === "checkboxRadios" ? "mobile_btn" : ""} onClick={() => handleActive("checkboxRadios")}>Checkbox & Radios</Link></li>
+                          <li><Link to="#" id={isMobile && active === "inputGroups" ? "mobile_btn" : ""} onClick={() => handleActive("inputGroups")}>Input Groups</Link></li>
+                          <li><Link to="#" id={isMobile && active === "gridGutters" ? "mobile_btn" : ""} onClick={() => handleActive("gridGutters")}>Grid & Gutters</Link></li>
+                          <li><Link to="#" id={isMobile && active === "formSelect" ? "mobile_btn" : ""} onClick={() => handleActive("formSelect")}>Form Select</Link></li>
+                          <li><Link to="#" id={isMobile && active === "inputMasks" ? "mobile_btn" : ""} onClick={() => handleActive("inputMasks")}>Input Masks</Link></li>
+                          <li><Link to="#" id={isMobile && active === "fileUploads" ? "mobile_btn" : ""} onClick={() => handleActive("fileUploads")}>File Uploads</Link></li>
                         </ul>
                       </li>
                       <li className="submenu submenu-two">
                         <Link to="#">Layouts<span className="menu-arrow inside-submenu" /></Link>
                         <ul>
-                          <li><Link to="#">Horizontal Form</Link></li>
-                          <li><Link to="#">Vertical Form</Link></li>
-                          <li><Link to="#">Floating Labels</Link></li>
+                          <li><Link to="#" id={isMobile && active === "horizontalForm" ? "mobile_btn" : ""} onClick={() => handleActive("horizontalForm")}>Horizontal Form</Link></li>
+                          <li><Link to="#" id={isMobile && active === "verticalForm" ? "mobile_btn" : ""} onClick={() => handleActive("verticalForm")}>Vertical Form</Link></li>
+                          <li><Link to="#" id={isMobile && active === "floatingLabels" ? "mobile_btn" : ""} onClick={() => handleActive("floatingLabels")}>Floating Labels</Link></li>
                         </ul>
                       </li>
-                      <li><Link to="#">Form Validation</Link></li>
-                      <li><Link to="#">Select2</Link></li>
-                      <li><Link to="#">Form Wizard</Link></li>
+                      <li><Link to="#" id={isMobile && active === "formValidation" ? "mobile_btn" : ""} onClick={() => handleActive("formValidation")}>Form Validation</Link></li>
+                      <li><Link to="#" id={isMobile && active === "select2" ? "mobile_btn" : ""} onClick={() => handleActive("select2")}>Select2</Link></li>
+                      <li><Link to="#" id={isMobile && active === "formWizard" ? "mobile_btn" : ""} onClick={() => handleActive("formWizard")}>Form Wizard</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
                     <Link to="#"><i className="ti ti-table" /><span>Tables</span><span className="menu-arrow" /></Link>
                     <ul>
-                      <li><Link to="#">Basic Tables</Link></li>
-                      <li><Link to="#">Data Table</Link></li>
+                      <li><Link to="#" id={isMobile && active === "basicTables" ? "mobile_btn" : ""} onClick={() => handleActive("basicTables")}>Basic Tables</Link></li>
+                      <li><Link to="#" id={isMobile && active === "dataTable" ? "mobile_btn" : ""} onClick={() => handleActive("dataTable")}>Data Table</Link></li>
                     </ul>
                   </li>
                 </ul>
-              </li> */}
-
-              {/* <li>
+              </li>
+              <li>
                 <h6 className="submenu-hdr">Help</h6>
                 <ul>
-                  <li><Link to="#"><i className="ti ti-file-type-doc" /><span>Documentation</span></Link></li>
-                  <li><Link to="#"><i className="ti ti-arrow-capsule" /><span>Changelog v2.0.3</span></Link>
-                  </li>
+                  <li><Link to="#" id={isMobile && active === "documentation" ? "mobile_btn" : ""} onClick={() => handleActive("documentation")}><i className="ti ti-file-type-doc" /><span>Documentation</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "changelog" ? "mobile_btn" : ""} onClick={() => handleActive("changelog")}><i className="ti ti-arrow-capsule" /><span>Changelog v2.0.3</span></Link></li>
                   <li className="submenu">
                     <Link to="#"><i className="ti ti-brand-databricks" /><span>Multi Level</span><span className="menu-arrow" /></Link>
                     <ul>
-                      <li><Link to="#">Level 1.1</Link></li>
-                      <li className="submenu submenu-two"><Link to="#">Level 1.2<span className="menu-arrow inside-submenu" /></Link>
+                      <li><Link to="#" id={isMobile && active === "level1.1" ? "mobile_btn" : ""} onClick={() => handleActive("level1.1")}>Level 1.1</Link></li>
+                      <li className="submenu submenu-two">
+                        <Link to="#" id={isMobile && active === "level1.2" ? "mobile_btn" : ""} onClick={() => handleActive("level1.2")}>Level 1.2<span className="menu-arrow inside-submenu" /></Link>
                         <ul>
-                          <li><Link to="#">Level 2.1</Link></li>
-                          <li className="submenu submenu-two submenu-three"><Link to="#">Level 2.2<span className="menu-arrow inside-submenu inside-submenu-two" /></Link>
+                          <li><Link to="#" id={isMobile && active === "level2.1" ? "mobile_btn" : ""} onClick={() => handleActive("level2.1")}>Level 2.1</Link></li>
+                          <li className="submenu submenu-two submenu-three">
+                            <Link to="#" id={isMobile && active === "level2.2" ? "mobile_btn" : ""} onClick={() => handleActive("level2.2")}>Level 2.2<span className="menu-arrow inside-submenu inside-submenu-two" /></Link>
                             <ul>
-                              <li><Link to="#">Level 3.1</Link></li>
-                              <li><Link to="#">Level 3.2</Link></li>
+                              <li><Link to="#" id={isMobile && active === "level3.1" ? "mobile_btn" : ""} onClick={() => handleActive("level3.1")}>Level 3.1</Link></li>
+                              <li><Link to="#" id={isMobile && active === "level3.2" ? "mobile_btn" : ""} onClick={() => handleActive("level3.2")}>Level 3.2</Link></li>
                             </ul>
                           </li>
                         </ul>
@@ -512,7 +511,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                 </ul>
-              </li> */}
+              </li>
             </ul>
           </div>
         </div>
