@@ -371,6 +371,7 @@ const Designation = () => {
                                         </Link>
                                       )
                                     }
+                                    <hr className="horizontal-line" />
                                     {
                                       (permissions?.delete) && (
                                         <Link to="#" className="dropdown-item" onClick={() => handleDelete(d?._id)}>
