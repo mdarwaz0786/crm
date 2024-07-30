@@ -496,11 +496,11 @@ const Sidebar = () => {
                     <ul>
                       <li><Link to="#" id={isMobile && active === "level1.1" ? "mobile_btn" : ""} onClick={() => handleActive("level1.1")}>Level 1.1</Link></li>
                       <li className="submenu submenu-two">
-                        <Link to="#" id={isMobile && active === "level1.2" ? "mobile_btn" : ""} onClick={() => handleActive("level1.2")}>Level 1.2<span className="menu-arrow inside-submenu" /></Link>
+                        <Link to="#">Level 1.2<span className="menu-arrow inside-submenu" /></Link>
                         <ul>
                           <li><Link to="#" id={isMobile && active === "level2.1" ? "mobile_btn" : ""} onClick={() => handleActive("level2.1")}>Level 2.1</Link></li>
                           <li className="submenu submenu-two submenu-three">
-                            <Link to="#" id={isMobile && active === "level2.2" ? "mobile_btn" : ""} onClick={() => handleActive("level2.2")}>Level 2.2<span className="menu-arrow inside-submenu inside-submenu-two" /></Link>
+                            <Link to="#">Level 2.2<span className="menu-arrow inside-submenu inside-submenu-two" /></Link>
                             <ul>
                               <li><Link to="#" id={isMobile && active === "level3.1" ? "mobile_btn" : ""} onClick={() => handleActive("level3.1")}>Level 3.1</Link></li>
                               <li><Link to="#" id={isMobile && active === "level3.2" ? "mobile_btn" : ""} onClick={() => handleActive("level3.2")}>Level 3.2</Link></li>
