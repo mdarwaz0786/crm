@@ -262,7 +262,7 @@ export const deleteTeam = async (req, res) => {
       return res.status(400).json({ success: false, message: "Team member not found" });
     };
 
-    return res.status(200).json({ success: true, message: "Team member deleted successfully", team });
+    return res.status(200).json({ success: true, message: "Team member deleted successfully" });
   } catch (error) {
     console.log("Error while deleting team member:", error.message);
     return res.status(500).json({ success: false, message: `Error while deleting team member: ${error.message}` });

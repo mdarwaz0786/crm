@@ -142,6 +142,10 @@
   background-color: #dbe1e7;
 }
 
+.dashboard-search {
+  display: none;
+}
+
 @media screen and (max-width: 767px) {
   .filter-reset-btns a {
     font-size: 0.85rem !important;
@@ -151,5 +155,9 @@
 
   .date-range {
     margin-left: 0rem;
+  }
+
+  .dashboard-search {
+    display: block;
   }
 }

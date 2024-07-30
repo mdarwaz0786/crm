@@ -8,6 +8,7 @@ import { useAuth } from "../../../context/authContext.jsx";
 import Preloader from "../../../Preloader.jsx";
 
 const AddTeamMember = () => {
+  const [data, setData] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -91,6 +92,28 @@ const AddTeamMember = () => {
 
   const formattedJoining = formatDateToDDMMYYYY(joining);
   const formattedDob = formatDateToDDMMYYYY(dob);
+
+  const fetchAllData = async () => {
+    try {
+      const response = await axios.get("/api/v1/team/all-team", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
+      if (response?.data?.success) {
+        setData(response?.data?.team);
+      };
+    } catch (error) {
+      console.log(error.message);
+    };
+  };
+
+  useEffect(() => {
+    if (!isLoading && team && permissions?.create) {
+      fetchAllData();
+    };
+  }, [isLoading, team, permissions?.create]);
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -217,8 +240,17 @@ const AddTeamMember = () => {
           </div>
           <div className="col-md-6">
             <div className="form-wrap">
-              <label className="col-form-label" htmlFor="username">User Name <span className="text-danger">*</span></label>
+              <label className="col-form-label" htmlFor="username">Username <span className="text-danger">*</span></label>
               <input type="text" className="form-control" name="username" id="username" value={username} onChange={(e) => setUsername(e.target.value)} />
+              {
+                username === "" ? null : (
+                  data?.some((d) => d?.username === username) ? (
+                    <div className="col-form-label" style={{ color: "red" }}>Not Available <i className="fas fa-times"></i></div>
+                  ) : (
+                    <div className="col-form-label" style={{ color: "green" }}>Available <i className="fas fa-check"></i></div>
+                  )
+                )
+              }
             </div>
           </div>
           <div className="col-md-6">

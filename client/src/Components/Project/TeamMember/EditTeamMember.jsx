@@ -8,6 +8,8 @@ import { useAuth } from "../../../context/authContext.jsx";
 import Preloader from "../../../Preloader.jsx";
 
 const EditTeamMember = () => {
+  const [data, setData] = useState([]);
+  const [existingUserName, setExistingUserName] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
@@ -99,6 +101,7 @@ const EditTeamMember = () => {
         setDob(response?.data?.team?.dob);
         setSelectedDesignation(response?.data?.team?.designation?._id);
         setUsername(response?.data?.team?.username);
+        setExistingUserName(response?.data?.team?.username);
         setPassword(response?.data?.team?.password);
         setSelectedRole(response?.data?.team?.role?._id);
         setSelectedReportingTo(response?.data?.team?.reportingTo?.map((r) => r?._id));
@@ -108,11 +111,35 @@ const EditTeamMember = () => {
     };
   };
 
+  console.log("existingUserName:", existingUserName);
+
   useEffect(() => {
     if (!isLoading && team && permissions?.update && id) {
       fetchSingleData(id);
     };
   }, [id, isLoading, team, permissions?.update]);
+
+  const fetchAllData = async () => {
+    try {
+      const response = await axios.get("/api/v1/team/all-team", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
+      if (response?.data?.success) {
+        setData(response?.data?.team);
+      };
+    } catch (error) {
+      console.log(error.message);
+    };
+  };
+
+  useEffect(() => {
+    if (!isLoading && team && permissions?.create) {
+      fetchAllData();
+    };
+  }, [isLoading, team, permissions?.create]);
 
   const handleUpdate = async (e, id) => {
     e.preventDefault();
@@ -287,6 +314,19 @@ const EditTeamMember = () => {
                 <div className="form-wrap">
                   <label className="col-form-label" htmlFor="username">User Name <span className="text-danger">*</span></label>
                   <input type="text" className={`form-control ${fieldPermissions?.username?.read ? "readonly-style" : ""}`} name="username" id="username" value={username} onChange={(e) => fieldPermissions?.username?.read ? null : setUsername(e.target.value)} />
+                  {
+                    username === "" ? null : (
+                      data?.some((d) => d?.username === username) && username !== existingUserName ? (
+                        <div className="col-form-label" style={{ color: "red" }}>
+                          Not Available <i className="fas fa-times"></i>
+                        </div>
+                      ) : (
+                        <div className="col-form-label" style={{ color: "green" }}>
+                          Available <i className="fas fa-check"></i>
+                        </div>
+                      )
+                    )
+                  }
                 </div>
               </div>
             )

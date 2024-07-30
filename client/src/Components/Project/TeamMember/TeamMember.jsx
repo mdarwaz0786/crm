@@ -107,7 +107,7 @@ const TeamMember = () => {
         },
       });
 
-      if (response?.data?.succes) {
+      if (response?.data?.success) {
         toast.success("Team member deleted successfully");
         fetchAllData();
       };

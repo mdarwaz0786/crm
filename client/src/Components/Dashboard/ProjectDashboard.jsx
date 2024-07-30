@@ -88,6 +88,12 @@ const ProjectDashboard = () => {
                     <div className="col-md-4">
                       <h3 className="page-title">Project Dashboard</h3>
                     </div>
+                    <div className="col-md-5 col-sm-4 dashboard-search">
+                      <div className="form-wrap icon-form">
+                        <span className="form-icon"><i className="ti ti-search" /></span>
+                        <input type="text" className="form-control" placeholder="Search Project" value={filters.search} onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))} />
+                      </div>
+                    </div>
                     <div className="col-md-8 float-end ms-auto">
                       <div className="d-flex title-head">
                         <div className="daterange-picker d-flex align-items-center justify-content-center">
