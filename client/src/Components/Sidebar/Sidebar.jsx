@@ -51,27 +51,27 @@ const Sidebar = () => {
                       <i className="ti ti-layout-2" /><span>Dashboard</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Deals Dashboard</Link></li>
-                      <li><Link to="#">Leads Dashboard</Link></li>
+                      <li><Link to="#" id={isMobile && active === "dealsDashboard" ? "mobile_btn" : ""} onClick={() => handleActive("dealsDashboard")}>Deals Dashboard</Link></li>
+                      <li><Link to="#" id={isMobile && active === "leadsDashboard" ? "mobile_btn" : ""} onClick={() => handleActive("leadsDashboard")}>Leads Dashboard</Link></li>
                       <li><Link to="/" className={(active === "projectDashboard" || currentPath === "/") ? "active" : ""} id={isMobile && active === "projectDashboard" ? "mobile_btn" : ""} onClick={() => handleActive("projectDashboard")}>Project Dashboard</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
                     <Link to="#"><i className="ti ti-brand-airtable" /><span>Application</span><span className="menu-arrow" /></Link>
                     <ul>
-                      <li><Link to="#">Chat</Link></li>
+                      <li><Link to="#" id={isMobile && active === "chat" ? "mobile_btn" : ""} onClick={() => handleActive("chat")}>Chat</Link></li>
                       <li className="submenu submenu-two">
                         <Link to="#">Call<span className="menu-arrow inside-submenu" /></Link>
                         <ul>
-                          <li><Link to="#">Video Call</Link></li>
-                          <li><Link to="#">Audio Call</Link></li>
-                          <li><Link to="#">Call History</Link></li>
+                          <li><Link to="#" id={isMobile && active === "videoCall" ? "mobile_btn" : ""} onClick={() => handleActive("videoCall")}>Video Call</Link></li>
+                          <li><Link to="#" id={isMobile && active === "audioCall" ? "mobile_btn" : ""} onClick={() => handleActive("audioCall")}>Audio Call</Link></li>
+                          <li><Link to="#" id={isMobile && active === "callHistory" ? "mobile_btn" : ""} onClick={() => handleActive("callHistory")}>Call History</Link></li>
                         </ul>
                       </li>
-                      <li><Link to="#">Calendar</Link></li>
-                      <li><Link to="#">Email</Link></li>
-                      <li><Link to="#">To Do</Link></li>
-                      <li><Link to="#">Notes</Link></li>
+                      <li><Link to="#" id={isMobile && active === "calender" ? "mobile_btn" : ""} onClick={() => handleActive("calender")}>Calendar</Link></li>
+                      <li><Link to="#" id={isMobile && active === "email" ? "mobile_btn" : ""} onClick={() => handleActive("email")}>Email</Link></li>
+                      <li><Link to="#" id={isMobile && active === "toDo" ? "mobile_btn" : ""} onClick={() => handleActive("toDo")}>To Do</Link></li>
+                      <li><Link to="#" id={isMobile && active === "notes" ? "mobile_btn" : ""} onClick={() => handleActive("notes")}>Notes</Link></li>
                       <li><Link to="#">File Manager</Link></li>
                     </ul>
                   </li>
@@ -137,46 +137,46 @@ const Sidebar = () => {
                     )
                   }
                   <li>
-                    <Link to="#"><i className="ti ti-user-up" /><span>Contacts</span></Link>
+                    <Link to="#" id={isMobile && active === "contacts" ? "mobile_btn" : ""} onClick={() => handleActive("contacts")}><i className="ti ti-user-up" /><span>Contacts</span></Link>
                   </li>
                   <li>
-                    <Link to="#"><i className="ti ti-building-community" /><span>Companies</span></Link>
+                    <Link to="#" id={isMobile && active === "companies" ? "mobile_btn" : ""} onClick={() => handleActive("companies")}><i className="ti ti-building-community" /><span>Companies</span></Link>
                   </li>
                   <li>
-                    <Link to="#"><i className="ti ti-medal" /><span>Deals</span></Link>
+                    <Link to="#" id={isMobile && active === "deals" ? "mobile_btn" : ""} onClick={() => handleActive("deals")}><i className="ti ti-medal" /><span>Deals</span></Link>
                   </li>
                   <li>
-                    <Link to="#"><i className="ti ti-chart-arcs" /><span>Leads</span></Link>
+                    <Link to="#" id={isMobile && active === "leads" ? "mobile_btn" : ""} onClick={() => handleActive("leads")}><i className="ti ti-chart-arcs" /><span>Leads</span></Link>
                   </li>
                   <li>
-                    <Link to="#"><i className="ti ti-timeline-event-exclamation" /><span>Pipeline</span></Link>
+                    <Link to="#" id={isMobile && active === "pipeline" ? "mobile_btn" : ""} onClick={() => handleActive("pipeline")}><i className="ti ti-timeline-event-exclamation" /><span>Pipeline</span></Link>
                   </li>
                   <li>
-                    <Link to="#"><i className="ti ti-brand-campaignmonitor" /><span>Campaign</span></Link>
+                    <Link to="#" id={isMobile && active === "compaign" ? "mobile_btn" : ""} onClick={() => handleActive("compaign")}><i className="ti ti-brand-campaignmonitor" /><span>Campaign</span></Link>
                   </li>
                   <li>
-                    <Link to="#"><i className="ti ti-list-check" /><span>Tasks</span></Link>
+                    <Link to="#" id={isMobile && active === "tasks" ? "mobile_btn" : ""} onClick={() => handleActive("tasks")}><i className="ti ti-list-check" /><span>Tasks</span></Link>
                   </li>
                   <li>
-                    <Link to="#"><i className="ti ti-file-star" /><span>Proposals</span></Link>
+                    <Link to="#" id={isMobile && active === "proposals" ? "mobile_btn" : ""} onClick={() => handleActive("proposals")}><i className="ti ti-file-star" /><span>Proposals</span></Link>
                   </li>
                   <li>
-                    <Link to="#"><i className="ti ti-file-check" /><span>Contracts</span></Link>
+                    <Link to="#" id={isMobile && active === "contracts" ? "mobile_btn" : ""} onClick={() => handleActive("contracts")}><i className="ti ti-file-check" /><span>Contracts</span></Link>
                   </li>
                   <li>
-                    <Link to="#"><i className="ti ti-file-report" /><span>Estimations</span></Link>
+                    <Link to="#" id={isMobile && active === "estimations" ? "mobile_btn" : ""} onClick={() => handleActive("estimations")}><i className="ti ti-file-report" /><span>Estimations</span></Link>
                   </li>
                   <li>
                     <Link to="#"><i className="ti ti-file-invoice" /><span>Invoices</span></Link>
                   </li>
                   <li>
-                    <Link to="#"><i className="ti ti-report-money" /><span>Payments</span></Link>
+                    <Link to="#" id={isMobile && active === "payments" ? "mobile_btn" : ""} onClick={() => handleActive("payments")}><i className="ti ti-report-money" /><span>Payments</span></Link>
                   </li>
                   <li>
-                    <Link to="#"><i className="ti ti-chart-bar" /><span>Analytics</span></Link>
+                    <Link to="#" id={isMobile && active === "analytics" ? "mobile_btn" : ""} onClick={() => handleActive("analytics")}><i className="ti ti-chart-bar" /><span>Analytics</span></Link>
                   </li>
                   <li>
-                    <Link to="#"><i className="ti ti-bounce-right" /><span>Activities</span></Link>
+                    <Link to="#" id={isMobile && active === "activities" ? "mobile_btn" : ""} onClick={() => handleActive("activities")}><i className="ti ti-bounce-right" /><span>Activities</span></Link>
                   </li>
                 </ul>
               </li>
@@ -188,12 +188,12 @@ const Sidebar = () => {
                       <i className="ti ti-file-invoice" /><span>Reports</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Lead Reports</Link></li>
-                      <li><Link to="#">Deal Reports</Link></li>
-                      <li><Link to="#">Contact Reports</Link></li>
-                      <li><Link to="#">Company Reports</Link></li>
-                      <li><Link to="#">Project Reports</Link></li>
-                      <li><Link to="#">Task Reports</Link></li>
+                      <li><Link to="#" id={isMobile && active === "dealReports" ? "mobile_btn" : ""} onClick={() => handleActive("dealReports")}>Lead Reports</Link></li>
+                      <li><Link to="#" id={isMobile && active === "dealReports" ? "mobile_btn" : ""} onClick={() => handleActive("dealReports")}>Deal Reports</Link></li>
+                      <li><Link to="#" id={isMobile && active === "contactReports" ? "mobile_btn" : ""} onClick={() => handleActive("contactReports")}>Contact Reports</Link></li>
+                      <li><Link to="#" id={isMobile && active === "companyReports" ? "mobile_btn" : ""} onClick={() => handleActive("companyReports")}>Company Reports</Link></li>
+                      <li><Link to="#" id={isMobile && active === "projectReports" ? "mobile_btn" : ""} onClick={() => handleActive("projectReports")}>Project Reports</Link></li>
+                      <li><Link to="#" id={isMobile && active === "tastReports" ? "mobile_btn" : ""} onClick={() => handleActive("tastReports")}>Task Reports</Link></li>
                     </ul>
                   </li>
                 </ul>
@@ -201,21 +201,19 @@ const Sidebar = () => {
               <li>
                 <h6 className="submenu-hdr">CRM Settings</h6>
                 <ul>
-                  <li><Link to="#"><i className="ti ti-artboard" /><span>Sources</span></Link></li>
-                  <li><Link to="#"><i className="ti ti-message-exclamation" /><span>Lost Reason</span></Link>
-                  </li>
-                  <li><Link to="#"><i className="ti ti-steam" /><span>Contact Stage</span></Link></li>
-                  <li><Link to="#"><i className="ti ti-building-factory" /><span>Industry</span></Link></li>
-                  <li><Link to="#"><i className="ti ti-phone-check" /><span>Calls</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "sources" ? "mobile_btn" : ""} onClick={() => handleActive("sources")}><i className="ti ti-artboard" /><span>Sources</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "lostReason" ? "mobile_btn" : ""} onClick={() => handleActive("lostReason")}><i className="ti ti-message-exclamation" /><span>Lost Reason</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "contactStage" ? "mobile_btn" : ""} onClick={() => handleActive("contactStage")}><i className="ti ti-steam" /><span>Contact Stage</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "industry" ? "mobile_btn" : ""} onClick={() => handleActive("industry")}><i className="ti ti-building-factory" /><span>Industry</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "calls" ? "mobile_btn" : ""} onClick={() => handleActive("calls")}><i className="ti ti-phone-check" /><span>Calls</span></Link></li>
                 </ul>
               </li>
               <li>
                 <h6 className="submenu-hdr">User Management</h6>
                 <ul>
-                  <li><Link to="#"><i className="ti ti-users" /><span>Manage Users</span></Link></li>
-                  <li><Link to="#"><i className="ti ti-navigation-cog" /><span>Roles &amp;
-                    Permissions</span></Link></li>
-                  <li><Link to="#"><i className="ti ti-flag-question" /><span>Delete Request</span></Link>
+                  <li><Link to="#" id={isMobile && active === "manageUsers" ? "mobile_btn" : ""} onClick={() => handleActive("manageUsers")}><i className="ti ti-users" /><span>Manage Users</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "rolePermissions" ? "mobile_btn" : ""} onClick={() => handleActive("rolePermissions")}><i className="ti ti-navigation-cog" /><span>Roles &amp;Permissions</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "deleteRequest" ? "mobile_btn" : ""} onClick={() => handleActive("deleteRequest")}><i className="ti ti-flag-question" /><span>Delete Request</span></Link>
                   </li>
                 </ul>
               </li>
@@ -227,9 +225,9 @@ const Sidebar = () => {
                       <i className="ti ti-file-invoice" /><span>Membership</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Membership Plans</Link></li>
-                      <li><Link to="#">Membership Addons</Link></li>
-                      <li><Link to="#">Transactions</Link></li>
+                      <li><Link to="#" id={isMobile && active === "membershipPlans" ? "mobile_btn" : ""} onClick={() => handleActive("membershipPlans")}>Membership Plans</Link></li>
+                      <li><Link to="#" id={isMobile && active === "membershipAddons" ? "mobile_btn" : ""} onClick={() => handleActive("membershipAddons")}>Membership Addons</Link></li>
+                      <li><Link to="#" id={isMobile && active === "transactions" ? "mobile_btn" : ""} onClick={() => handleActive("transactions")}>Transactions</Link></li>
                     </ul>
                   </li>
                 </ul>
@@ -237,27 +235,27 @@ const Sidebar = () => {
               <li>
                 <h6 className="submenu-hdr">Content</h6>
                 <ul>
-                  <li><Link to="#"><i className="ti ti-page-break" /><span>Pages</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "pages" ? "mobile_btn" : ""} onClick={() => handleActive("pages")}><i className="ti ti-page-break" /><span>Pages</span></Link></li>
                   <li className="submenu">
-                    <Link to="#">
+                    <Link to="#" >
                       <i className="ti ti-map-pin-pin" /><span>Location</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Countries</Link></li>
-                      <li><Link to="#">States</Link></li>
-                      <li><Link to="#">Cities</Link></li>
+                      <li><Link to="#" id={isMobile && active === "countries" ? "mobile_btn" : ""} onClick={() => handleActive("countries")}>Countries</Link></li>
+                      <li><Link to="#" id={isMobile && active === "states" ? "mobile_btn" : ""} onClick={() => handleActive("states")}>States</Link></li>
+                      <li><Link to="#" id={isMobile && active === "cities" ? "mobile_btn" : ""} onClick={() => handleActive("cities")}>Cities</Link></li>
                     </ul>
                   </li>
-                  <li><Link to="#"><i className="ti ti-quote" /><span>Testimonials</span></Link></li>
-                  <li><Link to="#"><i className="ti ti-question-mark" /><span>FAQ</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "testimonials" ? "mobile_btn" : ""} onClick={() => handleActive("testimonials")}><i className="ti ti-quote" /><span>Testimonials</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "faq" ? "mobile_btn" : ""} onClick={() => handleActive("faq")}><i className="ti ti-question-mark" /><span>FAQ</span></Link></li>
                 </ul>
               </li>
               <li>
                 <h6 className="submenu-hdr">Support</h6>
                 <ul>
-                  <li><Link to="#"><i className="ti ti-page-break" /><span>Contact Messages</span></Link>
+                  <li><Link to="#" id={isMobile && active === "contactMessages" ? "mobile_btn" : ""} onClick={() => handleActive("contactMessages")}><i className="ti ti-page-break" /><span>Contact Messages</span></Link>
                   </li>
-                  <li><Link to="#"><i className="ti ti-ticket" /><span>Tickets</span></Link></li>
+                  <li><Link to="#" id={isMobile && active === "tickets" ? "mobile_btn" : ""} onClick={() => handleActive("tickets")}><i className="ti ti-ticket" /><span>Tickets</span></Link></li>
                 </ul>
               </li>
               <li>
@@ -268,10 +266,10 @@ const Sidebar = () => {
                       <i className="ti ti-settings-cog" /><span>General Settings</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Profile</Link></li>
-                      <li><Link to="#">Security</Link></li>
-                      <li><Link to="#">Notifications</Link></li>
-                      <li><Link to="#">Connected Apps</Link></li>
+                      <li><Link to="#" id={isMobile && active === "profile" ? "mobile_btn" : ""} onClick={() => handleActive("profile")}>Profile</Link></li>
+                      <li><Link to="#" id={isMobile && active === "security" ? "mobile_btn" : ""} onClick={() => handleActive("security")}>Security</Link></li>
+                      <li><Link to="#" id={isMobile && active === "notifications" ? "mobile_btn" : ""} onClick={() => handleActive("notifications")}>Notifications</Link></li>
+                      <li><Link to="#" id={isMobile && active === "connectedApps" ? "mobile_btn" : ""} onClick={() => handleActive("connectedApps")}>Connected Apps</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
@@ -279,12 +277,12 @@ const Sidebar = () => {
                       <i className="ti ti-world-cog" /><span>Website Settings</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Company Settings</Link></li>
-                      <li><Link to="#">Localization</Link></li>
-                      <li><Link to="#">Prefixes</Link></li>
-                      <li><Link to="#">Preference</Link></li>
-                      <li><Link to="#">Appearance</Link></li>
-                      <li><Link to="#">Language</Link></li>
+                      <li><Link to="#" id={isMobile && active === "companySettings" ? "mobile_btn" : ""} onClick={() => handleActive("companySettings")}>Company Settings</Link></li>
+                      <li><Link to="#" id={isMobile && active === "localization" ? "mobile_btn" : ""} onClick={() => handleActive("localization")}>Localization</Link></li>
+                      <li><Link to="#" id={isMobile && active === "prefixes" ? "mobile_btn" : ""} onClick={() => handleActive("prefixes")}>Prefixes</Link></li>
+                      <li><Link to="#" id={isMobile && active === "preference" ? "mobile_btn" : ""} onClick={() => handleActive("preference")}>Preference</Link></li>
+                      <li><Link to="#" id={isMobile && active === "appearance" ? "mobile_btn" : ""} onClick={() => handleActive("appearance")}>Appearance</Link></li>
+                      <li><Link to="#" id={isMobile && active === "language" ? "mobile_btn" : ""} onClick={() => handleActive("language")}>Language</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
@@ -292,9 +290,9 @@ const Sidebar = () => {
                       <i className="ti ti-apps" /><span>App Settings</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Invoice Settings</Link></li>
-                      <li><Link to="#">Printers</Link></li>
-                      <li><Link to="#">Custom Fields</Link></li>
+                      <li><Link to="#" id={isMobile && active === "invoiceSettings" ? "mobile_btn" : ""} onClick={() => handleActive("invoiceSettings")}>Invoice Settings</Link></li>
+                      <li><Link to="#" id={isMobile && active === "printers" ? "mobile_btn" : ""} onClick={() => handleActive("printers")}>Printers</Link></li>
+                      <li><Link to="#" id={isMobile && active === "customFields" ? "mobile_btn" : ""} onClick={() => handleActive("customFields")}>Custom Fields</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
@@ -302,9 +300,9 @@ const Sidebar = () => {
                       <i className="ti ti-device-laptop" /><span>System Settings</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Email Settings</Link></li>
-                      <li><Link to="#">SMS Gateways</Link></li>
-                      <li><Link to="#">GDPR Cookies</Link></li>
+                      <li><Link to="#" id={isMobile && active === "emailSettings" ? "mobile_btn" : ""} onClick={() => handleActive("emailSettings")}>Email Settings</Link></li>
+                      <li><Link to="#" id={isMobile && active === "smsGateways" ? "mobile_btn" : ""} onClick={() => handleActive("smsGateways")}>SMS Gateways</Link></li>
+                      <li><Link to="#" id={isMobile && active === "gdprCookies" ? "mobile_btn" : ""} onClick={() => handleActive("gdprCookies")}>GDPR Cookies</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
@@ -312,10 +310,10 @@ const Sidebar = () => {
                       <i className="ti ti-moneybag" /><span>Financial Settings</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Payment Gateways</Link></li>
-                      <li><Link to="#">Bank Accounts</Link></li>
-                      <li><Link to="#">Tax Rates</Link></li>
-                      <li><Link to="#">Currencies</Link></li>
+                      <li><Link to="#" id={isMobile && active === "paymentsGateways" ? "mobile_btn" : ""} onClick={() => handleActive("paymentGateways")}>Payment Gateways</Link></li>
+                      <li><Link to="#" id={isMobile && active === "bankAccounts" ? "mobile_btn" : ""} onClick={() => handleActive("bankAccounts")}>Bank Accounts</Link></li>
+                      <li><Link to="#" id={isMobile && active === "taxRates" ? "mobile_btn" : ""} onClick={() => handleActive("taxRates")}>Tax Rates</Link></li>
+                      <li><Link to="#" id={isMobile && active === "currencies" ? "mobile_btn" : ""} onClick={() => handleActive("currencies")}>Currencies</Link></li>
                     </ul>
                   </li>
                   <li className="submenu">
@@ -323,13 +321,14 @@ const Sidebar = () => {
                       <i className="ti ti-flag-cog" /><span>Other Settings</span><span className="menu-arrow" />
                     </Link>
                     <ul>
-                      <li><Link to="#">Storage</Link></li>
-                      <li><Link to="#">Ban IP Address</Link></li>
+                      <li><Link to="#" id={isMobile && active === "storage" ? "mobile_btn" : ""} onClick={() => handleActive("storage")}>Storage</Link></li>
+                      <li><Link to="#" id={isMobile && active === "banIpAddress" ? "mobile_btn" : ""} onClick={() => handleActive("banIpAddress")}>Ban IP Address</Link></li>
                     </ul>
                   </li>
                 </ul>
               </li>
-              <li>
+
+              {/* <li>
                 <h6 className="submenu-hdr">Pages</h6>
                 <ul>
                   <li className="submenu">
@@ -360,8 +359,9 @@ const Sidebar = () => {
                   <li><Link to="#"><i className="ti ti-moneybag" /><span>Under Maintenance</span></Link>
                   </li>
                 </ul>
-              </li>
-              <li>
+              </li> */}
+
+              {/* <li>
                 <h6 className="submenu-hdr">UI Interface</h6>
                 <ul>
                   <li className="submenu">
@@ -486,8 +486,9 @@ const Sidebar = () => {
                     </ul>
                   </li>
                 </ul>
-              </li>
-              <li>
+              </li> */}
+
+              {/* <li>
                 <h6 className="submenu-hdr">Help</h6>
                 <ul>
                   <li><Link to="#"><i className="ti ti-file-type-doc" /><span>Documentation</span></Link></li>
@@ -511,7 +512,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                 </ul>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
