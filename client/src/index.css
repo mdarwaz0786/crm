@@ -146,6 +146,10 @@
   display: none;
 }
 
+.horizontal-line {
+  display: none;
+}
+
 @media screen and (max-width: 767px) {
   .filter-reset-btns a {
     font-size: 0.85rem !important;
@@ -158,6 +162,10 @@
   }
 
   .dashboard-search {
+    display: block;
+  }
+
+  .horizontal-line {
     display: block;
   }
 }
