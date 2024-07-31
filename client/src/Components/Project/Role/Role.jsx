@@ -230,13 +230,13 @@ const Role = () => {
                             <div className="dropdown-menu  dropdown-menu-start">
                               <ul>
                                 <li>
-                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, sort: "Ascending" }))}>
+                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, sort: "Ascending", page: 1 }))}>
                                     <i className="ti ti-circle-chevron-right" />
                                     Ascending
                                   </Link>
                                 </li>
                                 <li>
-                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, sort: "Descending" }))}>
+                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, sort: "Descending", page: 1 }))}>
                                     <i className="ti ti-circle-chevron-right" />
                                     Descending
                                   </Link>

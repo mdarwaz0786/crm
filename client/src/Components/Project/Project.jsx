@@ -26,7 +26,7 @@ const Project = () => {
     projectIdFilter: [],
     sort: "Descending",
     page: 1,
-    limit: 5,
+    limit: 10,
     dateRange: "",
   });
   const permissions = team?.role?.permissions?.project;

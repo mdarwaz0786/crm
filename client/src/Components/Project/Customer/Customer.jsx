@@ -230,13 +230,13 @@ const Customer = () => {
                             <div className="dropdown-menu  dropdown-menu-start">
                               <ul>
                                 <li>
-                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, sort: "Ascending" }))} >
+                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, sort: "Ascending", page: 1 }))} >
                                     <i className="ti ti-circle-chevron-right" />
                                     Ascending
                                   </Link>
                                 </li>
                                 <li>
-                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, sort: "Descending" }))} >
+                                  <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, sort: "Descending", page: 1 }))} >
                                     <i className="ti ti-circle-chevron-right" />
                                     Descending
                                   </Link>
@@ -351,7 +351,7 @@ const Customer = () => {
                               <td>
                                 <label className="checkboxs"><input type="checkbox" /><span className="checkmarks"></span></label>
                               </td>
-                              <td> {(filters.page - 1) * filters.limit + index + 1}</td>
+                              <td>{(filters.page - 1) * filters.limit + index + 1}</td>
                               {
                                 (filedPermissions?.name?.show) && (
                                   <td>{d?.name}</td>
