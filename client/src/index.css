@@ -163,6 +163,8 @@
 
   .horizontal-line {
     display: block;
+    padding: 0;
+    margin: 0.4rem auto;
   }
 
   .filter-section {
