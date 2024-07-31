@@ -568,6 +568,11 @@ const Project = () => {
                                       )
                                     }
                                     {
+                                      permissions?.update && permissions?.delete && (
+                                        <hr className="horizontal-line" />
+                                      )
+                                    }
+                                    {
                                       (permissions?.delete) && (
                                         <Link to="#" className="dropdown-item" onClick={() => handleDelete(p?._id)}>
                                           <i className="ti ti-trash text-danger"></i>

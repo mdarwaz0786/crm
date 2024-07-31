@@ -161,12 +161,18 @@
     margin-left: 0rem;
   }
 
-  .dashboard-search {
+  .horizontal-line {
     display: block;
   }
 
-  .horizontal-line {
-    display: block;
+  .filter-section {
+    padding-bottom: 1rem;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .view-icons {
+    display: none;
   }
 }
 
