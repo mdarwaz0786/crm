@@ -176,7 +176,12 @@
   }
 
   .date-picker-dashboard {
-    font-size: 0.7rem;
+    font-size: 0.85rem;
+    margin: 0.3rem;
+  }
+
+  .head-icons {
+    display: block !important;
   }
 }
 
@@ -184,10 +189,18 @@
   .view-icons {
     display: none;
   }
+
+  .head-icons {
+    display: block !important;
+  }
 }
 
 @media screen and (max-width: 991px) {
   .dashboard-search {
     display: block;
+  }
+
+  .head-icons {
+    display: block !important;
   }
 }

@@ -84,7 +84,7 @@ const ProjectDashboard = () => {
             <div className="row">
               <div className="col-md-12">
                 <div className="page-header">
-                  <div className="row align-items-center ">
+                  <div className="row align-items-center">
                     <div className="col-md-4">
                       <h3 className="page-title">Project Dashboard</h3>
                     </div>
