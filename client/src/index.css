@@ -150,6 +150,10 @@
   display: none;
 }
 
+.date-picker-dashboard {
+  font-size: 0.9rem;
+}
+
 @media screen and (max-width: 767px) {
   .filter-reset-btns a {
     font-size: 0.85rem !important;

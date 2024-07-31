@@ -99,7 +99,7 @@ const ProjectDashboard = () => {
                         <div className="daterange-picker d-flex align-items-center justify-content-center">
                           <div className="form-sort me-2">
                             <DatePicker
-                              className="form-control"
+                              className="form-control date-picker-dashboard"
                               selected={startDate}
                               onChange={(dates) => {
                                 const [start, end] = dates;
@@ -111,6 +111,8 @@ const ProjectDashboard = () => {
                               selectsRange
                               dateFormat="dd-MM-yyyy"
                               placeholderText="Select date range"
+                              isClearable
+                              disabledKeyboardNavigation
                             />
                           </div>
                           <div className="head-icons mb-0">
