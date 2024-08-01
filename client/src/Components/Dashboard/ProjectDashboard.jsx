@@ -10,6 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 const ProjectDashboard = () => {
   const location = useLocation();
   const [project, setProject] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const { validToken, team, isLoading } = useAuth();
@@ -30,6 +31,7 @@ const ProjectDashboard = () => {
 
   const fetchAllProject = async () => {
     try {
+      setLoading(true);
       const response = await axios.get("/api/v1/project/all-project", {
         headers: {
           Authorization: `${validToken}`,
@@ -48,9 +50,11 @@ const ProjectDashboard = () => {
           return isLeader || isResponsible;
         });
         setProject(filteredProject);
+        setLoading(false);
       };
     } catch (error) {
       console.log(error.message);
+      setLoading(false);
     };
   };
 
@@ -217,8 +221,16 @@ const ProjectDashboard = () => {
                           </table>
                         </div>
                         {
-                          (project.length === 0) && (
-                            <h5 style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>No Data Found</h5>
+                          (project.length === 0) ? (
+                            <h5 style={{ textAlign: "center", marginTop: "1rem" }}>No Data Found</h5>
+                          ) : loading ? (
+                            <h5 style={{ textAlign: "center", marginTop: "1rem", color: "green" }}>
+                              <div className="spinner-border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                              </div>
+                            </h5>
+                          ) : (
+                            null
                           )
                         }
                       </div>

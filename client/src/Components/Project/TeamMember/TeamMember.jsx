@@ -27,6 +27,7 @@ const TeamMember = () => {
 
   const fetchAllData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get("/api/v1/team/all-team", {
         headers: {
           Authorization: `${validToken}`,

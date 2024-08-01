@@ -51,6 +51,7 @@ const Project = () => {
 
   const fetchAllProject = async () => {
     try {
+      setLoading(true);
       const response = await axios.get("/api/v1/project/all-project", {
         headers: {
           Authorization: `${validToken}`,
