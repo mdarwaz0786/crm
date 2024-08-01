@@ -440,13 +440,16 @@ const ProjectType = () => {
                             </li>
                             {
                               [...Array(Math.ceil(total / filters.limit)).keys()].map((num) => (
-                                <li className={`paginate_button page-item ${filters.page === num + 1 ? "active" : ""}`} key={num}>
+                                <li className={`paginate_button page-item page-number ${filters.page === num + 1 ? "active" : ""}`} key={num}>
                                   <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: num + 1 }))} aria-controls="project-list" role="link" aria-current={filters.page === num + 1} data-dt-idx={num} tabIndex="0" className="page-link">
                                     {num + 1}
                                   </Link>
                                 </li>
                               ))
                             }
+                            <li className="paginate_button page-item page-number-mobile active">
+                              {filters.page}
+                            </li>
                             <li className={`paginate_button page-item next ${filters.page === Math.ceil(total / filters.limit) ? "disabled" : ""}`} id="project-list_next">
                               <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: filters.page + 1 }))} className="page-link" aria-controls="project-list" role="link" data-dt-idx="next" tabIndex="0">
                                 Next <i className="fa fa-angle-right"></i>
