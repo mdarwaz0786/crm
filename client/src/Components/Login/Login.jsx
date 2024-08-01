@@ -14,14 +14,6 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (username === "") {
-      return toast.error("username is empty");
-    };
-
-    if (password === "") {
-      return toast.error("password is empty");
-    };
-
     try {
       const response = await axios.post("/api/v1/team/login-team", { username, password });
       if (response?.data?.success) {
