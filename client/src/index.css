@@ -150,6 +150,13 @@
   width: 205px;
 }
 
+.date-range input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
 .title-head .daterange-picker .form-sort input {
   padding: 0 2rem 0 1rem !important;
 }

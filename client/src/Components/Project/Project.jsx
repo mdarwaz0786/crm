@@ -326,7 +326,6 @@ const Project = () => {
                             dateFormat="dd-MM-yyyy"
                             placeholderText="Select date range"
                             isClearable
-                            disabledKeyboardNavigation
                           />
                         </li>
                       </ul>
