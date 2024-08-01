@@ -11,6 +11,7 @@ import Preloader from "../../../Preloader.jsx";
 const TeamMember = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState("");
+  const [loading, setLoading] = useState(true);
   const { validToken, team, isLoading } = useAuth();
   const [nameData, setNameData] = useState([]);
   const [name, setName] = useState("");
@@ -42,9 +43,11 @@ const TeamMember = () => {
       if (response?.data?.success) {
         setData(response?.data?.team);
         setTotal(response?.data?.totalCount);
+        setLoading(false);
       };
     } catch (error) {
       console.log(error.message);
+      setLoading(false);
     };
   };
 
@@ -433,13 +436,8 @@ const TeamMember = () => {
                       </tbody>
                     </table>
                   </div>
-                  {
-                    (total === 0) && (
-                      <h5 style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>No Data Found</h5>
-                    )
-                  }
                   <div className="row align-items-center">
-                    <div className="col-md-6">
+                    <div className="col-md-4 custom-pagination">
                       <div className="datatable-length">
                         <div className="dataTables_length" id="project-list_length">
                           <label>
@@ -451,12 +449,26 @@ const TeamMember = () => {
                               <option value="25">25</option>
                               <option value={total}>All</option>
                             </select>
-                            entries
                           </label>
                         </div>
                       </div>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-4 custom-pagination">
+                      {
+                        (total === 0) ? (
+                          <h5 style={{ textAlign: "center", marginTop: "1rem" }}>No Data Found</h5>
+                        ) : loading ? (
+                          <h5 style={{ textAlign: "center", marginTop: "1rem", color: "green" }}>
+                            <div className="spinner-border" role="status">
+                              <span className="visually-hidden">Loading...</span>
+                            </div>
+                          </h5>
+                        ) : (
+                          null
+                        )
+                      }
+                    </div>
+                    <div className="col-md-4 custom-pagination">
                       <div className="datatable-paginate">
                         <div className="dataTables_paginate paging_simple_numbers" id="project-list_paginate">
                           <ul className="pagination">
