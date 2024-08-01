@@ -250,9 +250,9 @@ const ProjectDashboard = () => {
                           <div className="col-md-4 custom-pagination">
                             {
                               (total === 0) ? (
-                                <span style={{ textAlign: "center" }}>No Data Found</span>
+                                <span style={{ textAlign: "center" }}>No Data</span>
                               ) : loading ? (
-                                <h5 style={{ textAlign: "center", color: "00918E" }}>
+                                <h5 style={{ textAlign: "center", color: "#00918E" }}>
                                   <div className="spinner-border" role="status">
                                     <span className="visually-hidden">Loading...</span>
                                   </div>

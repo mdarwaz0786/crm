@@ -96,7 +96,7 @@ const Sidebar = () => {
                       }
                       {
                         (permissions?.role?.access) && (
-                          <li><Link to="/role" className={active === "role" || currentPath === "/role" ? "active" : ""} id={isMobile && active === "role" ? "mobile_btn" : ""} onClick={() => handleActive("role")}>Role</Link></li>
+                          <li><Link to="/role" className={active === "role" || currentPath === "/role" ? "active" : ""} id={isMobile && active === "role" ? "mobile_btn" : ""} onClick={() => handleActive("role")}>Role & Permission</Link></li>
                         )
                       }
                       {

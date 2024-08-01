@@ -313,4 +313,8 @@
     margin-right: 0.2rem;
     margin-left: 5px;
   }
+
+  .statistic-header .statistic-dropdown .dropdown-toggle {
+    padding: 8px;
+  }
 }
