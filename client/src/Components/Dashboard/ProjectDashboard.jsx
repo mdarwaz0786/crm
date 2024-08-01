@@ -10,6 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 const ProjectDashboard = () => {
   const location = useLocation();
   const [project, setProject] = useState([]);
+  const [total, setTotal] = useState("");
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -17,15 +18,17 @@ const ProjectDashboard = () => {
   const fieldPermissions = team?.role?.permissions?.project?.fields;
   const permissions = team?.role?.permissions?.project;
   const [filters, setFilters] = useState({
-    sort: "Descending",
     search: "",
+    sort: "Descending",
+    page: 1,
+    limit: 5,
     dateRange: "",
   });
 
   useEffect(() => {
     const { query } = location.state || {};
     if (query) {
-      setFilters((prevFilters) => ({ ...prevFilters, search: query || "" }));
+      setFilters((prevFilters) => ({ ...prevFilters, search: query || "", page: 1 }));
     };
   }, [location.state]);
 
@@ -37,8 +40,10 @@ const ProjectDashboard = () => {
           Authorization: `${validToken}`,
         },
         params: {
-          sort: filters.sort,
           search: filters.search,
+          sort: filters.sort,
+          page: filters.page,
+          limit: filters.limit,
           dateRange: filters.dateRange,
         },
       });
@@ -50,6 +55,7 @@ const ProjectDashboard = () => {
           return isLeader || isResponsible;
         });
         setProject(filteredProject);
+        setTotal(response?.data?.totalCount);
         setLoading(false);
       };
     } catch (error) {
@@ -79,6 +85,9 @@ const ProjectDashboard = () => {
       fetchAllProject();
     };
   }, [filters, team, isLoading, permissions?.access]);
+
+  console.log("total:", total);
+  console.log("limit:", filters.limit);
 
   return (
     <>
@@ -142,10 +151,10 @@ const ProjectDashboard = () => {
                                     <i className="ti ti-calendar-check me-2" /> {filters.sort}
                                   </Link>
                                   <div className="dropdown-menu dropdown-menu-end">
-                                    <Link to="#" className="dropdown-item" onClick={() => setFilters((prev) => ({ ...prev, sort: "Ascending" }))} >
+                                    <Link to="#" className="dropdown-item" onClick={() => setFilters((prev) => ({ ...prev, sort: "Ascending", page: 1 }))} >
                                       <i className="ti ti-circle-chevron-right" /> Ascending
                                     </Link>
-                                    <Link to="#" className="dropdown-item" onClick={() => setFilters((prev) => ({ ...prev, sort: "Descending" }))} >
+                                    <Link to="#" className="dropdown-item" onClick={() => setFilters((prev) => ({ ...prev, sort: "Descending", page: 1 }))} >
                                       <i className="ti ti-circle-chevron-right" /> Descending
                                     </Link>
                                   </div>
@@ -220,19 +229,67 @@ const ProjectDashboard = () => {
                             </tbody>
                           </table>
                         </div>
-                        {
-                          (project.length === 0) ? (
-                            <h5 style={{ textAlign: "center", marginTop: "1rem" }}>No Data Found</h5>
-                          ) : loading ? (
-                            <h5 style={{ textAlign: "center", marginTop: "1rem", color: "green" }}>
-                              <div className="spinner-border" role="status">
-                                <span className="visually-hidden">Loading...</span>
+                        <div className="row align-items-center">
+                          <div className="col-md-4 custom-pagination">
+                            <div className="datatable-length">
+                              <div className="dataTables_length" id="project-list_length">
+                                <label>
+                                  Show
+                                  <select name="project-list_length" value={filters.limit} onChange={(e) => setFilters((prev) => ({ ...prev, limit: e.target.value, page: 1 }))} aria-controls="project-list" className="form-select form-select-sm">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="25">25</option>
+                                    <option value={total}>All</option>
+                                  </select>
+                                </label>
                               </div>
-                            </h5>
-                          ) : (
-                            null
-                          )
-                        }
+                            </div>
+                          </div>
+                          <div className="col-md-4 custom-pagination">
+                            {
+                              (total === 0) ? (
+                                <h5 style={{ textAlign: "center", marginTop: "1rem" }}>No Data Found</h5>
+                              ) : loading ? (
+                                <h5 style={{ textAlign: "center", marginTop: "1rem", color: "green" }}>
+                                  <div className="spinner-border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                  </div>
+                                </h5>
+                              ) : (
+                                null
+                              )
+                            }
+                          </div>
+                          <div className="col-md-4 custom-pagination">
+                            <div className="datatable-paginate">
+                              <div className="dataTables_paginate paging_simple_numbers" id="project-list_paginate">
+                                <ul className="pagination">
+                                  <li className={`paginate_button page-item previous ${filters.page === 1 ? "disabled" : ""}`} id="project-list_previous">
+                                    <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: filters.page - 1 }))} aria-controls="project-list" aria-disabled={filters.page === 1} role="link" data-dt-idx="previous" tabIndex="-1" className="page-link" >
+                                      <i className="fa fa-angle-left"></i> Prev
+                                    </Link>
+                                  </li>
+                                  {
+                                    [...Array(Math.ceil(total / filters.limit)).keys()].map((num) => (
+                                      <li className={`paginate_button page-item ${filters.page === num + 1 ? "active" : ""}`} key={num}>
+                                        <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: num + 1 }))} aria-controls="project-list" role="link" aria-current={filters.page === num + 1} data-dt-idx={num} tabIndex="0" className="page-link">
+                                          {num + 1}
+                                        </Link>
+                                      </li>
+                                    ))
+                                  }
+                                  <li className={`paginate_button page-item next ${filters.page === Math.ceil(total / filters.limit) ? "disabled" : ""}`} id="project-list_next">
+                                    <Link to="#" onClick={() => setFilters((prev) => ({ ...prev, page: filters.page + 1 }))} className="page-link" aria-controls="project-list" role="link" data-dt-idx="next" tabIndex="0">
+                                      Next <i className="fa fa-angle-right"></i>
+                                    </Link>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

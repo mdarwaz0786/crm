@@ -20,7 +20,7 @@ const ProjectStatus = () => {
     statusFilter: [],
     sort: "Descending",
     page: 1,
-    limit: 10,
+    limit: 5,
   });
   const permissions = team?.role?.permissions?.projectStatus;
   const FiledPermissions = team?.role?.permissions?.projectStatus?.fields;
@@ -402,7 +402,8 @@ const ProjectStatus = () => {
                         <div className="dataTables_length" id="project-list_length">
                           <label>
                             Show
-                            <select name="project-list_length" value={filters.limit} onChange={(e) => { const newLimit = parseInt(e.target.value, 10); setFilters((prev) => ({ ...prev, limit: newLimit, page: 1 })) }} aria-controls="project-list" className="form-select form-select-sm">
+                            <select name="project-list_length" value={filters.limit} onChange={(e) => setFilters((prev) => ({ ...prev, limit: e.target.value, page: 1 }))} aria-controls="project-list" className="form-select form-select-sm">
+                              <option value="5">5</option>
                               <option value="10">10</option>
                               <option value="15">15</option>
                               <option value="20">20</option>
