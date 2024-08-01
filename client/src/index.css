@@ -188,13 +188,21 @@
   }
 
   .custom-pagination {
-    width: 33%;
+    width: 30%;
+  }
+
+  .custom-pagination h5 {
+    width: 1rem;
+    margin-left: 0.3rem;
+  }
+
+  .custom-pagination span {
+    margin-right: 0.79rem;
+    font-weight: bold;
   }
 
   .page-number-mobile {
     display: block;
-    border: 1px solid #00918E;
-    outline: none;
     border-radius: 0.3rem;
     padding: 0 0.5rem 0 0.5rem;
     background-color: #00918E;
@@ -203,6 +211,13 @@
 
   .page-number {
     display: none;
+  }
+
+  .dataTables_length label .form-select,
+  #dataTables_length label .form-select {
+    padding: 0 1.8rem 0 0.5rem;
+    margin-right: 0.2rem;
+    margin-left: 5px;
   }
 }
 
@@ -220,13 +235,21 @@
   }
 
   .custom-pagination {
-    width: 33%;
+    width: 30%;
+  }
+
+  .custom-pagination h5 {
+    width: 1rem;
+    margin-left: 0.3rem;
+  }
+
+  .custom-pagination span {
+    margin-right: 0.79rem;
+    font-weight: bold;
   }
 
   .page-number-mobile {
     display: block;
-    border: 1px solid #00918E;
-    outline: none;
     border-radius: 0.3rem;
     padding: 0 0.5rem 0 0.5rem;
     background-color: #00918E;
@@ -235,6 +258,13 @@
 
   .page-number {
     display: none;
+  }
+
+  .dataTables_length label .form-select,
+  #dataTables_length label .form-select {
+    padding: 0 1.8rem 0 0.5rem;
+    margin-right: 0.2rem;
+    margin-left: 5px;
   }
 }
 
@@ -252,13 +282,21 @@
   }
 
   .custom-pagination {
-    width: 33%;
+    width: 30%;
+  }
+
+  .custom-pagination h5 {
+    width: 1rem;
+    margin-left: 0.3rem;
+  }
+
+  .custom-pagination span {
+    margin-right: 0.79rem;
+    font-weight: bold;
   }
 
   .page-number-mobile {
     display: block;
-    border: 1px solid #00918E;
-    outline: none;
     border-radius: 0.3rem;
     padding: 0 0.5rem 0 0.5rem;
     background-color: #00918E;
@@ -267,5 +305,12 @@
 
   .page-number {
     display: none;
+  }
+
+  .dataTables_length label .form-select,
+  #dataTables_length label .form-select {
+    padding: 0 1.8rem 0 0.5rem;
+    margin-right: 0.2rem;
+    margin-left: 5px;
   }
 }

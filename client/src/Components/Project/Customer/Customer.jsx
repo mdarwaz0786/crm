@@ -428,9 +428,9 @@ const Customer = () => {
                     <div className="col-md-4 custom-pagination">
                       {
                         (total === 0) ? (
-                          <h5 style={{ textAlign: "center", marginTop: "1rem" }}>No Data Found</h5>
+                          <span style={{ textAlign: "center" }}>No Data</span>
                         ) : loading ? (
-                          <h5 style={{ textAlign: "center", marginTop: "1rem", color: "green" }}>
+                          <h5 style={{ textAlign: "center", color: "#00918E" }}>
                             <div className="spinner-border" role="status">
                               <span className="visually-hidden">Loading...</span>
                             </div>
