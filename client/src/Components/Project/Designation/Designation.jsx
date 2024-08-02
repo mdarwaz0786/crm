@@ -104,20 +104,26 @@ const Designation = () => {
   }, [filters, isLoading, team, permissions?.access]);
 
   const handleDelete = async (id) => {
-    try {
-      const response = await axios.delete(`/api/v1/designation/delete-designation/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+    let isdelete = prompt("If you want to delete, type \"yes\".");
 
-      if (response?.data?.success) {
-        toast.success("Designation deleted successfully");
-        fetchAllData();
+    if (isdelete === "yes") {
+      try {
+        const response = await axios.delete(`/api/v1/designation/delete-designation/${id}`, {
+          headers: {
+            Authorization: `${validToken}`,
+          },
+        });
+
+        if (response?.data?.success) {
+          toast.success("Designation deleted successfully");
+          fetchAllData();
+        };
+      } catch (error) {
+        console.log("Error while deleting designation:", error.message);
+        toast.error("Error while deleting designation");
       };
-    } catch (error) {
-      console.log("Error while deleting designation:", error.message);
-      toast.error("Error while deleting designation");
+    } else {
+      alert("Type only \"yes\".");
     };
   };
 

@@ -104,20 +104,26 @@ const TeamMember = () => {
   }, [filters, isLoading, team, permissions?.access]);
 
   const handleDelete = async (id) => {
-    try {
-      const response = await axios.delete(`/api/v1/team/delete-team/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+    let isdelete = prompt("If you want to delete, type \"yes\".");
 
-      if (response?.data?.success) {
-        toast.success("Team member deleted successfully");
-        fetchAllData();
+    if (isdelete === "yes") {
+      try {
+        const response = await axios.delete(`/api/v1/team/delete-team/${id}`, {
+          headers: {
+            Authorization: `${validToken}`,
+          },
+        });
+
+        if (response?.data?.success) {
+          toast.success("Team member deleted successfully");
+          fetchAllData();
+        };
+      } catch (error) {
+        console.log("Error while deleting team:", error.message);
+        toast.error("Error while deleting team");
       };
-    } catch (error) {
-      console.log("Error while deleting team:", error.message);
-      toast.error("Error while deleting team");
+    } else {
+      alert("Type only \"yes\".");
     };
   };
 

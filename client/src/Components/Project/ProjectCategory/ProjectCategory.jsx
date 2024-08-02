@@ -104,21 +104,27 @@ const ProjectCategory = () => {
   }, [filters, isLoading, team, permissions?.access]);
 
   const handleDelete = async (id) => {
-    try {
-      const response = await axios.delete(`/api/v1/projectCategory/delete-projectCategory/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+    let isdelete = prompt("If you want to delete, type \"yes\".");
 
-      if (response?.data?.success) {
-        toast.success("Project category deleted successfully");
-        fetchAllData();
+    if (isdelete === "yes") {
+      try {
+        const response = await axios.delete(`/api/v1/projectCategory/delete-projectCategory/${id}`, {
+          headers: {
+            Authorization: `${validToken}`,
+          },
+        });
+
+        if (response?.data?.success) {
+          toast.success("Project category deleted successfully");
+          fetchAllData();
+        };
+      } catch (error) {
+        console.log("Error while deleting project category:", error.message);
+        toast.error("Error while deleting project category");
       };
-    } catch (error) {
-      console.log("Error while deleting project category:", error.message);
-      toast.error("Error while deleting project category");
-    }
+    } else {
+      alert("Type only \"yes\".");
+    };
   };
 
   const exportProjectCategoryListAsPdf = () => {

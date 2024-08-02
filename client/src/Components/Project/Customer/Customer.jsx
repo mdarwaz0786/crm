@@ -104,20 +104,26 @@ const Customer = () => {
   }, [filters, isLoading, team, permissions?.access]);
 
   const handleDelete = async (id) => {
-    try {
-      const response = await axios.delete(`/api/v1/customer/delete-customer/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+    let isdelete = prompt("If you want to delete, type \"yes\".");
 
-      if (response?.data?.success) {
-        toast.success("Customer deleted successfully");
-        fetchAllData();
+    if (isdelete === "yes") {
+      try {
+        const response = await axios.delete(`/api/v1/customer/delete-customer/${id}`, {
+          headers: {
+            Authorization: `${validToken}`,
+          },
+        });
+
+        if (response?.data?.success) {
+          toast.success("Customer deleted successfully");
+          fetchAllData();
+        };
+      } catch (error) {
+        console.log("Error while deleting customer:", error.message);
+        toast.error("Error while deleting customer");
       };
-    } catch (error) {
-      console.log("Error while deleting customer:", error.message);
-      toast.error("Error while deleting customer");
+    } else {
+      alert("Type only \"yes\".");
     };
   };
 

@@ -104,20 +104,26 @@ const Role = () => {
   }, [filters, isLoading, team, permissions?.access]);
 
   const handleDelete = async (id) => {
-    try {
-      const response = await axios.delete(`/api/v1/role/delete-role/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+    let isdelete = prompt("If you want to delete, type \"yes\".");
 
-      if (response?.data?.success) {
-        toast.success("Role deleted successfully");
-        fetchAllData();
+    if (isdelete === "yes") {
+      try {
+        const response = await axios.delete(`/api/v1/role/delete-role/${id}`, {
+          headers: {
+            Authorization: `${validToken}`,
+          },
+        });
+
+        if (response?.data?.success) {
+          toast.success("Role deleted successfully");
+          fetchAllData();
+        };
+      } catch (error) {
+        console.log("Error while deleting role:", error.message);
+        toast.error("Error while deleting role");
       };
-    } catch (error) {
-      console.log("Error while deleting role:", error.message);
-      toast.error("Error while deleting role");
+    } else {
+      alert("Type only \"yes\".");
     };
   };
 

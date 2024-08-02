@@ -103,20 +103,26 @@ const ProjectStatus = () => {
   }, [filters, isLoading, team, permissions?.access]);
 
   const handleDelete = async (id) => {
-    try {
-      const response = await axios.delete(`/api/v1/projectStatus/delete-projectStatus/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+    let isdelete = prompt("If you want to delete, type \"yes\".");
 
-      if (response?.data?.success) {
-        toast.success("Project status deleted successfully");
-        fetchAllData();
+    if (isdelete === "yes") {
+      try {
+        const response = await axios.delete(`/api/v1/projectStatus/delete-projectStatus/${id}`, {
+          headers: {
+            Authorization: `${validToken}`,
+          },
+        });
+
+        if (response?.data?.success) {
+          toast.success("Project status deleted successfully");
+          fetchAllData();
+        };
+      } catch (error) {
+        console.log("Error while deleting project status:", error.message);
+        toast.error("Error while deleting project status");
       };
-    } catch (error) {
-      console.log("Error while deleting project status:", error.message);
-      toast.error("Error while deleting project status");
+    } else {
+      alert("Type only \"yes\".");
     };
   };
 

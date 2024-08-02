@@ -170,20 +170,26 @@ const Project = () => {
   }, [filters, isLoading, team, permissions?.access]);
 
   const handleDelete = async (id) => {
-    try {
-      const response = await axios.delete(`/api/v1/project/delete-project/${id}`, {
-        headers: {
-          Authorization: `${validToken}`,
-        },
-      });
+    let isdelete = prompt("If you want to delete, type \"yes\".");
 
-      if (response?.data?.success) {
-        toast.success("Project deleted successfully");
-        fetchAllProject();
+    if (isdelete === "yes") {
+      try {
+        const response = await axios.delete(`/api/v1/project/delete-project/${id}`, {
+          headers: {
+            Authorization: `${validToken}`,
+          },
+        });
+
+        if (response?.data?.success) {
+          toast.success("Project deleted successfully");
+          fetchAllProject();
+        };
+      } catch (error) {
+        console.log("Error while deleting project:", error.message);
+        toast.error("Error while deleting project");
       };
-    } catch (error) {
-      console.log("Error while deleting project:", error.message);
-      toast.error("Error while deleting project");
+    } else {
+      alert("Type only \"yes\".");
     };
   };
 
