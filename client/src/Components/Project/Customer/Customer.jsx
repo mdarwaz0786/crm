@@ -122,7 +122,7 @@ const Customer = () => {
         console.log("Error while deleting customer:", error.message);
         toast.error("Error while deleting customer");
       };
-    } else {
+    } else if (isdelete !== "") {
       alert("Type only \"yes\".");
     };
   };

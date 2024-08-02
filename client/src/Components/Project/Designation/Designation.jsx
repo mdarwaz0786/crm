@@ -122,7 +122,7 @@ const Designation = () => {
         console.log("Error while deleting designation:", error.message);
         toast.error("Error while deleting designation");
       };
-    } else {
+    } else if (isdelete !== "") {
       alert("Type only \"yes\".");
     };
   };

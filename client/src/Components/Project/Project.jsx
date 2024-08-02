@@ -188,7 +188,7 @@ const Project = () => {
         console.log("Error while deleting project:", error.message);
         toast.error("Error while deleting project");
       };
-    } else {
+    } else if (isdelete !== "") {
       alert("Type only \"yes\".");
     };
   };

@@ -122,7 +122,7 @@ const ProjectTiming = () => {
         console.log("Error while deleting project timing:", error.message);
         toast.error("Error while deleting project timing");
       };
-    } else {
+    } else if (isdelete !== "") {
       alert("Type only \"yes\".");
     };
   };
