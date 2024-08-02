@@ -11,6 +11,7 @@ import Preloader from "../../../Preloader.jsx";
 const AddRole = () => {
   const { validToken, team, isLoading } = useAuth();
   const permission = team?.role?.permissions?.role;
+  const [selectAll, setSelectAll] = useState(false);
   const [selectedMaster, setSelectedMaster] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -141,6 +142,7 @@ const AddRole = () => {
 
   const handleChange = (e) => {
     const { name, checked, type } = e.target;
+
     const [master, permission] = name.split('.');
     if (type === 'checkbox') {
       setPermissions((prevPermissions) => ({
@@ -158,19 +160,55 @@ const AddRole = () => {
   const handleFieldPermissionChange = (e) => {
     const { name, checked } = e.target;
     const [field, permission] = name.split('.');
-    setPermissions((prevPermissions) => ({
-      ...prevPermissions,
-      [selectedMaster]: {
-        ...prevPermissions[selectedMaster],
-        fields: {
-          ...prevPermissions[selectedMaster]?.fields,
-          [field]: {
-            ...prevPermissions[selectedMaster]?.fields?.[field],
-            [permission]: checked,
-          },
+
+    setPermissions((prevPermissions) => {
+      const updatedFields = {
+        ...prevPermissions[selectedMaster]?.fields,
+        [field]: {
+          ...prevPermissions[selectedMaster]?.fields?.[field],
+          [permission]: checked,
         },
-      },
-    }));
+      };
+
+      const allFieldsChecked = Object.values(updatedFields).every(
+        (field) => field.read && field.show
+      );
+
+      setSelectAll(allFieldsChecked);
+
+      return {
+        ...prevPermissions,
+        [selectedMaster]: {
+          ...prevPermissions[selectedMaster],
+          fields: updatedFields,
+        },
+      };
+    });
+  };
+
+  const handleSelectAllChange = (checked) => {
+    setSelectAll(checked);
+
+    setPermissions((prevPermissions) => {
+      const updatedFields = Object.keys(prevPermissions[selectedMaster]?.fields || {}).reduce(
+        (fields, field) => {
+          fields[field] = {
+            read: checked,
+            show: checked,
+          };
+          return fields;
+        },
+        {},
+      );
+
+      return {
+        ...prevPermissions,
+        [selectedMaster]: {
+          ...prevPermissions[selectedMaster],
+          fields: updatedFields,
+        },
+      };
+    });
   };
 
   const handleCreate = async (e) => {
@@ -339,6 +377,7 @@ const AddRole = () => {
 
   const closeModal = () => {
     setSelectedMaster(null);
+    setSelectAll(false);
     setModalIsOpen(false);
   };
 
@@ -438,7 +477,19 @@ const AddRole = () => {
 
       <Modal show={modalIsOpen} onHide={closeModal} size="lg" aria-labelledby="modal-title">
         <Modal.Header closeButton>
-          <h4>{permissionLabels[selectedMaster]} Field Permissions</h4>
+          <div style={{ display: "flex", columnGap: "1rem" }}>
+            <h5>{permissionLabels[selectedMaster]} :</h5>
+            <div className="form-check">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                id="selectAll"
+                checked={selectAll}
+                onChange={(e) => handleSelectAllChange(e.target.checked)}
+              />
+              <label style={{ fontWeight: "bold" }} className="form-check-label" htmlFor="selectAll">Select All</label>
+            </div>
+          </div>
         </Modal.Header>
         <Modal.Body>
           <div className="container">

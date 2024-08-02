@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import Preloader from "../../../Preloader.jsx";
 
 const EditRole = () => {
+  const [selectAll, setSelectAll] = useState(false);
   const [selectedMaster, setSelectedMaster] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { team, validToken, isLoading } = useAuth();
@@ -145,7 +146,6 @@ const EditRole = () => {
   const handleChange = (e) => {
     const { name, checked, type } = e.target;
 
-    // Prevent change if the checkbox is read only
     if (fieldPermissions?.masters?.read) {
       e.preventDefault();
       return;
@@ -167,27 +167,66 @@ const EditRole = () => {
 
   const handleFieldPermissionChange = (e) => {
     const { name, checked } = e.target;
+    const [field, permission] = name.split('.');
 
-    // Prevent change if the checkbox is read only
     if (fieldPermissions?.masters?.read) {
       e.preventDefault();
       return;
     };
 
-    const [field, permission] = name.split('.');
-    setPermissions((prevPermissions) => ({
-      ...prevPermissions,
-      [selectedMaster]: {
-        ...prevPermissions[selectedMaster],
-        fields: {
-          ...prevPermissions[selectedMaster]?.fields,
-          [field]: {
-            ...prevPermissions[selectedMaster]?.fields?.[field],
-            [permission]: checked,
-          },
+    setPermissions((prevPermissions) => {
+      const updatedFields = {
+        ...prevPermissions[selectedMaster]?.fields,
+        [field]: {
+          ...prevPermissions[selectedMaster]?.fields?.[field],
+          [permission]: checked,
         },
-      },
-    }));
+      };
+
+      const allFieldsChecked = Object.values(updatedFields).every(
+        (field) => field.read && field.show
+      );
+
+      setSelectAll(allFieldsChecked);
+
+      return {
+        ...prevPermissions,
+        [selectedMaster]: {
+          ...prevPermissions[selectedMaster],
+          fields: updatedFields,
+        },
+      };
+    });
+  };
+
+  const handleSelectAllChange = (e, checked) => {
+    if (fieldPermissions?.masters?.read) {
+      e.preventDefault();
+      return;
+    };
+
+    setSelectAll(checked);
+
+    setPermissions((prevPermissions) => {
+      const updatedFields = Object.keys(prevPermissions[selectedMaster]?.fields || {}).reduce(
+        (fields, field) => {
+          fields[field] = {
+            read: checked,
+            show: checked,
+          };
+          return fields;
+        },
+        {},
+      );
+
+      return {
+        ...prevPermissions,
+        [selectedMaster]: {
+          ...prevPermissions[selectedMaster],
+          fields: updatedFields,
+        },
+      };
+    });
   };
 
   const fetchSingleRole = async (id) => {
@@ -388,6 +427,7 @@ const EditRole = () => {
 
   const closeModal = () => {
     setSelectedMaster(null);
+    setSelectAll(false);
     setModalIsOpen(false);
   };
 
@@ -398,6 +438,8 @@ const EditRole = () => {
   if (!permission?.update) {
     return <Navigate to="/" />;
   };
+
+  console.log(permission);
 
   return (
     <div className="page-wrapper custom-role" style={{ paddingBottom: "1rem" }}>
@@ -495,7 +537,19 @@ const EditRole = () => {
 
       <Modal show={modalIsOpen} onHide={closeModal} size="lg" aria-labelledby="modal-title">
         <Modal.Header closeButton>
-          <h4>{permissionLabels[selectedMaster]} Field Permissions</h4>
+          <div style={{ display: "flex", columnGap: "1rem" }}>
+            <h5>{permissionLabels[selectedMaster]} :</h5>
+            <div className="form-check">
+              <input
+                type="checkbox"
+                className={`form-check-input ${fieldPermissions?.masters?.read ? "readonly-style-checkbox" : ""}`}
+                id="selectAll"
+                checked={selectAll}
+                onChange={(e) => handleSelectAllChange(e, e.target.checked)}
+              />
+              <label style={{ fontWeight: "bold" }} className="form-check-label" htmlFor="selectAll">Select All</label>
+            </div>
+          </div>
         </Modal.Header>
         <Modal.Body>
           <div className="container">
