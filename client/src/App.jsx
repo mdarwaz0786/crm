@@ -65,6 +65,7 @@ const App = () => {
           <Route path="designation" element={<Designation />} />
           <Route path="add-designation" element={<AddDesignation />} />
           <Route path="edit-designation/:id" element={<EditDesignation />} />
+          <Route path="test" element={<Test />} />
         </Route>
         <Route path="/test" element={<Test />} />
         <Route path="/login" element={<Login />} />
