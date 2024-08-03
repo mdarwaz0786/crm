@@ -14,10 +14,7 @@ const formFields = [
 ];
 
 const AddCustomer = () => {
-  const [formData, setFormData] = useState(
-    formFields.reduce((accumulator, field) => ({ ...accumulator, [field.name]: "" }), {}),
-  );
-
+  const [formData, setFormData] = useState(formFields.reduce((accumulator, field) => ({ ...accumulator, [field.name]: "" }), {}));
   const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
   const permissions = team?.role?.permissions?.customer;
@@ -51,11 +48,13 @@ const AddCustomer = () => {
     };
   };
 
-  if (isLoading) return <Preloader />;
+  if (isLoading) {
+    return <Preloader />;
+  };
 
-  if (!permissions?.create) return <Navigate to="/" />;
-
-  console.log(formData);
+  if (!permissions?.create) {
+    return <Navigate to="/" />;
+  };
 
   return (
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>

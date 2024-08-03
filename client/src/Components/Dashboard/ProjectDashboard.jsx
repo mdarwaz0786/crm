@@ -86,9 +86,6 @@ const ProjectDashboard = () => {
     };
   }, [filters, team, isLoading, permissions?.access]);
 
-  console.log("total:", total);
-  console.log("limit:", filters.limit);
-
   return (
     <>
       <div className="main-wrapper">
@@ -263,7 +260,7 @@ const ProjectDashboard = () => {
                             {
                               (total === 0) ? (
                                 <span style={{ textAlign: "center" }}>No Data</span>
-                              ) : loading ? (
+                              ) : loading && permissions?.access ? (
                                 <h5 style={{ textAlign: "center", color: "#00918E" }}>
                                   <div className="spinner-border" role="status">
                                     <span className="visually-hidden">Loading...</span>
