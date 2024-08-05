@@ -175,6 +175,7 @@ const ProjectDashboard = () => {
                             <thead className="thead-light">
                               <tr>
                                 <th>#</th>
+                                <th>View</th>
                                 {
                                   (fieldPermissions?.name?.show) && (
                                     <th>Project Name</th>
@@ -207,9 +208,10 @@ const ProjectDashboard = () => {
                                 project?.map((p, index) => (
                                   <tr key={p?._id}>
                                     <td>{(filters.page - 1) * filters.limit + index + 1}</td>
+                                    <td><Link to={permissions.update ? `edit-project/${p?._id}` : "/"}><i className="fas fa-eye"></i></Link></td>
                                     {
                                       (fieldPermissions?.name?.show) && (
-                                        <td><Link to={permissions.update ? `edit-project/${p?._id}` : "/"}>{p?.name}</Link></td>
+                                        <td>{p?.name}</td>
                                       )
                                     }
                                     {
