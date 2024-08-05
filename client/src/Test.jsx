@@ -16,6 +16,11 @@
 //   { name: 'start', type: 'date', label: 'Start Date' },
 //   { name: 'due', type: 'date', label: 'Due Date' },
 //   { name: 'description', type: 'textarea', label: 'Description' },
+//   { name: 'type', type: 'select', label: 'Project Type', options: [] },
+//   { name: 'customer', type: 'select', label: 'Customer', options: [] },
+//   { name: 'category', type: 'select', label: 'Project Category', options: [] },
+//   { name: 'timing', type: 'select', label: 'Project Timing', options: [] },
+//   { name: 'status', type: 'select', label: 'Project Status', options: [] },
 // ];
 
 // const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
@@ -31,7 +36,7 @@
 //   useEffect(() => {
 //     if (isLoading || !permissions?.create) {
 //       return;
-//     };
+//     }
 
 //     const fetchDropdownData = async () => {
 //       try {
@@ -45,31 +50,42 @@
 //         ];
 
 //         const responses = await Promise.all(endpoints.map((url) => axios.get(url, { headers: { Authorization: validToken } })));
-//         const [customer, projectCategory, projectTiming, teamMember, projectStatus, projectType] = responses.map((response) => response.data);
+//         const [customer, projectCategory, projectTiming, team, projectStatus, projectType] = responses.map((response) => response.data);
 
 //         setDropdownData({
 //           customer: customer.customer || [],
 //           projectCategory: projectCategory.projectCategory || [],
 //           projectTiming: projectTiming.projectTiming || [],
-//           teamMember: teamMember.team || [],
+//           teamMember: team.team || [],
 //           projectStatus: projectStatus.projectStatus || [],
 //           projectType: projectType.projectType || [],
 //         });
+
+//         // Initialize formData options
+//         setFormData(prev => ({
+//           ...prev,
+//           type: projectType.projectType?.[0]?._id || "",
+//           customer: customer.customer?.[0]?._id || "",
+//           category: projectCategory.projectCategory?.[0]?._id || "",
+//           timing: projectTiming.projectTiming?.[0]?._id || "",
+//           status: projectStatus.projectStatus?.[0]?._id || "",
+//         }));
 //       } catch (error) {
 //         console.error("Error while fetching dropdown data:", error.message);
-//       };
+//       }
 //     };
 
 //     fetchDropdownData();
 //   }, [isLoading, permissions?.create, validToken]);
 
 //   const handleChange = ({ target: { name, value } }) => {
-//     console.log(`Field: ${name}, New Value: ${value}`);
 //     setFormData((prev) => ({ ...prev, [name]: value }));
 //   };
 
 //   const handleMultiSelectChange = (field) => ({ target: { value } }) => {
-//     setSelectedOptions((prev) => ({ ...prev, [field]: [...prev[field], value] }));
+//     if (value && !selectedOptions[field].includes(value)) {
+//       setSelectedOptions((prev) => ({ ...prev, [field]: [...prev[field], value] }));
+//     }
 //   };
 
 //   const handleRemoveOption = (field, id) => () => {
@@ -82,14 +98,12 @@
 
 //     if (!allFieldsValid) {
 //       return toast.error("All fields are required.");
-//     };
+//     }
 
 //     try {
 //       const response = await axios.post("/api/v1/project/create-project",
 //         {
 //           ...formData,
-//           start: new Date(formData.start).toLocaleDateString('en-GB'),
-//           due: new Date(formData.due).toLocaleDateString('en-GB'),
 //           responsible: selectedOptions.responsible,
 //           leader: selectedOptions.leader,
 //         },
@@ -104,21 +118,23 @@
 //         setFormData(formFields.reduce((acc, { name }) => ({ ...acc, [name]: "" }), {}));
 //         setSelectedOptions({ responsible: [], leader: [] });
 //         toast.success("Project created successfully");
-//         navigate(-1);
-//       };
+//         // navigate(-1);
+//       }
 //     } catch (error) {
 //       console.error("Error while creating project:", error.message);
 //       toast.error("Error while creating project");
-//     };
+//     }
 //   };
 
 //   if (isLoading) {
 //     return <Preloader />;
-//   };
+//   }
 
 //   if (!permissions?.create) {
 //     return <Navigate to="/" />;
-//   };
+//   }
+
+//   console.log(formData);
 
 //   return (
 //     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
@@ -144,8 +160,8 @@
 //                           value={formData[name]}
 //                           onChange={(value) => handleChange({ target: { name, value } })}
 //                         />
-//                       ) : type === "select" ? (
-//                         <select className="form-select" id={name} value={formData[name]} onChange={handleChange}>
+//                       ) : options ? (
+//                         <select className="form-select" id={name} name={name} value={formData[name]} onChange={handleChange}>
 //                           <option value="">Select</option>
 //                           {options.map((option) => (
 //                             <option key={option} value={option}>{option}</option>
@@ -160,13 +176,13 @@
 //               ))
 //             }
 //             {
-//               ['projectType', 'customer', 'projectCategory', 'projectTiming', 'projectStatus'].map((field) => (
+//               ['type', 'customer', 'category', 'timing', 'status'].map((field) => (
 //                 <div className="col-md-6" key={field}>
 //                   <div className="form-wrap">
 //                     <label className="col-form-label" htmlFor={field}>
 //                       {capitalizeFirstLetter(field.replace(/([A-Z])/g, ' $1'))} <span className="text-danger">*</span>
 //                     </label>
-//                     <select className="form-select" id={field} value={formData[field]} onChange={handleChange}>
+//                     <select className="form-select" id={field} name={field} value={formData[field]} onChange={handleChange}>
 //                       <option value="">Select</option>
 //                       {
 //                         (dropdownData[field] || []).map((item) => (
@@ -219,11 +235,3 @@
 // };
 
 // export default AddProject;
-
-const Test = () => {
-  return (
-    <div>Test</div>
-  );
-};
-
-export default Test;
