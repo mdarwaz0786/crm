@@ -160,7 +160,7 @@ const EditProject = () => {
         setSelectedProjectCategory(response?.data?.project?.category?._id);
         setSelectedProjectTiming(response?.data?.project?.timing?._id);
         setPrice(response?.data?.project?.price);
-        setSelectedResponsible(response?.data?.project?.responsible?.map((r) => r._id));
+        setSelectedResponsible(response?.data?.project?.responsible?.map((r) => r?._id));
         setSelectedLeader(response?.data?.project?.leader?.map((l) => l?._id));
         setStart(response?.data?.project?.start);
         setDue(response?.data?.project?.due);
@@ -451,7 +451,7 @@ const EditProject = () => {
                     <select className={`form-select ${fieldPermissions?.responsible?.read ? "readonly-style" : ""}`} name="responsible" value="" onChange={(e) => fieldPermissions?.responsible?.read ? null : handleSelectChangeResponsible(e)}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
-                        teamMember?.map((t) => (
+                        teamMember?.filter((t) => !selectedResponsible.includes(t?._id)).map((t) => (
                           <option key={t?._id} value={t?._id}>{t?.name}</option>
                         ))
                       }
@@ -478,7 +478,7 @@ const EditProject = () => {
                     <select className={`form-select ${fieldPermissions?.leader?.read ? "readonly-style" : ""}`} name="leader" value="" onChange={(e) => fieldPermissions?.leader?.read ? null : handleSelectChangeLeader(e)}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
-                        teamMember?.map((t) => (
+                        teamMember?.filter((t) => !selectedLeader.includes(t?._id)).map((t) => (
                           <option key={t?._id} value={t?._id}>{t?.name}</option>
                         ))
                       }

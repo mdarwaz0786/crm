@@ -400,7 +400,7 @@ const AddProject = () => {
                 <select className="form-select" name="responsible" value="" onChange={handleSelectChangeResponsible}>
                   <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                   {
-                    teamMember?.map((t) => (
+                    teamMember?.filter((t) => !selectedResponsible.includes(t?._id)).map((t) => (
                       <option key={t?._id} value={t?._id}>{t?.name}</option>
                     ))
                   }
@@ -423,7 +423,7 @@ const AddProject = () => {
                 <select className="form-select" name="leader" value="" onChange={handleSelectChangeLeader}>
                   <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                   {
-                    teamMember?.map((t) => (
+                    teamMember?.filter((t) => !selectedLeader.includes(t?._id)).map((t) => (
                       <option key={t?._id} value={t?._id}>{t?.name}</option>
                     ))
                   }

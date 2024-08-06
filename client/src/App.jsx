@@ -31,6 +31,7 @@ import EditDesignation from "./Components/Project/Designation/EditDesignation.js
 import Login from "./Components/Login/Login.jsx";
 import Logout from "./Components/Logout/Logout.jsx";
 import Test from "./Test.jsx";
+import Test2 from "./Test2.jsx";
 
 const App = () => {
   return (
@@ -66,8 +67,8 @@ const App = () => {
           <Route path="add-designation" element={<AddDesignation />} />
           <Route path="edit-designation/:id" element={<EditDesignation />} />
           <Route path="test" element={<Test />} />
+          <Route path="test2" element={<Test2 />} />
         </Route>
-        <Route path="/test" element={<Test />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
       </Routes>

@@ -25,16 +25,15 @@ const formFields = [
   { name: 'description', type: 'textarea', label: 'Description' },
 ];
 
-const AddProject = () => {
-  const [formData, setFormData] = useState(formFields.reduce((accumulator, { name }) => ({ ...accumulator, [name]: "" }), {}));
-  const [dropdownData, setDropdownData] = useState({ customer: [], projectCategory: [], projectTiming: [], teamMember: [], projectStatus: [], projectType: [] });
-  const [selectedOptions, setSelectedOptions] = useState({ responsible: [], leader: [] });
-  const navigate = useNavigate();
+const EditProject = () => {
+  const id = "66b1ee4189457af0d875feba";
+  const [formData, setFormData] = useState(formFields.reduce((accumulator, { name, multiselect }) => ({ ...accumulator, [name]: multiselect ? [] : "" }), {}));
+  const [dropdownData, setDropdownData] = useState({}); const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
   const permissions = team?.role?.permissions?.project;
 
   useEffect(() => {
-    if (isLoading || !permissions?.create) {
+    if (isLoading || !permissions?.update) {
       return;
     };
 
@@ -50,45 +49,76 @@ const AddProject = () => {
         ];
 
         const responses = await Promise.all(endpoints.map((url) => axios.get(url, { headers: { Authorization: validToken } })));
-        const [customer, projectCategory, projectTiming, team, projectStatus, projectType] = responses.map((response) => response.data);
+        const [customer, category, timing, team, status, type] = responses.map((response) => response.data);
 
         setDropdownData({
           customer: customer.customer || [],
-          category: projectCategory.projectCategory || [],
-          timing: projectTiming.projectTiming || [],
+          category: category.projectCategory || [],
+          timing: timing.projectTiming || [],
           team: team.team || [],
-          status: projectStatus.projectStatus || [],
-          type: projectType.projectType || [],
+          status: status.projectStatus || [],
+          type: type.projectType || [],
         });
       } catch (error) {
         console.error("Error while fetching dropdown data:", error.message);
       };
     };
 
+    const setFormDataFromProject = (project) => {
+      const newFormData = formFields.reduce((acc, field) => {
+        const { name, multiselect } = field;
+        if (multiselect) {
+          acc[name] = project[name]?.map(item => item?._id) || [];
+        } else if (name in project) {
+          acc[name] = project[name]?._id || project[name] || "";
+        } else {
+          acc[name] = "";
+        }
+        return acc;
+      }, {});
+
+      setFormData(newFormData);
+    };
+
+
+    const fetchProjectData = async () => {
+      try {
+        const response = await axios.get(`/api/v1/project/single-project/${id}`, { headers: { Authorization: validToken } });
+        if (response?.data?.success) {
+          if (response?.data?.success) {
+            const project = response.data.project;
+            setFormDataFromProject(project);
+          };
+        };
+      } catch (error) {
+        console.error("Error while fetching project data:", error.message);
+      };
+    };
+
     fetchDropdownData();
-  }, [isLoading, permissions?.create, validToken]);
+    fetchProjectData();
+  }, [id, isLoading, permissions?.update, validToken]);
 
   const handleChange = ({ target: { name, value } }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleMultiSelectChange = (field) => ({ target: { value } }) => {
-    if (value && !selectedOptions[field].includes(value)) {
-      setSelectedOptions((prev) => ({ ...prev, [field]: [...prev[field], value] }));
+  const handleMultiSelectChange = (name) => ({ target: { value } }) => {
+    if (value && !formData[name].includes(value)) {
+      setFormData((prev) => ({ ...prev, [name]: [...prev[name], value] }));
     };
   };
 
-  const handleRemoveOption = (field, id) => () => {
-    setSelectedOptions((prev) => ({ ...prev, [field]: prev[field].filter((optionId) => optionId !== id) }));
+  const handleRemoveOption = (name, id) => () => {
+    setFormData((prev) => ({ ...prev, [name]: prev[name].filter((optionId) => optionId !== id) }));
   };
 
-  const handleCreate = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
 
-    // Form validation
     const emptyFields = formFields.filter(({ name, multiselect }) => {
       if (multiselect) {
-        return !selectedOptions[name] || selectedOptions[name].length === 0;
+        return !formData[name] || formData[name].length === 0;
       };
       return !formData[name] || formData[name].trim() === "";
     });
@@ -99,28 +129,15 @@ const AddProject = () => {
     };
 
     try {
-      const response = await axios.post("/api/v1/project/create-project",
-        {
-          ...formData,
-          responsible: selectedOptions.responsible,
-          leader: selectedOptions.leader
-        },
-        {
-          headers: {
-            Authorization: validToken,
-          },
-        },
-      );
+      const response = await axios.put(`/api/v1/project/update-project/${id}`, formData, { headers: { Authorization: validToken } });
 
       if (response?.data?.success) {
-        setFormData(formFields.reduce((acc, { name }) => ({ ...acc, [name]: "" }), {}));
-        setSelectedOptions({ responsible: [], leader: [] });
-        toast.success("Project created successfully");
+        toast.success("Project updated successfully");
         navigate("/");
       };
     } catch (error) {
-      console.error("Error while creating project:", error.message);
-      toast.error("Error while creating project");
+      console.error("Error while updating project:", error.message);
+      toast.error("Error while updating project");
     };
   };
 
@@ -128,7 +145,7 @@ const AddProject = () => {
     return <Preloader />;
   };
 
-  if (!permissions?.create) {
+  if (!permissions?.update) {
     return <Navigate to="/" />;
   };
 
@@ -136,12 +153,10 @@ const AddProject = () => {
     <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
       <div className="content">
         <div className="d-flex justify-content-between">
-          <h4>Add Project</h4>
-          <Link to="#" onClick={() => navigate(-1)}>
-            <button className="btn btn-primary">Back</button>
-          </Link>
+          <h4>Edit Project</h4>
+          <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
         </div>
-        <form onSubmit={handleCreate}>
+        <form onSubmit={handleUpdate}>
           <div className="row">
             {
               formFields.map(({ name, type, label, options, multiselect }) => (
@@ -159,8 +174,7 @@ const AddProject = () => {
                               [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
                               [{ size: [] }],
                               ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                              [{ 'list': 'ordered' }, { 'list': 'bullet' },
-                              { 'indent': '-1' }, { 'indent': '+1' }],
+                              [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                               ['link', 'image', 'video'],
                               ['clean'],
                             ],
@@ -180,16 +194,16 @@ const AddProject = () => {
                             <select className="form-select" id={name} onChange={handleMultiSelectChange(name)}>
                               <option value="">Select</option>
                               {
-                                (dropdownData.team || []).filter((member) => !selectedOptions[name].includes(member._id)).map((member) => (
-                                  <option key={member._id} value={member._id}>{member.name}</option>
+                                (dropdownData.team || []).filter((item) => !formData[name].includes(item._id)).map((item) => (
+                                  <option key={item._id} value={item._id}>{item.name || item.status}</option>
                                 ))
                               }
                             </select>
                             <div className="selected-container">
                               {
-                                selectedOptions[name]?.map((id) => (
+                                formData[name]?.map((id) => (
                                   <span key={id} className="selected-item">
-                                    {dropdownData.team.find((member) => member._id === id)?.name}
+                                    {dropdownData?.team?.find((item) => item._id === id)?.name}
                                     <button type="button" className="remove-btn" onClick={handleRemoveOption(name, id)}>{"x"}</button>
                                   </span>
                                 ))
@@ -197,7 +211,7 @@ const AddProject = () => {
                             </div>
                           </div>
                         ) : (
-                          name === "priority" ? (
+                          options ? (
                             <select className="form-select" id={name} name={name} value={formData[name]} onChange={handleChange}>
                               <option value="">Select</option>
                               {
@@ -231,7 +245,7 @@ const AddProject = () => {
               Cancel
             </Link>
             <button type="submit" className="btn btn-primary">
-              Create
+              Update
             </button>
           </div>
         </form>
@@ -240,7 +254,4 @@ const AddProject = () => {
   );
 };
 
-export default AddProject;
-
-
-
+export default EditProject;
