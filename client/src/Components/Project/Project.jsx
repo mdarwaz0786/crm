@@ -68,12 +68,7 @@ const Project = () => {
       });
 
       if (response?.data?.success) {
-        const filteredProject = response?.data?.project?.filter((p) => {
-          const isLeader = p?.leader?.some((l) => l?._id === team?._id);
-          const isResponsible = p?.responsible?.some((r) => r?._id === team?._id);
-          return isLeader || isResponsible;
-        });
-        setProject(filteredProject);
+        setProject(response?.data?.project);
         setTotal(response?.data?.totalCount);
         setLoading(false);
       };

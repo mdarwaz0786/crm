@@ -28,7 +28,8 @@ const formFields = [
 const EditProject = () => {
   const id = "66b1ee4189457af0d875feba";
   const [formData, setFormData] = useState(formFields.reduce((accumulator, { name, multiselect }) => ({ ...accumulator, [name]: multiselect ? [] : "" }), {}));
-  const [dropdownData, setDropdownData] = useState({}); const navigate = useNavigate();
+  const [dropdownData, setDropdownData] = useState({});
+  const navigate = useNavigate();
   const { validToken, team, isLoading } = useAuth();
   const permissions = team?.role?.permissions?.project;
 
@@ -65,16 +66,16 @@ const EditProject = () => {
     };
 
     const setFormDataFromProject = (project) => {
-      const newFormData = formFields.reduce((acc, field) => {
+      const newFormData = formFields.reduce((accumulator, field) => {
         const { name, multiselect } = field;
         if (multiselect) {
-          acc[name] = project[name]?.map(item => item?._id) || [];
+          accumulator[name] = project[name]?.map(item => item?._id) || [];
         } else if (name in project) {
-          acc[name] = project[name]?._id || project[name] || "";
+          accumulator[name] = project[name]?._id || project[name] || "";
         } else {
-          acc[name] = "";
-        }
-        return acc;
+          accumulator[name] = "";
+        };
+        return accumulator;
       }, {});
 
       setFormData(newFormData);
