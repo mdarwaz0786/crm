@@ -37,7 +37,7 @@ const EditProjectCategory = () => {
     if (!isLoading && team && permissions?.update && id) {
       fetchSingleData(id);
     };
-  }, [id, isLoading, team, permissions?.update]);
+  }, [id, isLoading, team, permissions]);
 
   const handleUpdate = async (e, id) => {
     e.preventDefault();

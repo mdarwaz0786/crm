@@ -83,7 +83,7 @@ const EditTeamMember = () => {
       fetchAllDesignation();
       fetchAllRole();
     };
-  }, [isLoading, team, permissions?.update]);
+  }, [isLoading, team, permissions]);
 
   const fetchSingleData = async (id) => {
     try {
@@ -117,7 +117,7 @@ const EditTeamMember = () => {
     if (!isLoading && team && permissions?.update && id) {
       fetchSingleData(id);
     };
-  }, [id, isLoading, team, permissions?.update]);
+  }, [id, isLoading, team, permissions]);
 
   const fetchAllData = async () => {
     try {
@@ -139,7 +139,7 @@ const EditTeamMember = () => {
     if (!isLoading && team && permissions?.create) {
       fetchAllData();
     };
-  }, [isLoading, team, permissions?.create]);
+  }, [isLoading, team, permissions]);
 
   const handleUpdate = async (e, id) => {
     e.preventDefault();

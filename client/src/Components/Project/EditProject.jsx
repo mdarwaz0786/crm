@@ -142,7 +142,7 @@ const EditProject = () => {
       fetchAllTeamMember();
       fetchAllProjectTiming();
     };
-  }, [isLoading, team, permissions?.update]);
+  }, [isLoading, team, permissions]);
 
   const fetchSingleProject = async (id) => {
     try {
@@ -177,7 +177,7 @@ const EditProject = () => {
     if (!isLoading && team && permissions?.update && id) {
       fetchSingleProject(id);
     };
-  }, [isLoading, team, permissions?.update, id]);
+  }, [isLoading, team, permissions, id]);
 
   const handleUpdate = async (e, id) => {
     e.preventDefault();

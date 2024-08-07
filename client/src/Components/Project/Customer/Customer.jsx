@@ -74,8 +74,8 @@ const Customer = () => {
   useEffect(() => {
     if (!isLoading && team && permissions?.access) {
       fetchAllCustomerName();
-    }
-  }, [name, isLoading, team, permissions?.access]);
+    };
+  }, [name, isLoading, team, permissions]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;

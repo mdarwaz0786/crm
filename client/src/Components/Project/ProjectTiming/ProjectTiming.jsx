@@ -75,7 +75,7 @@ const ProjectTiming = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllProjectTimingName();
     };
-  }, [name, isLoading, team, permissions?.access]);
+  }, [name, isLoading, team, permissions]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;

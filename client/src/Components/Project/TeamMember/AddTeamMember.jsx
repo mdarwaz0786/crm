@@ -80,7 +80,7 @@ const AddTeamMember = () => {
       fetchAllDesignation();
       fetchAllRole();
     };
-  }, [isLoading, team, permissions?.create]);
+  }, [isLoading, team, permissions]);
 
   const formatDateToDDMMYYYY = (dateString) => {
     const date = new Date(dateString);
@@ -113,7 +113,7 @@ const AddTeamMember = () => {
     if (!isLoading && team && permissions?.create) {
       fetchAllData();
     };
-  }, [isLoading, team, permissions?.create]);
+  }, [isLoading, team, permissions]);
 
   const handleCreate = async (e) => {
     e.preventDefault();

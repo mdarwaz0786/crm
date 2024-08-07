@@ -27,7 +27,7 @@ const Project = () => {
     projectIdFilter: [],
     sort: "Descending",
     page: 1,
-    limit: 5,
+    limit: 10,
     dateRange: "",
   });
   const permissions = team?.role?.permissions?.project;
@@ -68,7 +68,12 @@ const Project = () => {
       });
 
       if (response?.data?.success) {
-        setProject(response?.data?.project);
+        const filteredProject = response?.data?.project?.filter((p) => {
+          const isLeader = p?.leader?.some((l) => l?._id === team?._id);
+          const isResponsible = p?.responsible?.some((r) => r?._id === team?._id);
+          return isLeader || isResponsible;
+        });
+        setProject(filteredProject);
         setTotal(response?.data?.totalCount);
         setLoading(false);
       };
@@ -106,7 +111,7 @@ const Project = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllProjectName();
     };
-  }, [name, isLoading, team, permissions?.access]);
+  }, [name, isLoading, team, permissions]);
 
   const fetchAllProjectId = async () => {
     try {
@@ -136,7 +141,7 @@ const Project = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllProjectId();
     };
-  }, [projectId, isLoading, team, permissions?.access]);
+  }, [projectId, isLoading, team, permissions]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -162,7 +167,7 @@ const Project = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllProject();
     };
-  }, [filters, isLoading, team, permissions?.access]);
+  }, [filters, isLoading, team, permissions]);
 
   const handleDelete = async (id) => {
     let isdelete = prompt("If you want to delete, type \"yes\".");
@@ -600,7 +605,6 @@ const Project = () => {
                           <label>
                             Show
                             <select name="project-list_length" value={filters.limit} onChange={(e) => setFilters((prev) => ({ ...prev, limit: e.target.value, page: 1 }))} aria-controls="project-list" className="form-select form-select-sm">
-                              <option value="5">5</option>
                               <option value="10">10</option>
                               <option value="15">15</option>
                               <option value="20">20</option>

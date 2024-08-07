@@ -21,7 +21,7 @@ const ProjectDashboard = () => {
     search: "",
     sort: "Descending",
     page: 1,
-    limit: 5,
+    limit: 10,
     dateRange: "",
   });
 
@@ -84,7 +84,7 @@ const ProjectDashboard = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllProject();
     };
-  }, [filters, team, isLoading, permissions?.access]);
+  }, [filters, team, isLoading, permissions]);
 
   return (
     <>

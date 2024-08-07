@@ -140,7 +140,7 @@ const AddProject = () => {
       fetchAllTeamMember();
       fetchAllProjectTiming();
     };
-  }, [isLoading, team, permissions?.create]);
+  }, [isLoading, team, permissions]);
 
   const formatDateToDDMMYYYY = (dateString) => {
     const date = new Date(dateString);

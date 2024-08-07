@@ -250,7 +250,7 @@ const EditRole = () => {
     if (!isLoading && team && permission?.update && id) {
       fetchSingleRole(id);
     };
-  }, [id, isLoading, team, permission?.update]);
+  }, [id, isLoading, team, permission]);
 
   const handleUpdate = async (e, id) => {
     e.preventDefault();

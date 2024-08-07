@@ -74,7 +74,7 @@ const ProjectStatus = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllProjectStatus();
     };
-  }, [status, isLoading, team, permissions?.access]);
+  }, [status, isLoading, team, permissions]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -100,7 +100,7 @@ const ProjectStatus = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllData();
     };
-  }, [filters, isLoading, team, permissions?.access]);
+  }, [filters, isLoading, team, permissions]);
 
   const handleDelete = async (id) => {
     let isdelete = prompt("If you want to delete, type \"yes\".");

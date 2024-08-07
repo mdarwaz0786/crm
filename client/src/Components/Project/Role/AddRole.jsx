@@ -11,7 +11,7 @@ import Preloader from "../../../Preloader.jsx";
 const AddRole = () => {
   const { validToken, team, isLoading } = useAuth();
   const permission = team?.role?.permissions?.role;
-  const [selectAll, setSelectAll] = useState(false);
+  const [selectAll, setSelectAll] = useState(true);
   const [selectedMaster, setSelectedMaster] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -377,7 +377,7 @@ const AddRole = () => {
 
   const closeModal = () => {
     setSelectedMaster(null);
-    setSelectAll(false);
+    setSelectAll(true);
     setModalIsOpen(false);
   };
 

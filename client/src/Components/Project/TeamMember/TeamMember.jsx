@@ -75,7 +75,7 @@ const TeamMember = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllTeamName();
     };
-  }, [name, isLoading, team, permissions?.access]);
+  }, [name, isLoading, team, permissions]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -94,14 +94,14 @@ const TeamMember = () => {
         [name]: value,
         page: 1,
       }));
-    }
+    };
   };
 
   useEffect(() => {
     if (!isLoading && team && permissions?.access) {
       fetchAllData();
     };
-  }, [filters, isLoading, team, permissions?.access]);
+  }, [filters, isLoading, team, permissions]);
 
   const handleDelete = async (id) => {
     let isdelete = prompt("If you want to delete, type \"yes\".");

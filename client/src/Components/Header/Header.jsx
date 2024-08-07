@@ -45,7 +45,7 @@ const Header = () => {
                 </Link>
                 <div className="dropdown">
                   <div className="searchinputs">
-                    <input type="text" placeholder="Search Project" value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); navigate("/", { state: { query: searchQuery } }) }} />
+                    <input type="text" placeholder="Search Project" value={searchQuery} onChange={(e) => { const newQuery = e.target.value; setSearchQuery(newQuery); navigate("/", { state: { query: newQuery } }) }} />
                   </div>
                 </div>
               </div>
