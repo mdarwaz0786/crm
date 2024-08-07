@@ -309,7 +309,7 @@ const EditProject = () => {
       <div className="page-wrapper" style={{ paddingBottom: "1rem" }}>
         <div className="content">
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h4>Update Project</h4>
+            <h4>Edit Project</h4>
             <Link to="#" onClick={() => navigate(-1)}><button className="btn btn-primary">Back</button></Link>
           </div>
           <div className="row">
