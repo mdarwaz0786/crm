@@ -10,6 +10,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const EditProject = () => {
+  const [data, setData] = useState([]);
+  const [existingProjectId, setExistingProjectId] = useState("");
   const [customer, setCustomer] = useState([]);
   const [projectType, setProjectType] = useState([]);
   const [projectStatus, setProjectStatus] = useState([]);
@@ -133,6 +135,22 @@ const EditProject = () => {
     };
   };
 
+  const fetchAllData = async () => {
+    try {
+      const response = await axios.get("/api/v1/project/all-project", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
+      if (response?.data?.success) {
+        setData(response?.data?.project);
+      };
+    } catch (error) {
+      console.log(error.message);
+    };
+  };
+
   useEffect(() => {
     if (!isLoading && team && permissions?.update) {
       fetchAllCustomer();
@@ -141,6 +159,7 @@ const EditProject = () => {
       fetchAllProjectStatus();
       fetchAllTeamMember();
       fetchAllProjectTiming();
+      fetchAllData()
     };
   }, [isLoading, team, permissions]);
 
@@ -155,6 +174,7 @@ const EditProject = () => {
       if (response?.data?.success) {
         setName(response?.data?.project?.name);
         setProjectId(response?.data?.project?.projectId);
+        setExistingProjectId(response?.data?.project?.projectId);
         setSelectedProjectType(response?.data?.project?.type?._id);
         setSelectedCustomer(response?.data?.project?.customer?._id);
         setSelectedProjectCategory(response?.data?.project?.category?._id);
@@ -329,6 +349,19 @@ const EditProject = () => {
                   <div className="form-wrap">
                     <label className="col-form-label" htmlFor="projectId">Project ID<span className="text-danger"> *</span></label>
                     <input type="text" className={`form-control ${fieldPermissions?.projectId?.read ? "readonly-style" : ""}`} name="projectId" id="projectId" value={projectId} onChange={(e) => fieldPermissions?.projectId?.read ? null : setProjectId(e.target.value)} />
+                    {
+                      projectId === "" ? null : (
+                        data?.some((d) => d?.projectId === projectId) && projectId !== existingProjectId ? (
+                          <div className="col-form-label" style={{ color: "red" }}>
+                            Not Available <i className="fas fa-times"></i>
+                          </div>
+                        ) : (
+                          <div className="col-form-label" style={{ color: "green" }}>
+                            Available <i className="fas fa-check"></i>
+                          </div>
+                        )
+                      )
+                    }
                   </div>
                 </div>
               )

@@ -7,6 +7,7 @@ const projectSchema = new mongoose.Schema(
     },
     projectId: {
       type: String,
+      unique: true,
     },
     type: {
       type: mongoose.Schema.Types.ObjectId,

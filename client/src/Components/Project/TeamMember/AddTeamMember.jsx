@@ -277,7 +277,7 @@ const AddTeamMember = () => {
               <select className="form-select" name="leader" value="" onChange={handleSelectChange}>
                 <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                 {
-                  reportingTo?.map((r) => (
+                  reportingTo?.filter((r) => !selectedReportingTo.includes(r?._id)).map((r) => (
                     <option key={r?._id} value={r?._id}>{r?.name}</option>
                   ))
                 }

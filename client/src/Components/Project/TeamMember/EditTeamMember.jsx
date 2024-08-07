@@ -111,8 +111,6 @@ const EditTeamMember = () => {
     };
   };
 
-  console.log("existingUserName:", existingUserName);
-
   useEffect(() => {
     if (!isLoading && team && permissions?.update && id) {
       fetchSingleData(id);
@@ -188,7 +186,6 @@ const EditTeamMember = () => {
       updateData.role = selectedRole;
     };
 
-    e.preventDefault();
     try {
       const response = await axios.put(`/api/v1/team/update-team/${id}`, updateData, {
         headers: {
@@ -349,7 +346,7 @@ const EditTeamMember = () => {
                   <select className={`form-select ${fieldPermissions?.reportingTo?.read ? "readonly-style" : ""}`} name="leader" value="" onChange={(e) => fieldPermissions?.reportingTo?.read ? null : handleSelectChange(e)} >
                     <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                     {
-                      reportingTo?.map((r) => (
+                      reportingTo?.filter((r) => !selectedReportingTo.includes(r?._id)).map((r) => (
                         <option key={r?._id} value={r?._id}>{r?.name}</option>
                       ))
                     }

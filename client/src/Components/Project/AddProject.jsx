@@ -10,6 +10,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const AddProject = () => {
+  const [data, setData] = useState([]);
   const [customer, setCustomer] = useState([]);
   const [projectType, setProjectType] = useState([]);
   const [projectStatus, setProjectStatus] = useState([]);
@@ -131,6 +132,23 @@ const AddProject = () => {
     };
   };
 
+
+  const fetchAllData = async () => {
+    try {
+      const response = await axios.get("/api/v1/project/all-project", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
+      if (response?.data?.success) {
+        setData(response?.data?.project);
+      };
+    } catch (error) {
+      console.log(error.message);
+    };
+  };
+
   useEffect(() => {
     if (!isLoading && team && permissions?.create) {
       fetchAllCustomer();
@@ -139,6 +157,7 @@ const AddProject = () => {
       fetchAllProjectStatus();
       fetchAllTeamMember();
       fetchAllProjectTiming();
+      fetchAllData();
     };
   }, [isLoading, team, permissions]);
 
@@ -310,6 +329,15 @@ const AddProject = () => {
               <div className="form-wrap">
                 <label className="col-form-label" htmlFor="projectId">Project ID<span className="text-danger"> *</span></label>
                 <input className="form-control" type="text" name="projectId" id="projectId" value={projectId} onChange={(e) => setProjectId(e.target.value)} />
+                {
+                  projectId === "" ? null : (
+                    data?.some((d) => d?.projectId === projectId) ? (
+                      <div className="col-form-label" style={{ color: "red" }}>Not Available <i className="fas fa-times"></i></div>
+                    ) : (
+                      <div className="col-form-label" style={{ color: "green" }}>Available <i className="fas fa-check"></i></div>
+                    )
+                  )
+                }
               </div>
             </div>
             <div className="col-md-6">
