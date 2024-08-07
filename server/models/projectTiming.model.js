@@ -4,6 +4,7 @@ const projectTimingSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      unique: true,
     },
     description: {
       type: String,

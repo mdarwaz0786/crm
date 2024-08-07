@@ -4,6 +4,7 @@ const projectStatusSchema = new mongoose.Schema(
   {
     status: {
       type: String,
+      unique: true,
     },
     description: {
       type: String,

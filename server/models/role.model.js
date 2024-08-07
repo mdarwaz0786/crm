@@ -311,6 +311,7 @@ const RoleSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      unique: true,
     },
     permissions: {
       customer: { type: CustomerPermissionSchema, default: () => ({}) },
