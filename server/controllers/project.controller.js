@@ -73,12 +73,15 @@ export const fetchAllProject = async (req, res) => {
     let filter = {};
     let sort = {};
 
-    // Add filter to include project where the team member is either a leader or responsible
-    const teamId = req.team._id;
-    filter.$or = [
-      { leader: teamId },
-      { responsible: teamId },
-    ];
+    // Check if the role is either "Coordinator" or "Admin"
+    const teamRole = req.team.role?.name;
+    if (teamRole !== "Coordinator" && teamRole !== "Admin") {
+      const teamId = req.team._id;
+      filter.$or = [
+        { leader: teamId },
+        { responsible: teamId },
+      ];
+    };
 
     // Handle universal searching across all fields
     if (req.query.search) {

@@ -98,9 +98,15 @@ const Project = () => {
           const isResponsible = p?.responsible?.some((r) => r?._id === team?._id);
           return isLeader || isResponsible;
         });
-        setProject(filteredProject);
-        setTotal(response?.data?.totalCount);
-        setFilteredTotal(filteredProject?.length);
+        if (team?.role?.name === "Coordinator" || team?.role?.name === "Admin") {
+          setProject(response?.data?.project);
+          setTotal(response?.data?.totalCount);
+          setFilteredTotal(response?.data?.totalCount);
+        } else {
+          setProject(filteredProject);
+          setTotal(response?.data?.totalCount);
+          setFilteredTotal(filteredProject?.length);
+        };
         setLoading(false);
       };
     } catch (error) {
@@ -126,7 +132,11 @@ const Project = () => {
           const isResponsible = p?.responsible?.some((r) => r?._id === team?._id);
           return isLeader || isResponsible;
         });
-        setNameData(filteredProject);
+        if (team?.role?.name === "Coordinator" || team?.role?.name === "Admin") {
+          setNameData(response?.data?.project);
+        } else {
+          setNameData(filteredProject);
+        };
       };
     } catch (error) {
       console.log(error.message);
@@ -156,7 +166,11 @@ const Project = () => {
           const isResponsible = p?.responsible?.some((r) => r?._id === team?._id);
           return isLeader || isResponsible;
         });
-        setProjectIdData(filteredProject);
+        if (team?.role?.name === "Coordinator" || team?.role?.name === "Admin") {
+          setProjectIdData(response?.data?.project);
+        } else {
+          setProjectIdData(filteredProject);
+        };
       };
     } catch (error) {
       console.log(error.message);
@@ -644,7 +658,7 @@ const Project = () => {
                     </div>
                     <div className="col-md-4 custom-pagination">
                       {
-                        (total === 0) ? (
+                        (filteredTotal === 0) ? (
                           <span style={{ textAlign: "center", fontSize: "1rem", fontWeight: "600" }}>No Data</span>
                         ) : loading ? (
                           <h5 style={{ textAlign: "center", color: "#00918E" }}>

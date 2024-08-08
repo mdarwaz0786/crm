@@ -12,6 +12,7 @@ const ProjectDashboard = () => {
   const location = useLocation();
   const [project, setProject] = useState([]);
   const [total, setTotal] = useState("");
+  const [filteredTotal, setFilteredTotal] = useState("");
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -74,13 +75,20 @@ const ProjectDashboard = () => {
       });
 
       if (response?.data?.success) {
-        const filteredProject = response?.data?.project.filter((p) => {
+        const filteredProject = response?.data?.project?.filter((p) => {
           const isLeader = p?.leader?.some((l) => l?._id === team?._id);
           const isResponsible = p?.responsible?.some((r) => r?._id === team?._id);
           return isLeader || isResponsible;
         });
-        setProject(filteredProject);
-        setTotal(response?.data?.totalCount);
+        if (team?.role?.name === "Coordinator" || team?.role?.name === "Admin") {
+          setProject(response?.data?.project);
+          setTotal(response?.data?.totalCount);
+          setFilteredTotal(response?.data?.totalCount);
+        } else {
+          setProject(filteredProject);
+          setTotal(response?.data?.totalCount);
+          setFilteredTotal(filteredProject?.length);
+        };
         setLoading(false);
       };
     } catch (error) {
@@ -285,7 +293,7 @@ const ProjectDashboard = () => {
                           </div>
                           <div className="col-md-4 custom-pagination">
                             {
-                              (total === 0) ? (
+                              (filteredTotal === 0) ? (
                                 <span style={{ textAlign: "center", fontSize: "1rem", fontWeight: "600" }}>No Data</span>
                               ) : loading && permissions?.access ? (
                                 <h5 style={{ textAlign: "center", color: "#00918E" }}>
