@@ -365,7 +365,7 @@ const Header = () => {
               isLoggedIn ? (
                 <>
                   <Link className="dropdown-item" to="#">
-                    <i className="ti ti-user" /> {team?.name}{", "}{team?.role?.name}
+                    <i className="ti ti-user" /> {team?.name}
                   </Link>
                 </>
               ) : (

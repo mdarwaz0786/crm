@@ -13,6 +13,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 const Project = () => {
   const [project, setProject] = useState([]);
   const [total, setTotal] = useState("");
+  const [filteredTotal, setFilteredTotal] = useState("");
   const [loading, setLoading] = useState(true);
   const { validToken, team, isLoading } = useAuth();
   const [nameData, setNameData] = useState([]);
@@ -75,6 +76,7 @@ const Project = () => {
         });
         setProject(filteredProject);
         setTotal(response?.data?.totalCount);
+        setFilteredTotal(filteredProject?.length);
         setLoading(false);
       };
     } catch (error) {
@@ -227,7 +229,7 @@ const Project = () => {
               <div className="page-header">
                 <div className="row align-items-center">
                   <div className="col-4">
-                    <h4 className="page-title">Projects<span className="count-title">{total}</span></h4>
+                    <h4 className="page-title">Projects<span className="count-title">{filteredTotal}</span></h4>
                   </div>
                   <div className="col-8 text-end">
                     <div className="head-icons">
@@ -605,6 +607,7 @@ const Project = () => {
                           <label>
                             Show
                             <select name="project-list_length" value={filters.limit} onChange={(e) => setFilters((prev) => ({ ...prev, limit: e.target.value, page: 1 }))} aria-controls="project-list" className="form-select form-select-sm">
+                              <option value="5">5</option>
                               <option value="10">10</option>
                               <option value="15">15</option>
                               <option value="20">20</option>
