@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-extra-semi */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from "../../context/authContext.jsx";
@@ -24,6 +24,30 @@ const ProjectDashboard = () => {
     limit: 10,
     dateRange: "",
   });
+
+  const useDebounce = (value, delay) => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+    const timer = useRef();
+
+    useEffect(() => {
+      if (value === "") {
+        setDebouncedValue("");
+        return;
+      };
+
+      timer.current = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+
+      return () => {
+        clearTimeout(timer.current);
+      };
+    }, [value, delay]);
+
+    return debouncedValue;
+  };
+
+  const debouncedSearch = useDebounce(filters.search, 300);
 
   useEffect(() => {
     const { query } = location.state || {};
@@ -84,7 +108,7 @@ const ProjectDashboard = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllProject();
     };
-  }, [filters, team, isLoading, permissions]);
+  }, [debouncedSearch, filters.limit, filters.page, filters.sort, filters.dateRange, isLoading, team, permissions]);
 
   return (
     <>
@@ -101,7 +125,7 @@ const ProjectDashboard = () => {
                     <div className="col-md-5 col-sm-4 dashboard-search">
                       <div className="form-wrap icon-form">
                         <span className="form-icon"><i className="ti ti-search" /></span>
-                        <input type="text" className="form-control" placeholder="Search Project" value={filters.search} onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))} />
+                        <input type="text" className="form-control" placeholder="Search Project" value={filters.search} onChange={(e) => { const searchValue = e.target.value; setFilters((prev) => ({ ...prev, search: searchValue, page: 1 })) }} />
                       </div>
                     </div>
                     <div className="col-md-8 float-end ms-auto">

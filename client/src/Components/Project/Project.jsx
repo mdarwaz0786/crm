@@ -1,6 +1,6 @@
 /* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate } from 'react-router-dom';
@@ -33,6 +33,30 @@ const Project = () => {
   });
   const permissions = team?.role?.permissions?.project;
   const fieldPermissions = team?.role?.permissions?.project?.fields;
+
+  const useDebounce = (value, delay) => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+    const timer = useRef();
+
+    useEffect(() => {
+      if (value === "") {
+        setDebouncedValue("");
+        return;
+      };
+
+      timer.current = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+
+      return () => {
+        clearTimeout(timer.current);
+      };
+    }, [value, delay]);
+
+    return debouncedValue;
+  };
+
+  const debouncedSearch = useDebounce(filters.search, 300);
 
   useEffect(() => {
     const formatDate = (date) => {
@@ -169,7 +193,7 @@ const Project = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllProject();
     };
-  }, [filters, isLoading, team, permissions]);
+  }, [debouncedSearch, filters.limit, filters.page, filters.sort, filters.nameFilter, filters.projectIdFilter, filters.dateRange, isLoading, team, permissions]);
 
   const handleDelete = async (id) => {
     let isdelete = prompt("If you want to delete, type \"yes\".");
@@ -253,7 +277,7 @@ const Project = () => {
                       <div className="col-md-5 col-sm-4">
                         <div className="form-wrap icon-form">
                           <span className="form-icon"><i className="ti ti-search" /></span>
-                          <input type="text" className="form-control" placeholder="Search Project" value={filters.search} onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))} />
+                          <input type="text" className="form-control" placeholder="Search Project" value={filters.search} onChange={(e) => { const searchValue = e.target.value; setFilters((prev) => ({ ...prev, search: searchValue, page: 1 })) }} />
                         </div>
                       </div>
                       <div className="col-md-7 col-sm-8">
