@@ -56,7 +56,7 @@ const Project = () => {
     return debouncedValue;
   };
 
-  const debouncedSearch = useDebounce(filters.search, 300);
+  const debouncedSearch = useDebounce(filters.search, 500);
 
   useEffect(() => {
     const formatDate = (date) => {

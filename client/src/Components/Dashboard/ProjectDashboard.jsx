@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useAuth } from "../../context/authContext.jsx";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import Search from "../Header/Search.jsx";
 
 const ProjectDashboard = () => {
   const location = useLocation();
@@ -47,11 +48,11 @@ const ProjectDashboard = () => {
     return debouncedValue;
   };
 
-  const debouncedSearch = useDebounce(filters.search, 300);
+  const debouncedSearch = useDebounce(filters.search, 500);
 
   useEffect(() => {
     const { query } = location.state || {};
-    if (query) {
+    if (query !== undefined) {
       setFilters((prevFilters) => ({ ...prevFilters, search: query || "", page: 1 }));
     };
   }, [location.state]);
@@ -125,7 +126,7 @@ const ProjectDashboard = () => {
                     <div className="col-md-5 col-sm-4 dashboard-search">
                       <div className="form-wrap icon-form">
                         <span className="form-icon"><i className="ti ti-search" /></span>
-                        <input type="text" className="form-control" placeholder="Search Project" value={filters.search} onChange={(e) => { const searchValue = e.target.value; setFilters((prev) => ({ ...prev, search: searchValue, page: 1 })) }} />
+                        <Search />
                       </div>
                     </div>
                     <div className="col-md-8 float-end ms-auto">

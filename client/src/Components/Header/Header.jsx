@@ -1,13 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import usericon from "../../Assets/user-icon.png";
 import { useAuth } from "../../context/authContext.jsx";
-import { useState } from "react";
+import Search from "./Search.jsx";
 
 const Header = () => {
-  const [searchQuery, setSearchQuery] = useState("");
   const { team, isLoggedIn } = useAuth();
   const permissions = team?.role?.permissions?.project;
-  const navigate = useNavigate();
 
   return (
     <div className="main-wrapper">
@@ -45,7 +43,7 @@ const Header = () => {
                 </Link>
                 <div className="dropdown">
                   <div className="searchinputs">
-                    <input type="text" placeholder="Search Project" value={searchQuery} onChange={(e) => { const newQuery = e.target.value; setSearchQuery(newQuery); navigate("/", { state: { query: newQuery } }) }} />
+                    <Search />
                   </div>
                 </div>
               </div>
