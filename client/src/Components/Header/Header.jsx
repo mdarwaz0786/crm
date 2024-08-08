@@ -1,11 +1,38 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-extra-semi */
 import { Link } from "react-router-dom";
 import usericon from "../../Assets/user-icon.png";
 import { useAuth } from "../../context/authContext.jsx";
 import Search from "./Search.jsx";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Header = () => {
-  const { team, isLoggedIn } = useAuth();
+  const [total, setTotal] = useState("");
+  const { team, isLoggedIn, isLoading, validToken } = useAuth();
   const permissions = team?.role?.permissions?.project;
+
+  useEffect(() => {
+    const fetchAllProject = async () => {
+      try {
+        const response = await axios.get("/api/v1/project/all-project", {
+          headers: {
+            Authorization: `${validToken}`,
+          },
+        });
+
+        if (response?.data?.success) {
+          setTotal(response?.data?.totalCount);
+        };
+      } catch (error) {
+        console.log(error.message);
+      };
+    };
+
+    if (!isLoading && team && permissions?.access) {
+      fetchAllProject();
+    };
+  }, [isLoading, team, permissions]);
 
   return (
     <div className="main-wrapper">
@@ -16,9 +43,11 @@ const Header = () => {
             <img src="/assets/img/logo.svg" alt="logo" />
             <img src="/assets/img/white-logo.svg" className="white-logo" alt="whitelogo" />
           </Link>
+
           <Link to="/" className="logo-small">
             <img src="/assets/img/logo-small.svg" alt="logo" />
           </Link>
+
           <Link id="toggle_btn" to="#">
             <i className="ti ti-arrow-bar-to-left" />
           </Link>
@@ -53,12 +82,13 @@ const Header = () => {
             {/* Nav List */}
             <li className="nav-item nav-list">
               <ul className="nav">
-                <li className="dark-mode-list">
+                {/* <li className="dark-mode-list">
                   <Link to="#" id="dark-mode-toggle" className="dark-mode-toggle">
-                    <i className="ti ti-sun light-mode active" />
-                    <i className="ti ti-moon dark-mode" />
+                    <i className="ti ti-sun light-mode active" id="lightTheme" />
+                    <i className="ti ti-moon dark-mode" id="darkTheme" />
                   </Link>
-                </li>
+                </li> */}
+
                 <li className="nav-item dropdown">
                   <Link to="#" className="btn btn-header-list" data-bs-toggle="dropdown">
                     <i className="ti ti-layout-grid-add" />
@@ -67,7 +97,7 @@ const Header = () => {
                     <div className="row">
                       <div className="col-md-6">
                         <ul className="menu-list">
-                          <li>
+                          {/* <li>
                             <Link to="#">
                               <div className="menu-details">
                                 <span className="menu-list-icon bg-violet">
@@ -79,8 +109,9 @@ const Header = () => {
                                 </div>
                               </div>
                             </Link>
-                          </li>
-                          <li>
+                          </li> */}
+
+                          {/* <li>
                             <Link to="#">
                               <div className="menu-details">
                                 <span className="menu-list-icon bg-green">
@@ -92,8 +123,9 @@ const Header = () => {
                                 </div>
                               </div>
                             </Link>
-                          </li>
-                          <li>
+                          </li> */}
+
+                          {/* <li>
                             <Link to="#">
                               <div className="menu-details">
                                 <span className="menu-list-icon bg-pink">
@@ -105,8 +137,9 @@ const Header = () => {
                                 </div>
                               </div>
                             </Link>
-                          </li>
-                          <li>
+                          </li> */}
+
+                          {/* <li>
                             <Link to="#">
                               <div className="menu-details">
                                 <span className="menu-list-icon bg-info">
@@ -118,14 +151,15 @@ const Header = () => {
                                 </div>
                               </div>
                             </Link>
-                          </li>
+                          </li> */}
+
                           <li>
                             {
                               (permissions?.create) && (
                                 <Link to="/add-project">
                                   <div className="menu-details">
                                     <span className="menu-list-icon bg-danger">
-                                      <i className="ti ti-atom-2" />
+                                      <i className="ti ti-briefcase"></i>
                                     </span>
                                     <div className="menu-details-content">
                                       <p>Projects</p>
@@ -138,6 +172,7 @@ const Header = () => {
                           </li>
                         </ul>
                       </div>
+
                       <div className="col-md-6">
                         <ul className="menu-list">
                           <li>
@@ -153,7 +188,8 @@ const Header = () => {
                               </div>
                             </Link>
                           </li>
-                          <li>
+
+                          {/* <li>
                             <Link to="#">
                               <div className="menu-details">
                                 <span className="menu-list-icon bg-secondary">
@@ -165,8 +201,9 @@ const Header = () => {
                                 </div>
                               </div>
                             </Link>
-                          </li>
-                          <li>
+                          </li> */}
+
+                          {/* <li>
                             <Link to="#">
                               <div className="menu-details">
                                 <span className="menu-list-icon bg-tertiary">
@@ -178,8 +215,9 @@ const Header = () => {
                                 </div>
                               </div>
                             </Link>
-                          </li>
-                          <li>
+                          </li> */}
+
+                          {/* <li>
                             <Link to="#">
                               <div className="menu-details">
                                 <span className="menu-list-icon bg-success">
@@ -191,8 +229,9 @@ const Header = () => {
                                 </div>
                               </div>
                             </Link>
-                          </li>
-                          <li>
+                          </li> */}
+
+                          {/* <li>
                             <Link to="#">
                               <div className="menu-details">
                                 <span className="menu-list-icon bg-purple">
@@ -204,37 +243,39 @@ const Header = () => {
                                 </div>
                               </div>
                             </Link>
-                          </li>
+                          </li> */}
                         </ul>
                       </div>
                     </div>
                   </div>
                 </li>
-                <li className="nav-item">
+
+                {/* <li className="nav-item">
                   <Link to="#" className="btn btn-help">
                     <i className="ti ti-help-hexagon" />
                   </Link>
-                </li>
-                <li className="nav-item">
+                </li> */}
+
+                {/* <li className="nav-item">
                   <Link to="#" className="btn btn-chart-pie">
                     <i className="ti ti-chart-pie" />
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </li>
             {/* /Nav List */}
 
             {/* Email */}
-            <li className="nav-item nav-item-email nav-item-box">
+            <li className="nav-item nav-item-box">
               <Link to="#">
-                <i className="ti ti-message-circle-exclamation" />
-                <span className="badge rounded-pill">14</span>
+                <i className="ti ti-briefcase"></i>
+                <span className="badge rounded-pill">{total}</span>
               </Link>
             </li>
             {/* /Email */}
 
             {/* Notifications */}
-            <li className="nav-item dropdown nav-item-box">
+            {/* <li className="nav-item dropdown nav-item-box">
               <Link to="#" className="nav-link" data-bs-toggle="dropdown">
                 <i className="ti ti-bell" />
                 <span className="badge rounded-pill">13</span>
@@ -303,7 +344,7 @@ const Header = () => {
                   <Link to="#" className="clear-link">Clear all</Link>
                 </div>
               </div>
-            </li>
+            </li> */}
             {/* /Notifications */}
 
             {/* Profile Dropdown */}
@@ -320,9 +361,6 @@ const Header = () => {
                 <div className="profilename">
                   <Link className="dropdown-item" to="/">
                     <i className="ti ti-layout-2" /> Dashboard
-                  </Link>
-                  <Link className="dropdown-item" to="#">
-                    <i className="ti ti-user-pin" /> My Profile
                   </Link>
                   {
                     isLoggedIn ? (
@@ -355,9 +393,6 @@ const Header = () => {
           <div className="dropdown-menu">
             <Link className="dropdown-item" to="/">
               <i className="ti ti-layout-2" /> Dashboard
-            </Link>
-            <Link className="dropdown-item" to="#">
-              <i className="ti ti-user-pin" /> My Profile
             </Link>
             {
               isLoggedIn ? (

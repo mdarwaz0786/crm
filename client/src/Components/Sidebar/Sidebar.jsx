@@ -42,8 +42,9 @@ const Sidebar = () => {
                 </Link>
               </li>
             </ul>
+
             <ul>
-              <li>
+              {/* <li>
                 <h6 className="submenu-hdr">Main Menu</h6>
                 <ul>
                   <li className="submenu">
@@ -56,6 +57,7 @@ const Sidebar = () => {
                       <li><Link to="/" className={(active === "projectDashboard" || currentPath === "/") ? "active" : ""} id={isMobile && active === "projectDashboard" ? "mobile_btn" : ""} onClick={() => handleActive("projectDashboard")}>Project Dashboard</Link></li>
                     </ul>
                   </li>
+
                   <li className="submenu">
                     <Link to="#"><i className="ti ti-brand-airtable" /><span>Application</span><span className="menu-arrow" /></Link>
                     <ul>
@@ -76,59 +78,73 @@ const Sidebar = () => {
                     </ul>
                   </li>
                 </ul>
-              </li>
+              </li> */}
+
               <li>
+                <h6 className="submenu-hdr">Main Menu</h6>
                 <ul>
-                  <li className="submenu">
-                    <Link to="#" className={currentPath === "/customer" || currentPath === "/edit-customer/:id" || currentPath === "/team-member" || currentPath === "/role" || currentPath === "/role" || currentPath === "/designation" || currentPath === "/project-type" || currentPath === "/project-status" || currentPath === "/project-category" || currentPath === "/project-timing" ? "active subdrop" : ""}>
-                      <i className="ti ti-file-invoice" /><span>Masters</span><span className="menu-arrow" />
-                    </Link>
-                    <ul>
-                      {
-                        (permissions?.customer?.access) && (
-                          <li><Link to="/customer" className={active === "customer" || currentPath === "/customer" ? "active" : ""} id={isMobile && active === "customer" ? "mobile_btn" : ""} onClick={() => handleActive("customer")}>Customer</Link></li>
-                        )
-                      }
-                      {
-                        (permissions?.team?.access) && (
-                          <li><Link to="/team-member" className={active === "teamMember" || currentPath === "/team-member" ? "active" : ""} id={isMobile && active === "teamMember" ? "mobile_btn" : ""} onClick={() => handleActive("teamMember")}>Team Member</Link></li>
-                        )
-                      }
-                      {
-                        (permissions?.role?.access) && (
-                          <li><Link to="/role" className={active === "role" || currentPath === "/role" ? "active" : ""} id={isMobile && active === "role" ? "mobile_btn" : ""} onClick={() => handleActive("role")}>Role & Permission</Link></li>
-                        )
-                      }
-                      {
-                        (permissions?.designation?.access) && (
-                          <li><Link to="/designation" className={active === "designation" || currentPath === "/designation" ? "active" : ""} id={isMobile && active === "designation" ? "mobile_btn" : ""} onClick={() => handleActive("designation")}>Designation</Link></li>
-                        )
-                      }
-                      {
-                        (permissions?.projectType?.access) && (
-                          <li><Link to="/project-type" className={active === "projectType" || currentPath === "/project-type" ? "active" : ""} id={isMobile && active === "projectType" ? "mobile_btn" : ""} onClick={() => handleActive("projectType")}>Project Type</Link></li>
-                        )
-                      }
-                      {
-                        (permissions?.projectStatus?.access) && (
-                          <li><Link to="/project-status" className={active === "projectStatus" || currentPath === "/project-status" ? "active" : ""} id={isMobile && active === "projectStatus" ? "mobile_btn" : ""} onClick={() => handleActive("projectStatus")}>Project Status</Link></li>
-                        )
-                      }
-                      {
-                        (permissions?.projectCategory?.access) && (
-                          <li><Link to="/project-category" className={active === "projectCategory" || currentPath === "/project-category" ? "active" : ""} id={isMobile && active === "projectCategory" ? "mobile_btn" : ""} onClick={() => handleActive("projectCategory")}>Project Category</Link></li>
-                        )
-                      }
-                      {
-                        (permissions?.projectTiming?.access) && (
-                          <li><Link to="/project-timing" className={active === "projectTiming" || currentPath === "/project-timing" ? "active" : ""} id={isMobile && active === "projectTiming" ? "mobile_btn" : ""} onClick={() => handleActive("projectTiming")}>Project Timing</Link></li>
-                        )
-                      }
-                    </ul>
-                  </li>
+                  <li><Link to="/" className={currentPath === "/" ? "active" : ""} id={isMobile && active === "dashboard" ? "mobile_btn" : ""} onClick={() => handleActive("dashboard")}><i className="ti ti-layout-2" /><span>Dashboard</span></Link></li>
                 </ul>
               </li>
+
               <li>
+                <h6 className="submenu-hdr">CRM</h6>
+                <ul>
+                  {
+                    (permissions?.project?.access) && (
+                      <li><Link to="/project" className={currentPath === "/project" ? "active" : ""} id={isMobile && active === "projects" ? "mobile_btn" : ""} onClick={() => handleActive("projects")}><i className="ti ti-briefcase"></i><span>Projects</span></Link></li>
+                    )
+                  }
+                </ul>
+              </li>
+
+              <li>
+                <h6 className="submenu-hdr">Masters</h6>
+                <ul>
+                  {
+                    (permissions?.customer?.access) && (
+                      <li><Link to="/customer" className={currentPath === "/customer" ? "active" : ""} id={isMobile && active === "customer" ? "mobile_btn" : ""} onClick={() => handleActive("customer")}><i className="ti ti-user-circle"></i><span>Customer</span></Link></li>
+                    )
+                  }
+                  {
+                    (permissions?.team?.access) && (
+                      <li><Link to="/team-member" className={currentPath === "/team-member" ? "active" : ""} id={isMobile && active === "teamMember" ? "mobile_btn" : ""} onClick={() => handleActive("teamMember")}><i className="ti ti-code"></i><span>Team Member</span></Link></li>
+                    )
+                  }
+                  {
+                    (permissions?.role?.access) && (
+                      <li><Link to="/role" className={currentPath === "/role" ? "active" : ""} id={isMobile && active === "role" ? "mobile_btn" : ""} onClick={() => handleActive("role")}><i className="ti ti-shield-check"></i><span>Role & Permission</span></Link></li>
+                    )
+                  }
+                  {
+                    (permissions?.designation?.access) && (
+                      <li><Link to="/designation" className={currentPath === "/designation" ? "active" : ""} id={isMobile && active === "designation" ? "mobile_btn" : ""} onClick={() => handleActive("designation")}><i className="ti ti-id-badge"></i><span>Designation</span></Link></li>
+                    )
+                  }
+                  {
+                    (permissions?.projectType?.access) && (
+                      <li><Link to="/project-type" className={currentPath === "/project-type" ? "active" : ""} id={isMobile && active === "projectType" ? "mobile_btn" : ""} onClick={() => handleActive("projectType")}><i className="ti ti-apps"></i><span>Project Type</span></Link></li>
+                    )
+                  }
+                  {
+                    (permissions?.projectStatus?.access) && (
+                      <li><Link to="/project-status" className={currentPath === "/project-status" ? "active" : ""} id={isMobile && active === "projectStatus" ? "mobile_btn" : ""} onClick={() => handleActive("projectStatus")}><i className="ti ti-clipboard-list"></i><span>Project Status</span></Link></li>
+                    )
+                  }
+                  {
+                    (permissions?.projectCategory?.access) && (
+                      <li><Link to="/project-category" className={currentPath === "/project-category" ? "active" : ""} id={isMobile && active === "projectCategory" ? "mobile_btn" : ""} onClick={() => handleActive("projectCategory")}><i className="ti ti-tags"></i><span>Project Category</span></Link></li>
+                    )
+                  }
+                  {
+                    (permissions?.projectTiming?.access) && (
+                      <li><Link to="/project-timing" className={currentPath === "/project-timing" ? "active" : ""} id={isMobile && active === "projectTiming" ? "mobile_btn" : ""} onClick={() => handleActive("projectTiming")}><i className="ti ti-clock"></i><span>Project Timing</span></Link></li>
+                    )
+                  }
+                </ul>
+              </li>
+
+              {/* <li>
                 <h6 className="submenu-hdr">CRM</h6>
                 <ul>
                   {
@@ -136,51 +152,38 @@ const Sidebar = () => {
                       <li><Link to="/project" className={active === "projects" || currentPath === "/project" ? "active" : ""} id={isMobile && active === "projects" ? "mobile_btn" : ""} onClick={() => handleActive("projects")}><i className="ti ti-atom-2" /><span>Projects</span></Link></li>
                     )
                   }
-                  <li>
-                    <Link to="#" id={isMobile && active === "contacts" ? "mobile_btn" : ""} onClick={() => handleActive("contacts")}><i className="ti ti-user-up" /><span>Contacts</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#" id={isMobile && active === "companies" ? "mobile_btn" : ""} onClick={() => handleActive("companies")}><i className="ti ti-building-community" /><span>Companies</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#" id={isMobile && active === "deals" ? "mobile_btn" : ""} onClick={() => handleActive("deals")}><i className="ti ti-medal" /><span>Deals</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#" id={isMobile && active === "leads" ? "mobile_btn" : ""} onClick={() => handleActive("leads")}><i className="ti ti-chart-arcs" /><span>Leads</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#" id={isMobile && active === "pipeline" ? "mobile_btn" : ""} onClick={() => handleActive("pipeline")}><i className="ti ti-timeline-event-exclamation" /><span>Pipeline</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#" id={isMobile && active === "compaign" ? "mobile_btn" : ""} onClick={() => handleActive("compaign")}><i className="ti ti-brand-campaignmonitor" /><span>Campaign</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#" id={isMobile && active === "tasks" ? "mobile_btn" : ""} onClick={() => handleActive("tasks")}><i className="ti ti-list-check" /><span>Tasks</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#" id={isMobile && active === "proposals" ? "mobile_btn" : ""} onClick={() => handleActive("proposals")}><i className="ti ti-file-star" /><span>Proposals</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#" id={isMobile && active === "contracts" ? "mobile_btn" : ""} onClick={() => handleActive("contracts")}><i className="ti ti-file-check" /><span>Contracts</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#" id={isMobile && active === "estimations" ? "mobile_btn" : ""} onClick={() => handleActive("estimations")}><i className="ti ti-file-report" /><span>Estimations</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#"><i className="ti ti-file-invoice" /><span>Invoices</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#" id={isMobile && active === "payments" ? "mobile_btn" : ""} onClick={() => handleActive("payments")}><i className="ti ti-report-money" /><span>Payments</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#" id={isMobile && active === "analytics" ? "mobile_btn" : ""} onClick={() => handleActive("analytics")}><i className="ti ti-chart-bar" /><span>Analytics</span></Link>
-                  </li>
-                  <li>
-                    <Link to="#" id={isMobile && active === "activities" ? "mobile_btn" : ""} onClick={() => handleActive("activities")}><i className="ti ti-bounce-right" /><span>Activities</span></Link>
-                  </li>
+
+                  <li><Link to="#" id={isMobile && active === "contacts" ? "mobile_btn" : ""} onClick={() => handleActive("contacts")}><i className="ti ti-user-up" /><span>Contacts</span></Link></li>
+
+                  <li><Link to="#" id={isMobile && active === "companies" ? "mobile_btn" : ""} onClick={() => handleActive("companies")}><i className="ti ti-building-community" /><span>Companies</span></Link></li>
+
+                  <li><Link to="#" id={isMobile && active === "deals" ? "mobile_btn" : ""} onClick={() => handleActive("deals")}><i className="ti ti-medal" /><span>Deals</span></Link></li>
+
+                  <li><Link to="#" id={isMobile && active === "leads" ? "mobile_btn" : ""} onClick={() => handleActive("leads")}><i className="ti ti-chart-arcs" /><span>Leads</span></Link></li>
+
+                  <li><Link to="#" id={isMobile && active === "pipeline" ? "mobile_btn" : ""} onClick={() => handleActive("pipeline")}><i className="ti ti-timeline-event-exclamation" /><span>Pipeline</span></Link></li>
+
+                  <li><Link to="#" id={isMobile && active === "compaign" ? "mobile_btn" : ""} onClick={() => handleActive("compaign")}><i className="ti ti-brand-campaignmonitor" /><span>Campaign</span></Link></li>
+
+                  <li><Link to="#" id={isMobile && active === "tasks" ? "mobile_btn" : ""} onClick={() => handleActive("tasks")}><i className="ti ti-list-check" /><span>Tasks</span></Link></li>
+
+                  <li><Link to="#" id={isMobile && active === "proposals" ? "mobile_btn" : ""} onClick={() => handleActive("proposals")}><i className="ti ti-file-star" /><span>Proposals</span></Link></li>
+
+                  <li><Link to="#" id={isMobile && active === "contracts" ? "mobile_btn" : ""} onClick={() => handleActive("contracts")}><i className="ti ti-file-check" /><span>Contracts</span></Link></li>
+
+                  <li><Link to="#" id={isMobile && active === "estimations" ? "mobile_btn" : ""} onClick={() => handleActive("estimations")}><i className="ti ti-file-report" /><span>Estimations</span></Link></li>
+
+                  <li><Link to="#"><i className="ti ti-file-invoice" /><span>Invoices</span></Link></li>
+
+                  <li><Link to="#" id={isMobile && active === "payments" ? "mobile_btn" : ""} onClick={() => handleActive("payments")}><i className="ti ti-report-money" /><span>Payments</span></Link></li>
+
+                  <li><Link to="#" id={isMobile && active === "analytics" ? "mobile_btn" : ""} onClick={() => handleActive("analytics")}><i className="ti ti-chart-bar" /><span>Analytics</span></Link></li>
+
+                  <li><Link to="#" id={isMobile && active === "activities" ? "mobile_btn" : ""} onClick={() => handleActive("activities")}><i className="ti ti-bounce-right" /><span>Activities</span></Link></li>
                 </ul>
-              </li>
-              <li>
+              </li> */}
+
+              {/* <li>
                 <h6 className="submenu-hdr">Reports</h6>
                 <ul>
                   <li className="submenu">
@@ -197,8 +200,9 @@ const Sidebar = () => {
                     </ul>
                   </li>
                 </ul>
-              </li>
-              <li>
+              </li> */}
+
+              {/* <li>
                 <h6 className="submenu-hdr">CRM Settings</h6>
                 <ul>
                   <li><Link to="#" id={isMobile && active === "sources" ? "mobile_btn" : ""} onClick={() => handleActive("sources")}><i className="ti ti-artboard" /><span>Sources</span></Link></li>
@@ -207,8 +211,9 @@ const Sidebar = () => {
                   <li><Link to="#" id={isMobile && active === "industry" ? "mobile_btn" : ""} onClick={() => handleActive("industry")}><i className="ti ti-building-factory" /><span>Industry</span></Link></li>
                   <li><Link to="#" id={isMobile && active === "calls" ? "mobile_btn" : ""} onClick={() => handleActive("calls")}><i className="ti ti-phone-check" /><span>Calls</span></Link></li>
                 </ul>
-              </li>
-              <li>
+              </li> */}
+
+              {/* <li>
                 <h6 className="submenu-hdr">User Management</h6>
                 <ul>
                   <li><Link to="#" id={isMobile && active === "manageUsers" ? "mobile_btn" : ""} onClick={() => handleActive("manageUsers")}><i className="ti ti-users" /><span>Manage Users</span></Link></li>
@@ -216,8 +221,9 @@ const Sidebar = () => {
                   <li><Link to="#" id={isMobile && active === "deleteRequest" ? "mobile_btn" : ""} onClick={() => handleActive("deleteRequest")}><i className="ti ti-flag-question" /><span>Delete Request</span></Link>
                   </li>
                 </ul>
-              </li>
-              <li>
+              </li> */}
+
+              {/* <li>
                 <h6 className="submenu-hdr">Membership</h6>
                 <ul>
                   <li className="submenu">
@@ -231,8 +237,9 @@ const Sidebar = () => {
                     </ul>
                   </li>
                 </ul>
-              </li>
-              <li>
+              </li> */}
+
+              {/* <li>
                 <h6 className="submenu-hdr">Content</h6>
                 <ul>
                   <li><Link to="#" id={isMobile && active === "pages" ? "mobile_btn" : ""} onClick={() => handleActive("pages")}><i className="ti ti-page-break" /><span>Pages</span></Link></li>
@@ -249,16 +256,18 @@ const Sidebar = () => {
                   <li><Link to="#" id={isMobile && active === "testimonials" ? "mobile_btn" : ""} onClick={() => handleActive("testimonials")}><i className="ti ti-quote" /><span>Testimonials</span></Link></li>
                   <li><Link to="#" id={isMobile && active === "faq" ? "mobile_btn" : ""} onClick={() => handleActive("faq")}><i className="ti ti-question-mark" /><span>FAQ</span></Link></li>
                 </ul>
-              </li>
-              <li>
+              </li> */}
+
+              {/* <li>
                 <h6 className="submenu-hdr">Support</h6>
                 <ul>
                   <li><Link to="#" id={isMobile && active === "contactMessages" ? "mobile_btn" : ""} onClick={() => handleActive("contactMessages")}><i className="ti ti-page-break" /><span>Contact Messages</span></Link>
                   </li>
                   <li><Link to="#" id={isMobile && active === "tickets" ? "mobile_btn" : ""} onClick={() => handleActive("tickets")}><i className="ti ti-ticket" /><span>Tickets</span></Link></li>
                 </ul>
-              </li>
-              <li>
+              </li> */}
+
+              {/* <li>
                 <h6 className="submenu-hdr">Settings</h6>
                 <ul>
                   <li className="submenu">
@@ -272,6 +281,7 @@ const Sidebar = () => {
                       <li><Link to="#" id={isMobile && active === "connectedApps" ? "mobile_btn" : ""} onClick={() => handleActive("connectedApps")}>Connected Apps</Link></li>
                     </ul>
                   </li>
+
                   <li className="submenu">
                     <Link to="#">
                       <i className="ti ti-world-cog" /><span>Website Settings</span><span className="menu-arrow" />
@@ -285,6 +295,7 @@ const Sidebar = () => {
                       <li><Link to="#" id={isMobile && active === "language" ? "mobile_btn" : ""} onClick={() => handleActive("language")}>Language</Link></li>
                     </ul>
                   </li>
+
                   <li className="submenu">
                     <Link to="#">
                       <i className="ti ti-apps" /><span>App Settings</span><span className="menu-arrow" />
@@ -295,6 +306,7 @@ const Sidebar = () => {
                       <li><Link to="#" id={isMobile && active === "customFields" ? "mobile_btn" : ""} onClick={() => handleActive("customFields")}>Custom Fields</Link></li>
                     </ul>
                   </li>
+
                   <li className="submenu">
                     <Link to="#">
                       <i className="ti ti-device-laptop" /><span>System Settings</span><span className="menu-arrow" />
@@ -305,6 +317,7 @@ const Sidebar = () => {
                       <li><Link to="#" id={isMobile && active === "gdprCookies" ? "mobile_btn" : ""} onClick={() => handleActive("gdprCookies")}>GDPR Cookies</Link></li>
                     </ul>
                   </li>
+
                   <li className="submenu">
                     <Link to="#">
                       <i className="ti ti-moneybag" /><span>Financial Settings</span><span className="menu-arrow" />
@@ -316,6 +329,7 @@ const Sidebar = () => {
                       <li><Link to="#" id={isMobile && active === "currencies" ? "mobile_btn" : ""} onClick={() => handleActive("currencies")}>Currencies</Link></li>
                     </ul>
                   </li>
+
                   <li className="submenu">
                     <Link to="#">
                       <i className="ti ti-flag-cog" /><span>Other Settings</span><span className="menu-arrow" />
@@ -326,9 +340,9 @@ const Sidebar = () => {
                     </ul>
                   </li>
                 </ul>
-              </li>
+              </li> */}
 
-              <li>
+              {/* <li>
                 <h6 className="submenu-hdr">Pages</h6>
                 <ul>
                   <li className="submenu">
@@ -358,9 +372,9 @@ const Sidebar = () => {
                   <li><Link to="#" id={isMobile && active === "comingSoon" ? "mobile_btn" : ""} onClick={() => handleActive("comingSoon")}><i className="ti ti-device-laptop" /><span>Coming Soon</span></Link></li>
                   <li><Link to="#" id={isMobile && active === "underMaintenance" ? "mobile_btn" : ""} onClick={() => handleActive("underMaintenance")}><i className="ti ti-moneybag" /><span>Under Maintenance</span></Link></li>
                 </ul>
-              </li>
+              </li> */}
 
-              <li>
+              {/* <li>
                 <h6 className="submenu-hdr">UI Interface</h6>
                 <ul>
                   <li className="submenu">
@@ -485,8 +499,9 @@ const Sidebar = () => {
                     </ul>
                   </li>
                 </ul>
-              </li>
-              <li>
+              </li> */}
+
+              {/* <li>
                 <h6 className="submenu-hdr">Help</h6>
                 <ul>
                   <li><Link to="#" id={isMobile && active === "documentation" ? "mobile_btn" : ""} onClick={() => handleActive("documentation")}><i className="ti ti-file-type-doc" /><span>Documentation</span></Link></li>
@@ -511,7 +526,7 @@ const Sidebar = () => {
                     </ul>
                   </li>
                 </ul>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

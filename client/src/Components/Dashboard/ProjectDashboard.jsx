@@ -27,6 +27,21 @@ const ProjectDashboard = () => {
     dateRange: "",
   });
 
+  useEffect(() => {
+    // Check if the flag is set in localStorage
+    const shouldReload = localStorage.getItem('shouldReload');
+
+    if (!shouldReload) {
+      // Set the flag to indicate that the page should reload
+      localStorage.setItem('shouldReload', 'true');
+      // Perform the reload
+      window.location.reload();
+    } else {
+      // Once reloaded, clear the flag
+      localStorage.removeItem('shouldReload');
+    };
+  }, []);
+
   const useDebounce = (value, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
     const timer = useRef();
@@ -129,7 +144,7 @@ const ProjectDashboard = () => {
                 <div className="page-header">
                   <div className="row align-items-center">
                     <div className="col-md-4">
-                      <h3 className="page-title">Project Dashboard</h3>
+                      <h3 className="page-title">Dashboard</h3>
                     </div>
                     <div className="col-md-5 col-sm-4 dashboard-search">
                       <div className="form-wrap icon-form">
