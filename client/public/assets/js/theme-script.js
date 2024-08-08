@@ -126,59 +126,6 @@ let themesettings = `
                 </div>
             </div>
         </div>
-        <div class="themesettings-content m-0 border-0">
-            <h6>Sidebar Background</h6>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="input-themeselect">
-                        <input type="radio" name="sidebar" id="sidebarBg1" value="sidebarbg1" >
-                        <label for="sidebarBg1">
-                            <img src="assets/img/theme/theme-07.svg" alt="img">
-                            <span class="w-100">
-                                <span>Bg-1</span>
-                                <span class="checkboxs-theme"></span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-themeselect">
-                        <input type="radio" name="sidebar" id="sidebarBg2" value="sidebarbg2">
-                        <label for="sidebarBg2">
-                            <img src="assets/img/theme/theme-08.svg" alt="img">
-                            <span class="w-100">
-                                <span>Bg-2</span>
-                                <span class="checkboxs-theme"></span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-themeselect">
-                        <input type="radio" name="sidebar" id="sidebarBg3" value="sidebarbg3" >
-                        <label for="sidebarBg3">
-                            <img src="assets/img/theme/theme-09.svg" alt="img">
-                            <span class="w-100">
-                                <span>Bg-3</span>
-                                <span class="checkboxs-theme"></span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-themeselect">
-                        <input type="radio" name="sidebar" id="sidebarBg4" value="sidebarbg4" >
-                        <label for="sidebarBg4">
-                            <img src="assets/img/theme/theme-10.svg" alt="img">
-                            <span class="w-100">
-                                <span>Bg-4</span>
-                                <span class="checkboxs-theme"></span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="themesettings-footer">
         <ul>
@@ -194,67 +141,67 @@ let themesettings = `
             `
 
 $("html").append(themesettings)
-        // Your JavaScript code here
-        setTimeout(function() {
-            const applyScriptAfterDelay = () => {
-                const themeRadios = document.querySelectorAll('input[name="theme"]');
-                const sidebarRadios = document.querySelectorAll('input[name="sidebar"]');
-                const colorRadios = document.querySelectorAll('input[name="color"]');
-                const sidebarBgRadios = document.querySelectorAll('input[name="sidebarbg"]');
-                const resetbutton = document.getElementById('resetbutton');
-                const sidebar = document.getElementById('sidebar');
+// Your JavaScript code here
+setTimeout(function () {
+    const applyScriptAfterDelay = () => {
+        const themeRadios = document.querySelectorAll('input[name="theme"]');
+        const sidebarRadios = document.querySelectorAll('input[name="sidebar"]');
+        const colorRadios = document.querySelectorAll('input[name="color"]');
+        const sidebarBgRadios = document.querySelectorAll('input[name="sidebarbg"]');
+        const resetbutton = document.getElementById('resetbutton');
+        const sidebar = document.getElementById('sidebar');
 
-                function setThemeAndSidebarTheme(theme, sidebarTheme, color, sidebarBg) {
-                    document.documentElement.setAttribute('data-theme', theme);
-                    document.documentElement.setAttribute('data-sidebar', sidebarTheme);
-                    document.documentElement.setAttribute('data-color', color);
-                    localStorage.setItem('theme', theme);
-                    localStorage.setItem('sidebarTheme', sidebarTheme);
-                    localStorage.setItem('color', color);
-                    localStorage.setItem('sidebarBg', sidebarBg);
-                }
+        function setThemeAndSidebarTheme(theme, sidebarTheme, color, sidebarBg) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.setAttribute('data-sidebar', sidebarTheme);
+            document.documentElement.setAttribute('data-color', color);
+            localStorage.setItem('theme', theme);
+            localStorage.setItem('sidebarTheme', sidebarTheme);
+            localStorage.setItem('color', color);
+            localStorage.setItem('sidebarBg', sidebarBg);
+        }
 
-                function handleInputChange(event) {
-                    const theme = document.querySelector('input[name="theme"]:checked') ? document.querySelector('input[name="theme"]:checked').value : 'light';
-                    const sidebarTheme = document.querySelector('input[name="sidebar"]:checked') ? document.querySelector('input[name="sidebar"]:checked').value : 'light';
-                    const color = document.querySelector('input[name="color"]:checked') ? document.querySelector('input[name="color"]:checked').value : 'red';
-                    const sidebarBg = document.querySelector('input[name="sidebarbg"]:checked') ? document.querySelector('input[name="sidebarbg"]:checked').value : 'sidebarbg1';
-                    setThemeAndSidebarTheme(theme, sidebarTheme, color, sidebarBg);
-                }
+        function handleInputChange(event) {
+            const theme = document.querySelector('input[name="theme"]:checked') ? document.querySelector('input[name="theme"]:checked').value : 'light';
+            const sidebarTheme = document.querySelector('input[name="sidebar"]:checked') ? document.querySelector('input[name="sidebar"]:checked').value : 'light';
+            const color = document.querySelector('input[name="color"]:checked') ? document.querySelector('input[name="color"]:checked').value : 'red';
+            const sidebarBg = document.querySelector('input[name="sidebarbg"]:checked') ? document.querySelector('input[name="sidebarbg"]:checked').value : 'sidebarbg1';
+            setThemeAndSidebarTheme(theme, sidebarTheme, color, sidebarBg);
+        }
 
-                function resetThemeAndSidebarThemeAndColorAndBg() {
-                    setThemeAndSidebarTheme('light', 'light', 'red', 'sidebarbg1');
+        function resetThemeAndSidebarThemeAndColorAndBg() {
+            setThemeAndSidebarTheme('light', 'light', 'red', 'sidebarbg1');
 
-                    const lightThemeRadio = document.getElementById('lightTheme');
-                    const lightSidebarRadio = document.getElementById('lightSidebar');
-                    const redColorRadio = document.getElementById('redColor');
+            const lightThemeRadio = document.getElementById('lightTheme');
+            const lightSidebarRadio = document.getElementById('lightSidebar');
+            const redColorRadio = document.getElementById('redColor');
 
-                    if (lightThemeRadio) {
-                        lightThemeRadio.checked = true;
-                    }
+            if (lightThemeRadio) {
+                lightThemeRadio.checked = true;
+            }
 
-                    if (lightSidebarRadio) {
-                        lightSidebarRadio.checked = true;
-                    }
+            if (lightSidebarRadio) {
+                lightSidebarRadio.checked = true;
+            }
 
-                    if (redColorRadio) {
-                        redColorRadio.checked = true;
-                    }
-                }
+            if (redColorRadio) {
+                redColorRadio.checked = true;
+            }
+        }
 
-                themeRadios.forEach(radio => radio.addEventListener('change', handleInputChange));
-                sidebarRadios.forEach(radio => radio.addEventListener('change', handleInputChange));
-                colorRadios.forEach(radio => radio.addEventListener('change', handleInputChange));
-                resetbutton.addEventListener('click', resetThemeAndSidebarThemeAndColorAndBg);
+        themeRadios.forEach(radio => radio.addEventListener('change', handleInputChange));
+        sidebarRadios.forEach(radio => radio.addEventListener('change', handleInputChange));
+        colorRadios.forEach(radio => radio.addEventListener('change', handleInputChange));
+        resetbutton.addEventListener('click', resetThemeAndSidebarThemeAndColorAndBg);
 
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                const savedSidebarTheme = localStorage.getItem('sidebarTheme') || 'light';
-                const savedColor = localStorage.getItem('color') || 'red';
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedSidebarTheme = localStorage.getItem('sidebarTheme') || 'light';
+        const savedColor = localStorage.getItem('color') || 'red';
 
-                setThemeAndSidebarTheme(savedTheme, savedSidebarTheme, savedColor);
-                document.getElementById(`${savedTheme}Theme`).checked = true;
-                document.getElementById(`${savedColor}Color`).checked = true;
-            };
+        setThemeAndSidebarTheme(savedTheme, savedSidebarTheme, savedColor);
+        document.getElementById(`${savedTheme}Theme`).checked = true;
+        document.getElementById(`${savedColor}Color`).checked = true;
+    };
 
-            applyScriptAfterDelay();
-        }); // 2000 milliseconds = 2 seconds
+    applyScriptAfterDelay();
+}); // 2000 milliseconds = 2 seconds
