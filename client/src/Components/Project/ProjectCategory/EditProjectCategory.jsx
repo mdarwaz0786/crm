@@ -54,11 +54,6 @@ const EditProjectCategory = () => {
       updateData.description = description;
     };
 
-    // Validation
-    if (!name) {
-      return toast.error("Enter name");
-    };
-
     try {
       const response = await axios.put(`/api/v1/projectCategory/update-projectCategory/${id}`, updateData, {
         headers: {

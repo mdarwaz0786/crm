@@ -54,11 +54,6 @@ const EditProjectStatus = () => {
       updateData.description = description;
     };
 
-    // Validation
-    if (!status) {
-      return toast.error("Enter status");
-    };
-
     try {
       const response = await axios.put(`/api/v1/projectStatus/update-projectStatus/${id}`, updateData, {
         headers: {

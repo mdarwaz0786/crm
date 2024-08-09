@@ -54,11 +54,6 @@ const EditDesignation = () => {
       updateData.description = description;
     };
 
-    // Validation
-    if (!name) {
-      return toast.error("Enter name");
-    };
-
     try {
       const response = await axios.put(`/api/v1/designation/update-designation/${id}`, updateData, {
         headers: {

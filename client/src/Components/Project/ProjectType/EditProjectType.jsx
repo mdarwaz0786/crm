@@ -54,11 +54,6 @@ const EditProjectType = () => {
       updateData.description = description;
     };
 
-    // Validation
-    if (!name) {
-      return toast.error("Enter type");
-    };
-
     try {
       const response = await axios.put(`/api/v1/projectType/update-projectType/${id}`, updateData, {
         headers: {

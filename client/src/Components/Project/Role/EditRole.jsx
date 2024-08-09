@@ -278,11 +278,6 @@ const EditRole = () => {
       updateData.permissions = permissions;
     };
 
-    // Validation
-    if (!name) {
-      return toast.error("Enter name");
-    };
-
     try {
       const response = await axios.put(`/api/v1/role/update-role/${id}`, updateData, {
         headers: {

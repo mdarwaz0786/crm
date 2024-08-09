@@ -280,63 +280,6 @@ const EditProject = () => {
       updateData.description = description;
     };
 
-    // Validation
-    if (!name) {
-      return toast.error("Enter project name");
-    };
-
-    if (!projectId) {
-      return toast.error("Enter project id");
-    };
-
-    if (!selectedProjectType) {
-      return toast.error("Select project type");
-    };
-
-    if (!selectedCustomer) {
-      return toast.error("Select Customer");
-    };
-
-    if (!selectedProjectCategory) {
-      return toast.error("Select project category");
-    };
-
-    if (!selectedProjectTiming) {
-      return toast.error("Select project timing");
-    };
-
-    if (!price) {
-      return toast.error("Enter price");
-    };
-
-    if (selectedResponsible?.length === 0) {
-      return toast.error("Select responsible person");
-    };
-
-    if (selectedLeader?.length === 0) {
-      return toast.error("Select team leader");
-    };
-
-    if (!start) {
-      return toast.error("Enter start date");
-    };
-
-    if (!due) {
-      return toast.error("Enter due date");
-    };
-
-    if (!selectedProjectPriority) {
-      return toast.error("Select project priority");
-    };
-
-    if (!selectedProjectStatus) {
-      return toast.error("Select project status");
-    };
-
-    if (!description) {
-      return toast.error("Enter description");
-    };
-
     try {
       const response = await axios.put(`/api/v1/project/update-project/${id}`, updateData, {
         headers: {
