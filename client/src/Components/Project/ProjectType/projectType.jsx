@@ -140,12 +140,12 @@ const ProjectType = () => {
         });
 
         if (response?.data?.success) {
-          toast.success("Project type deleted successfully");
+          toast.success("Deleted successfully");
           fetchAllData();
         };
       } catch (error) {
         console.log("Error while deleting project type:", error.message);
-        toast.error("Error while deleting project type");
+        toast.error("Error while deleting");
       };
     } else if (isdelete !== "") {
       alert("Type only \"yes\".");

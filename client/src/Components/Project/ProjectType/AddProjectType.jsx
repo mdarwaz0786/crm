@@ -16,6 +16,8 @@ const AddProjectType = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+
+      // Validation
       if (!name) {
         return toast.error("Enter type");
       };
@@ -29,12 +31,12 @@ const AddProjectType = () => {
       if (response?.data?.success) {
         setName("");
         setDescription("");
-        toast.success("Project type created successfully");
+        toast.success("Created successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating project type:", error.message);
-      toast.error("Error while creating project type");
+      toast.error("Error while creating");
     };
   };
 

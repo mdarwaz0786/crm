@@ -54,6 +54,11 @@ const EditProjectStatus = () => {
       updateData.description = description;
     };
 
+    // Validation
+    if (!status) {
+      return toast.error("Enter status");
+    };
+
     try {
       const response = await axios.put(`/api/v1/projectStatus/update-projectStatus/${id}`, updateData, {
         headers: {
@@ -64,12 +69,12 @@ const EditProjectStatus = () => {
       if (response?.data?.success) {
         setStatus("");
         setDescription("");
-        toast.success("Project Status updated successfully");
+        toast.success("Updated successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating project status:", error.message);
-      toast.error("Error while updating project status");
+      toast.error("Error while updating");
     };
   };
 

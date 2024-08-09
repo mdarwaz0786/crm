@@ -16,6 +16,8 @@ const AddProjectTiming = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+
+      // Validation
       if (!name) {
         return toast.error("Enter name");
       };
@@ -29,12 +31,12 @@ const AddProjectTiming = () => {
       if (response?.data?.success) {
         setName("");
         setDescription("");
-        toast.success("Project timing created successfully");
+        toast.success("Created successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating project timing:", error.message);
-      toast.error("Error while creating project timing");
+      toast.error("Error while creating");
     };
   };
 

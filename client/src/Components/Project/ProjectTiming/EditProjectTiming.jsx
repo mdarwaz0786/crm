@@ -54,6 +54,11 @@ const EditProjectTiming = () => {
       updateData.description = description;
     };
 
+    // Validation
+    if (!name) {
+      return toast.error("Enter name");
+    };
+
     try {
       const response = await axios.put(`/api/v1/projectTiming/update-projectTiming/${id}`, updateData, {
         headers: {
@@ -64,12 +69,12 @@ const EditProjectTiming = () => {
       if (response?.data?.success) {
         setName("");
         setDescription("");
-        toast.success("Project timing updated successfully");
+        toast.success("Updated successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating project timing:", error.message);
-      toast.error("Error while updating project timing");
+      toast.error("Error while updating");
     };
   };
 

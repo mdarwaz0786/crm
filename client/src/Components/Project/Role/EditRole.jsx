@@ -278,6 +278,11 @@ const EditRole = () => {
       updateData.permissions = permissions;
     };
 
+    // Validation
+    if (!name) {
+      return toast.error("Enter name");
+    };
+
     try {
       const response = await axios.put(`/api/v1/role/update-role/${id}`, updateData, {
         headers: {
@@ -421,12 +426,12 @@ const EditRole = () => {
             },
           },
         });
-        toast.success("Role updated successfully");
+        toast.success("Updated successfully");
         navigate(-1);
       }
     } catch (error) {
       console.error('Error while updating role:', error.message);
-      toast.error("Error while updating role");
+      toast.error("Error while updating");
     };
   };
 

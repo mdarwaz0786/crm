@@ -118,6 +118,8 @@ const AddTeamMember = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+
+      // Validation
       if (!name) {
         return toast.error("Enter name");
       };
@@ -171,12 +173,12 @@ const AddTeamMember = () => {
         setSelectedDesignation("");
         setSelectedRole("");
         setSelectedReportingTo([]);
-        toast.success("Team member created successfully");
+        toast.success("created successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating team member:", error.message);
-      toast.error("Error while creating team member");
+      toast.error("Error while creating");
     };
   };
 

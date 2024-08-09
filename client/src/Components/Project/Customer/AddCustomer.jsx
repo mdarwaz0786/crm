@@ -26,8 +26,9 @@ const AddCustomer = () => {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    const allFieldsValid = formFields.every(({ name }) => formData[name]);
 
+    // Validation
+    const allFieldsValid = formFields.every(({ name }) => formData[name]);
     if (!allFieldsValid) {
       return toast.error("All fields are required.");
     };
@@ -39,12 +40,12 @@ const AddCustomer = () => {
 
       if (response?.data?.success) {
         setFormData((prev) => Object.keys(prev).reduce((accumulator, key) => ({ ...accumulator, [key]: "" }), {}));
-        toast.success("Customer created successfully");
+        toast.success("Created successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating customer:", error.message);
-      toast.error("Error while creating customer");
+      toast.error("Error while creating");
     };
   };
 

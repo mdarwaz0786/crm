@@ -16,6 +16,8 @@ const AddProjectPriority = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+
+      // Validation
       if (!name) {
         return toast.error("Enter name");
       };
@@ -29,12 +31,12 @@ const AddProjectPriority = () => {
       if (response?.data?.success) {
         setName("");
         setDescription("");
-        toast.success("Project priority created successfully");
+        toast.success("Created successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating project priority:", error.message);
-      toast.error("Error while creating project priority");
+      toast.error("Error while creating");
     };
   };
 

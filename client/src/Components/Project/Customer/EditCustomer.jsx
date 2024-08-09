@@ -56,18 +56,24 @@ const EditCustomer = () => {
     // Create update object based on permissions
     const updateData = Object.fromEntries(Object.entries(formData).filter(([key]) => fieldPermissions[key]?.show && !fieldPermissions[key]?.read));
 
+    // Validation
+    const allFieldsValid = formFields.every(({ name }) => formData[name]);
+    if (!allFieldsValid) {
+      return toast.error("All fields are required.");
+    };
+
     try {
       const response = await axios.put(`/api/v1/customer/update-customer/${id}`, updateData, {
         headers: { Authorization: `${validToken}` },
       });
 
       if (response?.data?.success) {
-        toast.success("Customer updated successfully");
+        toast.success("Updated successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating customer:", error.message);
-      toast.error("Error while updating customer");
+      toast.error("Error while updating");
     };
   };
 

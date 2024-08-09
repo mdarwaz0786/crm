@@ -16,6 +16,8 @@ const AddProjectStatus = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+
+      // Validation
       if (!status) {
         return toast.error("Enter status");
       };
@@ -29,12 +31,12 @@ const AddProjectStatus = () => {
       if (response?.data?.success) {
         setStatus("");
         setDescription("");
-        toast.success("Project status created successfully");
+        toast.success("Created successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating project status:", error.message);
-      toast.error("Error while creating project status");
+      toast.error("Error while creating");
     };
   };
 

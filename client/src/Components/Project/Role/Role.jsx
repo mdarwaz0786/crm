@@ -140,12 +140,12 @@ const Role = () => {
         });
 
         if (response?.data?.success) {
-          toast.success("Role deleted successfully");
+          toast.success("Deleted successfully");
           fetchAllData();
         };
       } catch (error) {
         console.log("Error while deleting role:", error.message);
-        toast.error("Error while deleting role");
+        toast.error("Error while deleting");
       };
     } else if (isdelete !== "") {
       alert("Type only \"yes\".");

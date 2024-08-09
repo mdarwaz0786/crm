@@ -193,6 +193,8 @@ const AddProject = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+
+      // Validation
       if (!name) {
         return toast.error("Enter project name");
       };
@@ -289,12 +291,12 @@ const AddProject = () => {
         setStart("");
         setDue("");
         setDescription("");
-        toast.success("Project created successfully");
+        toast.success("Created successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating project:", error.message);
-      toast.error("Error while creating project");
+      toast.error("Error while creating");
     };
   };
 

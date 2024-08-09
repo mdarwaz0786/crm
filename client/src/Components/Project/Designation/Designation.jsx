@@ -140,12 +140,12 @@ const Designation = () => {
         });
 
         if (response?.data?.success) {
-          toast.success("Designation deleted successfully");
+          toast.success("Deleted successfully");
           fetchAllData();
         };
       } catch (error) {
         console.log("Error while deleting designation:", error.message);
-        toast.error("Error while deleting designation");
+        toast.error("Error while deleting");
       };
     } else if (isdelete !== "") {
       alert("Type only \"yes\".");

@@ -54,6 +54,11 @@ const EditProjectPriority = () => {
       updateData.description = description;
     };
 
+    // Validation
+    if (!name) {
+      return toast.error("Enter name");
+    };
+
     try {
       const response = await axios.put(`/api/v1/projectPriority/update-projectPriority/${id}`, updateData, {
         headers: {
@@ -64,12 +69,12 @@ const EditProjectPriority = () => {
       if (response?.data?.success) {
         setName("");
         setDescription("");
-        toast.success("Project priority updated successfully");
+        toast.success("Updated successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating project priority:", error.message);
-      toast.error("Error while updating project priority");
+      toast.error("Error while updating");
     };
   };
 

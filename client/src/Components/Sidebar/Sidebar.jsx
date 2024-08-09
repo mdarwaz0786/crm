@@ -99,7 +99,7 @@ const Sidebar = () => {
               </li>
 
               <li>
-                <h6 className="submenu-hdr">Masters</h6>
+                <h6 className="submenu-hdr">Master</h6>
                 <ul>
                   {
                     (permissions?.customer?.access) && (

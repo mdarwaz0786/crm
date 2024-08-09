@@ -140,12 +140,12 @@ const ProjectTiming = () => {
         });
 
         if (response?.data?.success) {
-          toast.success("Project timing deleted successfully");
+          toast.success("Deleted successfully");
           fetchAllData();
         };
       } catch (error) {
         console.log("Error while deleting project timing:", error.message);
-        toast.error("Error while deleting project timing");
+        toast.error("Error while deleting");
       };
     } else if (isdelete !== "") {
       alert("Type only \"yes\".");

@@ -134,7 +134,7 @@ const EditTeamMember = () => {
   };
 
   useEffect(() => {
-    if (!isLoading && team && permissions?.create) {
+    if (!isLoading && team && permissions?.update) {
       fetchAllData();
     };
   }, [isLoading, team, permissions]);
@@ -186,6 +186,43 @@ const EditTeamMember = () => {
       updateData.role = selectedRole;
     };
 
+    // Validation
+    if (!name) {
+      return toast.error("Enter name");
+    };
+
+    if (!email) {
+      return toast.error("Enter email");
+    };
+
+    if (!username) {
+      return toast.error("Enter username");
+    };
+
+    if (!password) {
+      return toast.error("Enter password");
+    };
+
+    if (!mobile) {
+      return toast.error("Enter mobile number");
+    };
+
+    if (!joining) {
+      return toast.error("Enter joining date");
+    };
+
+    if (!dob) {
+      return toast.error("Enter date of birth");
+    };
+
+    if (!selectedDesignation) {
+      return toast.error("Select designation");
+    };
+
+    if (!selectedRole) {
+      return toast.error("Select role");
+    };
+
     try {
       const response = await axios.put(`/api/v1/team/update-team/${id}`, updateData, {
         headers: {
@@ -202,12 +239,12 @@ const EditTeamMember = () => {
         setSelectedRole("");
         setSelectedDesignation("");
         setSelectedReportingTo([]);
-        toast.success("Team member updated successfully");
+        toast.success("Updated successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating team member:", error.message);
-      toast.error("Error while updating team member");
+      toast.error("Error while updating");
     };
   };
 

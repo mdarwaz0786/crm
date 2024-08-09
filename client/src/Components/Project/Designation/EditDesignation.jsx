@@ -54,6 +54,11 @@ const EditDesignation = () => {
       updateData.description = description;
     };
 
+    // Validation
+    if (!name) {
+      return toast.error("Enter name");
+    };
+
     try {
       const response = await axios.put(`/api/v1/designation/update-designation/${id}`, updateData, {
         headers: {
@@ -64,12 +69,12 @@ const EditDesignation = () => {
       if (response?.data?.success) {
         setName("");
         setDescription("");
-        toast.success("Designation updated successfully");
+        toast.success("Updated successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating designation:", error.message);
-      toast.error("Error while updating designation");
+      toast.error("Error while updating");
     };
   };
 

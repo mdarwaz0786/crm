@@ -140,12 +140,12 @@ const TeamMember = () => {
         });
 
         if (response?.data?.success) {
-          toast.success("Team member deleted successfully");
+          toast.success("Deleted successfully");
           fetchAllData();
         };
       } catch (error) {
         console.log("Error while deleting team:", error.message);
-        toast.error("Error while deleting team");
+        toast.error("Error while deleting");
       };
     } else if (isdelete !== "") {
       alert("Type only \"yes\".");

@@ -139,12 +139,12 @@ const ProjectStatus = () => {
         });
 
         if (response?.data?.success) {
-          toast.success("Project status deleted successfully");
+          toast.success("Deleted successfully");
           fetchAllData();
         };
       } catch (error) {
         console.log("Error while deleting project status:", error.message);
-        toast.error("Error while deleting project status");
+        toast.error("Error while deleting");
       };
     } else if (isdelete !== "") {
       alert("Type only \"yes\".");

@@ -224,6 +224,8 @@ const AddRole = () => {
 
   const handleCreate = async (e) => {
     e.preventDefault();
+
+    // Validation
     if (!name) {
       return toast.error("Enter name");
     };
@@ -371,12 +373,12 @@ const AddRole = () => {
             },
           },
         });
-        toast.success("Role created successfully");
+        toast.success("Created successfully");
         navigate(-1);
       };
     } catch (error) {
       console.error('Error while creating role:', error.message);
-      toast.error("Error while creating role");
+      toast.error("Error while creating");
     };
   };
 

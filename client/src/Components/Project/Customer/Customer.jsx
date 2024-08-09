@@ -140,12 +140,12 @@ const Customer = () => {
         });
 
         if (response?.data?.success) {
-          toast.success("Customer deleted successfully");
+          toast.success("Deleted successfully");
           fetchAllData();
         };
       } catch (error) {
         console.log("Error while deleting customer:", error.message);
-        toast.error("Error while deleting customer");
+        toast.error("Error while deleting");
       };
     } else if (isdelete !== "") {
       alert("Type only \"yes\".");

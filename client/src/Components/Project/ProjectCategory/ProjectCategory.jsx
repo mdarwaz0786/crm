@@ -140,12 +140,12 @@ const ProjectCategory = () => {
         });
 
         if (response?.data?.success) {
-          toast.success("Project category deleted successfully");
+          toast.success("Deleted successfully");
           fetchAllData();
         };
       } catch (error) {
         console.log("Error while deleting project category:", error.message);
-        toast.error("Error while deleting project category");
+        toast.error("Error while deleting");
       };
     } else if (isdelete !== "") {
       alert("Type only \"yes\".");

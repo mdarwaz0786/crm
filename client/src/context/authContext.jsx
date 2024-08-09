@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
       if (error.response && error.response.status === 401) {
         status = error.response.status;
         logOutTeam();
-        toast.error("Please log in to continue.");
+        toast.error("Please log in to continue");
       } else {
         console.log("Error while fetching logged in team member:", error.message);
       };

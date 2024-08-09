@@ -16,6 +16,8 @@ const AddProjectCategory = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+
+      // Validation
       if (!name) {
         return toast.error("Enter name");
       };
@@ -29,12 +31,12 @@ const AddProjectCategory = () => {
       if (response?.data?.success) {
         setName("");
         setDescription("");
-        toast.success("Project category created successfully");
+        toast.success("Created successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while creating project category:", error.message);
-      toast.error("Error while creating project category");
+      toast.error("Error while creating");
     };
   };
 

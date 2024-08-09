@@ -54,6 +54,11 @@ const EditProjectType = () => {
       updateData.description = description;
     };
 
+    // Validation
+    if (!name) {
+      return toast.error("Enter type");
+    };
+
     try {
       const response = await axios.put(`/api/v1/projectType/update-projectType/${id}`, updateData, {
         headers: {
@@ -64,12 +69,12 @@ const EditProjectType = () => {
       if (response?.data?.success) {
         setName("");
         setDescription("");
-        toast.success("Project type updated successfully");
+        toast.success("Updated successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating project type:", error.message);
-      toast.error("Error while updating project type");
+      toast.error("Error while updating");
     };
   };
 

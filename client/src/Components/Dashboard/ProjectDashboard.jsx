@@ -28,16 +28,12 @@ const ProjectDashboard = () => {
   });
 
   useEffect(() => {
-    // Check if the flag is set in localStorage
     const shouldReload = localStorage.getItem('shouldReload');
 
     if (!shouldReload) {
-      // Set the flag to indicate that the page should reload
       localStorage.setItem('shouldReload', 'true');
-      // Perform the reload
       window.location.reload();
     } else {
-      // Once reloaded, clear the flag
       localStorage.removeItem('shouldReload');
     };
   }, []);

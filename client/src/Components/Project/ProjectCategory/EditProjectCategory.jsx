@@ -54,6 +54,11 @@ const EditProjectCategory = () => {
       updateData.description = description;
     };
 
+    // Validation
+    if (!name) {
+      return toast.error("Enter name");
+    };
+
     try {
       const response = await axios.put(`/api/v1/projectCategory/update-projectCategory/${id}`, updateData, {
         headers: {
@@ -64,12 +69,12 @@ const EditProjectCategory = () => {
       if (response?.data?.success) {
         setName("");
         setDescription("");
-        toast.success("Project category updated successfully");
+        toast.success("Updated successfully");
         navigate(-1);
       };
     } catch (error) {
       console.log("Error while updating project category:", error.message);
-      toast.error("Error while updating project category");
+      toast.error("Error while updating");
     };
   };
 

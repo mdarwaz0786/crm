@@ -223,12 +223,12 @@ const Project = () => {
         });
 
         if (response?.data?.success) {
-          toast.success("Project deleted successfully");
+          toast.success("Deleted successfully");
           fetchAllProject();
         };
       } catch (error) {
         console.log("Error while deleting project:", error.message);
-        toast.error("Error while deleting project");
+        toast.error("Error while deleting");
       };
     } else if (isdelete !== "") {
       alert("Type only \"yes\".");
