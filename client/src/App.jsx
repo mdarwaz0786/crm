@@ -22,6 +22,9 @@ import EditTeamMember from "./Components/Project/TeamMember/EditTeamMember.jsx";
 import ProjectTiming from "./Components/Project/ProjectTiming/ProjectTiming.jsx";
 import AddProjectTiming from "./Components/Project/ProjectTiming/AddProjectTiming.jsx";
 import EditProjectTiming from "./Components/Project/ProjectTiming/EditProjectTiming.jsx";
+import ProjectPriority from "./Components/Project/ProjectPriority/ProjectPriority.jsx";
+import AddProjectPriority from "./Components/Project/ProjectPriority/AddProjectPriority.jsx";
+import EditProjectPriority from "./Components/Project/ProjectPriority/EditProjectPriority.jsx";
 import Role from "./Components/Project/Role/Role.jsx";
 import AddRole from "./Components/Project/Role/AddRole.jsx";
 import EditRole from "./Components/Project/Role/EditRole.jsx";
@@ -30,8 +33,6 @@ import AddDesignation from "./Components/Project/Designation/AddDesignation.jsx"
 import EditDesignation from "./Components/Project/Designation/EditDesignation.jsx";
 import Login from "./Components/Login/Login.jsx";
 import Logout from "./Components/Logout/Logout.jsx";
-import Test from "./Test.jsx";
-import Test2 from "./Test2.jsx";
 
 const App = () => {
   return (
@@ -66,8 +67,9 @@ const App = () => {
           <Route path="designation" element={<Designation />} />
           <Route path="add-designation" element={<AddDesignation />} />
           <Route path="edit-designation/:id" element={<EditDesignation />} />
-          <Route path="test" element={<Test />} />
-          <Route path="test2" element={<Test2 />} />
+          <Route path="project-priority" element={<ProjectPriority />} />
+          <Route path="add-project-priority" element={<AddProjectPriority />} />
+          <Route path="edit-project-priority/:id" element={<EditProjectPriority />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />

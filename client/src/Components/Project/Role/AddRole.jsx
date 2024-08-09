@@ -17,6 +17,29 @@ const AddRole = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [permissions, setPermissions] = useState({
+    project: {
+      access: false,
+      export: false,
+      create: false,
+      update: false,
+      delete: false,
+      fields: {
+        name: { read: true, show: true },
+        projectId: { read: true, show: true },
+        type: { read: true, show: true },
+        customer: { read: true, show: true },
+        category: { read: true, show: true },
+        timing: { read: true, show: true },
+        price: { read: true, show: true },
+        responsible: { read: true, show: true },
+        leader: { read: true, show: true },
+        start: { read: true, show: true },
+        due: { read: true, show: true },
+        priority: { read: true, show: true },
+        status: { read: true, show: true },
+        description: { read: true, show: true },
+      },
+    },
     customer: {
       access: false,
       export: false,
@@ -115,7 +138,7 @@ const AddRole = () => {
         description: { read: true, show: true },
       },
     },
-    project: {
+    projectPriority: {
       access: false,
       export: false,
       create: false,
@@ -123,18 +146,6 @@ const AddRole = () => {
       delete: false,
       fields: {
         name: { read: true, show: true },
-        projectId: { read: true, show: true },
-        type: { read: true, show: true },
-        customer: { read: true, show: true },
-        category: { read: true, show: true },
-        timing: { read: true, show: true },
-        price: { read: true, show: true },
-        responsible: { read: true, show: true },
-        leader: { read: true, show: true },
-        start: { read: true, show: true },
-        due: { read: true, show: true },
-        priority: { read: true, show: true },
-        status: { read: true, show: true },
         description: { read: true, show: true },
       },
     },
@@ -227,6 +238,29 @@ const AddRole = () => {
       if (response?.data?.success) {
         setName("");
         setPermissions({
+          project: {
+            access: false,
+            export: false,
+            create: false,
+            update: false,
+            delete: false,
+            fields: {
+              name: { read: true, show: true },
+              projectId: { read: true, show: true },
+              type: { read: true, show: true },
+              customer: { read: true, show: true },
+              category: { read: true, show: true },
+              timing: { read: true, show: true },
+              price: { read: true, show: true },
+              responsible: { read: true, show: true },
+              leader: { read: true, show: true },
+              start: { read: true, show: true },
+              due: { read: true, show: true },
+              priority: { read: true, show: true },
+              status: { read: true, show: true },
+              description: { read: true, show: true },
+            },
+          },
           customer: {
             access: false,
             export: false,
@@ -325,7 +359,7 @@ const AddRole = () => {
               description: { read: true, show: true },
             },
           },
-          project: {
+          projectPriority: {
             access: false,
             export: false,
             create: false,
@@ -333,18 +367,6 @@ const AddRole = () => {
             delete: false,
             fields: {
               name: { read: true, show: true },
-              projectId: { read: true, show: true },
-              type: { read: true, show: true },
-              customer: { read: true, show: true },
-              category: { read: true, show: true },
-              timing: { read: true, show: true },
-              price: { read: true, show: true },
-              responsible: { read: true, show: true },
-              leader: { read: true, show: true },
-              start: { read: true, show: true },
-              due: { read: true, show: true },
-              priority: { read: true, show: true },
-              status: { read: true, show: true },
               description: { read: true, show: true },
             },
           },
@@ -359,15 +381,16 @@ const AddRole = () => {
   };
 
   const permissionLabels = {
+    project: "Projects",
     customer: "Customer",
     team: "Team Member",
-    role: "Role",
+    role: "Role & Permission",
     designation: "Designation",
     projectType: "Project Type",
     projectStatus: "Project Status",
     projectCategory: "Project Category",
     projectTiming: "Project Timing",
-    project: "Projects",
+    projectPriority: "Project Priority",
   };
 
   const openModal = (master) => {

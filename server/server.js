@@ -13,6 +13,7 @@ import teamRoute from "./routes/team.route.js";
 import projectTimingRoute from "./routes/projectTiming.route.js";
 import roleRoute from "./routes/role.route.js";
 import designationRoute from "./routes/designation.route.js";
+import projectPriorityRoute from "./routes/projectPriority.route.js";
 
 const __dirname = path.resolve();
 
@@ -49,14 +50,14 @@ server.use("/api/v1/projectTiming", projectTimingRoute);
 server.use("/api/v1/role", roleRoute);
 // Designation route
 server.use("/api/v1/designation", designationRoute);
+// Project priority route
+server.use("/api/v1/projectPriority", projectPriorityRoute);
 
 // Middleware for serving client static file
 server.use(express.static(path.join(__dirname, "/client/dist")), (req, res, next) => next());
 
 // Route for serving client index.html file
-server.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
-});
+server.get("*", (req, res) => res.sendFile(path.join(__dirname, "/client/dist", "index.html")));
 
 // Environment variable
 const port = process.env.PORT || 8080;

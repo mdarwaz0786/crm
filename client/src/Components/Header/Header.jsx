@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-extra-semi */
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import usericon from "../../Assets/user-icon.png";
 import { useAuth } from "../../context/authContext.jsx";
 import Search from "./Search.jsx";
@@ -10,6 +10,8 @@ import axios from "axios";
 const Header = () => {
   const [total, setTotal] = useState("");
   const { team, isLoggedIn, isLoading, validToken } = useAuth();
+  const location = useLocation();
+  const currentPath = location.pathname;
   const permissions = team?.role?.permissions?.project;
 
   useEffect(() => {
@@ -65,7 +67,7 @@ const Header = () => {
         <div className="header-user">
           <ul className="nav user-menu">
             {/* Search */}
-            <li className="nav-item nav-search-inputs me-auto">
+            <li className="nav-item nav-search-inputs me-auto" style={{ visibility: currentPath === "/" ? "visible" : "hidden" }}>
               <div className="top-nav-search">
                 <Link to="#" className="responsive-search">
                   <i className="fa fa-search" />
@@ -155,15 +157,87 @@ const Header = () => {
 
                           <li>
                             {
-                              (permissions?.create) && (
+                              (team?.role?.permissions?.project?.create) && (
                                 <Link to="/add-project">
                                   <div className="menu-details">
-                                    <span className="menu-list-icon bg-danger">
+                                    <span className="menu-list-icon bg-violet">
                                       <i className="ti ti-briefcase"></i>
                                     </span>
                                     <div className="menu-details-content">
                                       <p>Projects</p>
                                       <span>Add New Project</span>
+                                    </div>
+                                  </div>
+                                </Link>
+                              )
+                            }
+                          </li>
+
+                          <li>
+                            {
+                              (team?.role?.permissions?.customer?.create) && (
+                                <Link to="/add-customer">
+                                  <div className="menu-details">
+                                    <span className="menu-list-icon bg-green">
+                                      <i className="ti ti-user-circle"></i>
+                                    </span>
+                                    <div className="menu-details-content">
+                                      <p>Customer</p>
+                                      <span>Add New Customer</span>
+                                    </div>
+                                  </div>
+                                </Link>
+                              )
+                            }
+                          </li>
+
+                          <li>
+                            {
+                              (team?.role?.permissions?.team?.create) && (
+                                <Link to="/add-team-member">
+                                  <div className="menu-details">
+                                    <span className="menu-list-icon bg-pink">
+                                      <i className="ti ti-code"></i>
+                                    </span>
+                                    <div className="menu-details-content">
+                                      <p>Team Member</p>
+                                      <span>Add New Team Member</span>
+                                    </div>
+                                  </div>
+                                </Link>
+                              )
+                            }
+                          </li>
+
+                          <li>
+                            {
+                              (team?.role?.permissions?.role?.create) && (
+                                <Link to="/add-role">
+                                  <div className="menu-details">
+                                    <span className="menu-list-icon bg-primary">
+                                      <i className="ti ti-shield-check"></i>
+                                    </span>
+                                    <div className="menu-details-content">
+                                      <p>Role & Permission</p>
+                                      <span>Add New Role</span>
+                                    </div>
+                                  </div>
+                                </Link>
+                              )
+                            }
+                          </li>
+
+                          <li>
+                            {
+                              (team?.role?.permissions?.designation?.create) && (
+                                <Link to="/add-designation">
+                                  <div className="menu-details">
+                                    <span className="menu-list-icon bg-danger">
+                                      <i className="ti ti-id-badge"></i>
+                                    </span>
+                                    <div className="menu-details-content">
+                                      <p>Designation</p>
+                                      <span>Add New Designation</span>
                                     </div>
                                   </div>
                                 </Link>
@@ -176,6 +250,96 @@ const Header = () => {
                       <div className="col-md-6">
                         <ul className="menu-list">
                           <li>
+                            {
+                              (team?.role?.permissions?.projectType?.create) && (
+                                <Link to="/add-project-type">
+                                  <div className="menu-details">
+                                    <span className="menu-list-icon bg-purple">
+                                      <i className="ti ti-apps"></i>
+                                    </span>
+                                    <div className="menu-details-content">
+                                      <p>Project Type</p>
+                                      <span>Add New Project Type</span>
+                                    </div>
+                                  </div>
+                                </Link>
+                              )
+                            }
+                          </li>
+
+                          <li>
+                            {
+                              (team?.role?.permissions?.projectStatus?.create) && (
+                                <Link to="/add-project-status">
+                                  <div className="menu-details">
+                                    <span className="menu-list-icon bg-success">
+                                      <i className="ti ti-clipboard-list"></i>
+                                    </span>
+                                    <div className="menu-details-content">
+                                      <p>Project Status</p>
+                                      <span>Add New Project Status</span>
+                                    </div>
+                                  </div>
+                                </Link>
+                              )
+                            }
+                          </li>
+
+                          <li>
+                            {
+                              (team?.role?.permissions?.projectTiming?.create) && (
+                                <Link to="/add-project-timing">
+                                  <div className="menu-details">
+                                    <span className="menu-list-icon bg-secondary">
+                                      <i className="ti ti-clock"></i>
+                                    </span>
+                                    <div className="menu-details-content">
+                                      <p>Project Timing</p>
+                                      <span>Add New Project Timing</span>
+                                    </div>
+                                  </div>
+                                </Link>
+                              )
+                            }
+                          </li>
+
+                          <li>
+                            {
+                              (team?.role?.permissions?.projectPriority?.create) && (
+                                <Link to="/add-project-priority">
+                                  <div className="menu-details">
+                                    <span className="menu-list-icon bg-tertiary">
+                                      <i className="ti ti-star"></i>
+                                    </span>
+                                    <div className="menu-details-content">
+                                      <p>Project Priority</p>
+                                      <span>Add New Project Priority</span>
+                                    </div>
+                                  </div>
+                                </Link>
+                              )
+                            }
+                          </li>
+
+                          <li>
+                            {
+                              (team?.role?.permissions?.projectCategory?.create) && (
+                                <Link to="/add-project-category">
+                                  <div className="menu-details">
+                                    <span className="menu-list-icon bg-info">
+                                      <i className="ti ti-tags"></i>
+                                    </span>
+                                    <div className="menu-details-content">
+                                      <p>Project Category</p>
+                                      <span>Add New Project Category</span>
+                                    </div>
+                                  </div>
+                                </Link>
+                              )
+                            }
+                          </li>
+
+                          {/* <li>
                             <Link to="#">
                               <div className="menu-details">
                                 <span className="menu-list-icon bg-info">
@@ -187,7 +351,7 @@ const Header = () => {
                                 </div>
                               </div>
                             </Link>
-                          </li>
+                          </li> */}
 
                           {/* <li>
                             <Link to="#">

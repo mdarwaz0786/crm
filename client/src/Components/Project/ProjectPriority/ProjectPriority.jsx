@@ -8,22 +8,22 @@ import { useAuth } from "../../../context/authContext.jsx";
 import html2pdf from "html2pdf.js";
 import Preloader from "../../../Preloader.jsx";
 
-const ProjectStatus = () => {
+const ProjectPriority = () => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState("");
+  const [loading, setLoading] = useState(true);
   const { validToken, team, isLoading } = useAuth();
-  const [statusData, setStatusData] = useState([]);
-  const [status, setStatus] = useState("");
+  const [nameData, setNameData] = useState([]);
+  const [name, setName] = useState("");
   const [filters, setFilters] = useState({
     search: "",
-    statusFilter: [],
+    nameFilter: [],
     sort: "Descending",
     page: 1,
     limit: 5,
   });
-  const permissions = team?.role?.permissions?.projectStatus;
-  const FiledPermissions = team?.role?.permissions?.projectStatus?.fields;
+  const permissions = team?.role?.permissions?.projectPriority;
+  const filedPermissions = team?.role?.permissions?.projectPriority?.fields;
 
   const useDebounce = (value, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -48,12 +48,12 @@ const ProjectStatus = () => {
   };
 
   const debouncedSearch = useDebounce(filters.search, 500);
-  const debouncedSearchStatus = useDebounce(status, 500);
+  const debouncedSearchName = useDebounce(name, 500);
 
   const fetchAllData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("/api/v1/projectStatus/all-projectStatus", {
+      const response = await axios.get("/api/v1/projectPriority/all-projectPriority", {
         headers: {
           Authorization: `${validToken}`,
         },
@@ -62,12 +62,12 @@ const ProjectStatus = () => {
           sort: filters.sort,
           page: filters.page,
           limit: filters.limit,
-          statusFilter: filters.statusFilter.map(String),
+          nameFilter: filters.nameFilter.map(String),
         },
       });
 
       if (response?.data?.success) {
-        setData(response?.data?.projectStatus);
+        setData(response?.data?.projectPriority);
         setTotal(response?.data?.totalCount);
         setLoading(false);
       };
@@ -77,19 +77,20 @@ const ProjectStatus = () => {
     };
   };
 
-  const fetchAllProjectStatus = async () => {
+  const fetchAllProjectPriorityName = async () => {
     try {
-      const response = await axios.get("/api/v1/projectStatus/all-projectStatus", {
+      const response = await axios.get("/api/v1/projectPriority/all-projectPriority", {
         headers: {
           Authorization: `${validToken}`,
         },
         params: {
-          status,
+          name,
         },
       });
+
       if (response?.data?.success) {
-        setStatusData(response?.data?.projectStatus);
-      }
+        setNameData(response?.data?.projectPriority);
+      };
     } catch (error) {
       console.log(error.message);
     };
@@ -97,9 +98,9 @@ const ProjectStatus = () => {
 
   useEffect(() => {
     if (!isLoading && team && permissions?.access) {
-      fetchAllProjectStatus();
+      fetchAllProjectPriorityName();
     };
-  }, [debouncedSearchStatus, isLoading, team, permissions]);
+  }, [debouncedSearchName, isLoading, team, permissions]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -125,37 +126,37 @@ const ProjectStatus = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllData();
     };
-  }, [debouncedSearch, filters.limit, filters.page, filters.sort, filters.statusFilter, isLoading, team, permissions]);
+  }, [debouncedSearch, filters.limit, filters.page, filters.sort, filters.nameFilter, isLoading, team, permissions]);
 
   const handleDelete = async (id) => {
     let isdelete = prompt("If you want to delete, type \"yes\".");
 
     if (isdelete === "yes") {
       try {
-        const response = await axios.delete(`/api/v1/projectStatus/delete-projectStatus/${id}`, {
+        const response = await axios.delete(`/api/v1/projectPriority/delete-projectPriority/${id}`, {
           headers: {
             Authorization: `${validToken}`,
           },
         });
 
         if (response?.data?.success) {
-          toast.success("Project status deleted successfully");
+          toast.success("Project timing deleted successfully");
           fetchAllData();
         };
       } catch (error) {
-        console.log("Error while deleting project status:", error.message);
-        toast.error("Error while deleting project status");
+        console.log("Error while deleting project timing:", error.message);
+        toast.error("Error while deleting project timing");
       };
     } else if (isdelete !== "") {
       alert("Type only \"yes\".");
     };
   };
 
-  const exportProjectStatusListAsPdf = () => {
-    const element = document.querySelector("#exportProjectStatusList");
+  const exportProjectPriorityListAsPdf = () => {
+    const element = document.querySelector("#exportProjectPriorityList");
     element.style.padding = "1.5rem";
     const options = {
-      filename: "project-status-list.pdf",
+      filename: "project-priority-list.pdf",
       html2canvas: {
         useCORS: true,
       },
@@ -178,14 +179,14 @@ const ProjectStatus = () => {
     <>
       {/* Page Wrapper */}
       <div className="page-wrapper">
-        <div className="content" id="exportProjectStatusList">
+        <div className="content" id="exportProjectPriorityList">
           <div className="row">
             <div className="col-md-12">
               {/* Page Header */}
               <div className="page-header">
                 <div className="row align-items-center">
                   <div className="col-4">
-                    <h4 className="page-title">Project Status<span className="count-title">{total}</span></h4>
+                    <h4 className="page-title">Project Priorities<span className="count-title">{total}</span></h4>
                   </div>
                   <div className="col-8 text-end">
                     <div className="head-icons">
@@ -209,7 +210,7 @@ const ProjectStatus = () => {
                       <div className="col-md-5 col-sm-4">
                         <div className="form-wrap icon-form">
                           <span className="form-icon"><i className="ti ti-search" /></span>
-                          <input type="text" className="form-control" placeholder="Search Project Status" value={filters.search} onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))} />
+                          <input type="text" className="form-control" placeholder="Search Project Priority" value={filters.search} onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))} />
                         </div>
                       </div>
                       <div className="col-md-7 col-sm-8">
@@ -226,7 +227,7 @@ const ProjectStatus = () => {
                                     <div className="dropdown-menu  dropdown-menu-end">
                                       <ul>
                                         <li>
-                                          <Link to="#" onClick={() => setTimeout(() => { exportProjectStatusListAsPdf() }, 0)}>
+                                          <Link to="#" onClick={() => setTimeout(() => { exportProjectPriorityListAsPdf() }, 0)}>
                                             <i className="ti ti-file-type-pdf text-danger" />
                                             Export as PDF
                                           </Link>
@@ -240,9 +241,9 @@ const ProjectStatus = () => {
                             {
                               (permissions?.create) && (
                                 <li>
-                                  <Link to="/add-project-status" className="btn btn-primary">
+                                  <Link to="/add-project-priority" className="btn btn-primary">
                                     <i className="ti ti-square-rounded-plus" />
-                                    Add New Project Status
+                                    Add New Project Priority
                                   </Link>
                                 </li>
                               )
@@ -294,32 +295,32 @@ const ProjectStatus = () => {
                                 <div className="accordion" id="accordionExample">
                                   <div className="filter-set-content">
                                     <div className="filter-set-content-head">
-                                      <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Project Status</Link>
+                                      <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Project Priority Name</Link>
                                     </div>
                                     <div className="filter-set-contents accordion-collapse collapse show" id="collapseTwo" data-bs-parent="#accordionExample">
                                       <div className="filter-content-list">
                                         <div className="form-wrap icon-form">
                                           <span className="form-icon"><i className="ti ti-search" /></span>
-                                          <input type="text" className="form-control" placeholder="Search Project Status" onChange={(e) => setStatus(e.target.value)} />
+                                          <input type="text" className="form-control" placeholder="Search Project Priority Name" onChange={(e) => setName(e.target.value)} />
                                         </div>
                                         <ul>
                                           {
-                                            statusData?.map((s) => (
-                                              <li key={s._id}>
+                                            nameData?.map((n) => (
+                                              <li key={n._id}>
                                                 <div className="filter-checks">
                                                   <label className="checkboxs">
                                                     <input
                                                       type="checkbox"
-                                                      name="statusFilter"
-                                                      value={s?.status}
-                                                      checked={filters.statusFilter.includes(s?.status)}
+                                                      name="nameFilter"
+                                                      value={n?.name}
+                                                      checked={filters.nameFilter.includes(n?.name)}
                                                       onChange={handleFilterChange}
                                                     />
                                                     <span className="checkmarks" />
                                                   </label>
                                                 </div>
                                                 <div className="collapse-inside-text">
-                                                  <h5>{s?.status}</h5>
+                                                  <h5>{n?.name}</h5>
                                                 </div>
                                               </li>
                                             ))
@@ -332,7 +333,7 @@ const ProjectStatus = () => {
                                 <div className="filter-reset-btns">
                                   <div className="row">
                                     <div className="col-6">
-                                      <Link to="#" className="btn btn-light" onClick={() => setFilters((prev) => ({ ...prev, statusFilter: [] }))}>Reset</Link>
+                                      <Link to="#" className="btn btn-light" onClick={() => setFilters((prev) => ({ ...prev, nameFilter: [] }))}>Reset</Link>
                                     </div>
                                   </div>
                                 </div>
@@ -351,7 +352,7 @@ const ProjectStatus = () => {
                   </div>
                   {/* /Filter */}
 
-                  {/* Project Status List */}
+                  {/* Project Priority List */}
                   <div className="table-responsive custom-table">
                     <table className="table table-bordered table-striped custom-border">
                       <thead className="thead-light">
@@ -361,12 +362,12 @@ const ProjectStatus = () => {
                           </th>
                           <th>#</th>
                           {
-                            (FiledPermissions?.status?.show) && (
-                              <th>Status</th>
+                            (filedPermissions?.name?.show) && (
+                              <th>Name</th>
                             )
                           }
                           {
-                            (FiledPermissions?.description?.show) && (
+                            (filedPermissions?.description?.show) && (
                               <th>Description</th>
                             )
                           }
@@ -382,12 +383,12 @@ const ProjectStatus = () => {
                               </td>
                               <td>{(filters.page - 1) * filters.limit + index + 1}</td>
                               {
-                                (FiledPermissions?.status?.show) && (
-                                  <td>{d?.status}</td>
+                                (filedPermissions?.name?.show) && (
+                                  <td>{d?.name}</td>
                                 )
                               }
                               {
-                                (FiledPermissions?.description?.show) && (
+                                (filedPermissions?.description?.show) && (
                                   <td>{d?.description}</td>
                                 )
                               }
@@ -399,7 +400,7 @@ const ProjectStatus = () => {
                                   <div className="dropdown-menu dropdown-menu-right">
                                     {
                                       (permissions?.update) && (
-                                        <Link to={`/edit-project-status/${d?._id}`} className="dropdown-item">
+                                        <Link to={`/edit-project-priority/${d?._id}`} className="dropdown-item">
                                           <i className="ti ti-edit text-blue"></i>
                                           Update
                                         </Link>
@@ -491,7 +492,7 @@ const ProjectStatus = () => {
                       </div>
                     </div>
                   </div>
-                  {/* /Project Status List */}
+                  {/* /Project Priority List */}
                 </div>
               </div>
             </div>
@@ -503,4 +504,4 @@ const ProjectStatus = () => {
   );
 };
 
-export default ProjectStatus;
+export default ProjectPriority;

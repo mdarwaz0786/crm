@@ -1,6 +1,6 @@
 /* eslint-disable no-extra-semi */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, Navigate } from 'react-router-dom';
@@ -24,6 +24,31 @@ const ProjectType = () => {
   });
   const permissions = team?.role?.permissions?.projectType;
   const filedPermissions = team?.role?.permissions?.projectType?.fields;
+
+  const useDebounce = (value, delay) => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+    const timer = useRef();
+
+    useEffect(() => {
+      if (value === "") {
+        setDebouncedValue("");
+        return;
+      };
+
+      timer.current = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+
+      return () => {
+        clearTimeout(timer.current);
+      };
+    }, [value, delay]);
+
+    return debouncedValue;
+  };
+
+  const debouncedSearch = useDebounce(filters.search, 500);
+  const debouncedSearchName = useDebounce(name, 500);
 
   const fetchAllData = async () => {
     try {
@@ -75,7 +100,7 @@ const ProjectType = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllProjectTypeName();
     };
-  }, [name, isLoading, team, permissions]);
+  }, [debouncedSearchName, isLoading, team, permissions]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -94,14 +119,14 @@ const ProjectType = () => {
         [name]: value,
         page: 1,
       }));
-    }
+    };
   };
 
   useEffect(() => {
     if (!isLoading && team && permissions?.access) {
       fetchAllData();
     };
-  }, [filters, isLoading, team, permissions]);
+  }, [debouncedSearch, filters.limit, filters.page, filters.sort, filters.nameFilter, isLoading, team, permissions]);
 
   const handleDelete = async (id) => {
     let isdelete = prompt("If you want to delete, type \"yes\".");

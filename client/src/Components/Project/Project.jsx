@@ -57,6 +57,8 @@ const Project = () => {
   };
 
   const debouncedSearch = useDebounce(filters.search, 500);
+  const debouncedSearchName = useDebounce(name, 500);
+  const debouncedSearchProjectId = useDebounce(projectId, 500);
 
   useEffect(() => {
     const formatDate = (date) => {
@@ -147,7 +149,7 @@ const Project = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllProjectName();
     };
-  }, [name, isLoading, team, permissions]);
+  }, [debouncedSearchName, isLoading, team, permissions]);
 
   const fetchAllProjectId = async () => {
     try {
@@ -181,7 +183,7 @@ const Project = () => {
     if (!isLoading && team && permissions?.access) {
       fetchAllProjectId();
     };
-  }, [projectId, isLoading, team, permissions]);
+  }, [debouncedSearchProjectId, isLoading, team, permissions]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;

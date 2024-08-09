@@ -141,6 +141,11 @@ const Sidebar = () => {
                       <li><Link to="/project-timing" className={currentPath === "/project-timing" ? "active" : ""} id={isMobile && active === "projectTiming" ? "mobile_btn" : ""} onClick={() => handleActive("projectTiming")}><i className="ti ti-clock"></i><span>Project Timing</span></Link></li>
                     )
                   }
+                  {
+                    (permissions?.projectPriority?.access) && (
+                      <li><Link to="/project-priority" className={currentPath === "/project-priority" ? "active" : ""} id={isMobile && active === "projectPriority" ? "mobile_btn" : ""} onClick={() => handleActive("projectPriority")}><i className="ti ti-star"></i><span>Project Priority</span></Link></li>
+                    )
+                  }
                 </ul>
               </li>
 

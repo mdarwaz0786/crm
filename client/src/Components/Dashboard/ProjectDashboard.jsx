@@ -207,9 +207,9 @@ const ProjectDashboard = () => {
                                 {
                                   (permissions?.create) && (
                                     <li>
-                                      <Link to="/add-project" className="btn btn-primary" style={{ width: "8.2rem" }}>
+                                      <Link to="/add-project" className="btn btn-primary" style={{ width: "10.2rem" }}>
                                         <i className="ti ti-square-rounded-plus me-1" />
-                                        Add Project
+                                        Add New Project
                                       </Link>
                                     </li>
                                   )

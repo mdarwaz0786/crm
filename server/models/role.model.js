@@ -208,6 +208,36 @@ const ProjectTimingPermissionSchema = new mongoose.Schema(
   },
 );
 
+// Project priority permission Schema
+const ProjectPriorityPermissionSchema = new mongoose.Schema(
+  {
+    access: {
+      type: Boolean,
+      default: false,
+    },
+    export: {
+      type: Boolean,
+      default: false,
+    },
+    create: {
+      type: Boolean,
+      default: false,
+    },
+    update: {
+      type: Boolean,
+      default: false,
+    },
+    delete: {
+      type: Boolean,
+      default: false,
+    },
+    fields: {
+      name: { type: FieldPermissionSchema, default: () => ({}) },
+      description: { type: FieldPermissionSchema, default: () => ({}) },
+    },
+  },
+);
+
 // Project type permission Schema
 const ProjectTypePermissionSchema = new mongoose.Schema(
   {
@@ -321,6 +351,7 @@ const RoleSchema = new mongoose.Schema(
       projectStatus: { type: ProjectStatusPermissionSchema, default: () => ({}) },
       projectCategory: { type: ProjectCategoryPermissionSchema, default: () => ({}) },
       projectTiming: { type: ProjectTimingPermissionSchema, default: () => ({}) },
+      projectPriority: { type: ProjectPriorityPermissionSchema, default: () => ({}) },
       designation: { type: DesignationPermissionSchema, default: () => ({}) },
       project: { type: ProjectPermissionSchema, default: () => ({}) },
     },
