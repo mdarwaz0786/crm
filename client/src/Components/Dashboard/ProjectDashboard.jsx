@@ -28,8 +28,11 @@ const ProjectDashboard = () => {
   });
 
   useEffect(() => {
-    const shouldReload = localStorage.getItem('shouldReload');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [filters]);
 
+  useEffect(() => {
+    const shouldReload = localStorage.getItem('shouldReload');
     if (!shouldReload) {
       localStorage.setItem('shouldReload', 'true');
       window.location.reload();
