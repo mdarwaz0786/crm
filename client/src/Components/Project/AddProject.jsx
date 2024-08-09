@@ -17,6 +17,7 @@ const AddProject = () => {
   const [projectCategory, setProjectCategory] = useState([]);
   const [teamMember, setTeamMember] = useState([]);
   const [projectTiming, setProjectTiming] = useState([]);
+  const [projectPriority, setProjectPriority] = useState([]);
 
   const [name, setName] = useState("");
   const [projectId, setProjectId] = useState("");
@@ -25,12 +26,12 @@ const AddProject = () => {
   const [selectedProjectStatus, setSelectedProjectStatus] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState("");
   const [selectedProjectTiming, setSelectedProjectTiming] = useState("");
+  const [selectedProjectPriority, setSelectedProjectPriority] = useState("");
   const [price, setPrice] = useState("");
   const [selectedResponsible, setSelectedResponsible] = useState([]);
   const [selectedLeader, setSelectedLeader] = useState([]);
   const [start, setStart] = useState("");
   const [due, setDue] = useState("");
-  const [priority, setPriority] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
   const { team, validToken, isLoading } = useAuth();
@@ -132,6 +133,22 @@ const AddProject = () => {
     };
   };
 
+  const fetchAllProjectPriority = async () => {
+    try {
+      const response = await axios.get("/api/v1/projectPriority/all-projectPriority", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
+      if (response?.data?.success) {
+        setProjectPriority(response?.data?.projectPriority);
+      };
+    } catch (error) {
+      console.log(error.message);
+    };
+  };
+
 
   const fetchAllData = async () => {
     try {
@@ -157,6 +174,7 @@ const AddProject = () => {
       fetchAllProjectStatus();
       fetchAllTeamMember();
       fetchAllProjectTiming();
+      fetchAllProjectPriority();
       fetchAllData();
     };
   }, [isLoading, team, permissions]);
@@ -176,7 +194,7 @@ const AddProject = () => {
     e.preventDefault();
     try {
       if (!name) {
-        return toast.error("Enter name");
+        return toast.error("Enter project name");
       };
 
       if (!projectId) {
@@ -184,19 +202,19 @@ const AddProject = () => {
       };
 
       if (!selectedProjectType) {
-        return toast.error("Enter project type");
+        return toast.error("Select project type");
       };
 
       if (!selectedCustomer) {
-        return toast.error("Enter Client");
+        return toast.error("Select Customer");
       };
 
       if (!selectedProjectCategory) {
-        return toast.error("Enter category");
+        return toast.error("Select project category");
       };
 
       if (!selectedProjectTiming) {
-        return toast.error("Enter project timing");
+        return toast.error("Select project timing");
       };
 
       if (!price) {
@@ -204,11 +222,11 @@ const AddProject = () => {
       };
 
       if (selectedResponsible?.length === 0) {
-        return toast.error("Enter responsible person");
+        return toast.error("Select responsible person");
       };
 
       if (selectedLeader?.length === 0) {
-        return toast.error("Enter team leader");
+        return toast.error("Select team leader");
       };
 
       if (!start) {
@@ -219,12 +237,12 @@ const AddProject = () => {
         return toast.error("Enter due date");
       };
 
-      if (!priority) {
-        return toast.error("Enter priority");
+      if (!selectedProjectPriority) {
+        return toast.error("Select project priority");
       };
 
       if (!selectedProjectStatus) {
-        return toast.error("Enter status");
+        return toast.error("Select project status");
       };
 
       if (!description) {
@@ -244,7 +262,7 @@ const AddProject = () => {
           leader: selectedLeader,
           start: formattedStart,
           due: formattedDue,
-          priority,
+          priority: selectedProjectPriority,
           status: selectedProjectStatus,
           description,
         },
@@ -264,10 +282,10 @@ const AddProject = () => {
         setSelectedCustomer("");
         setDescription("");
         setSelectedProjectTiming("");
+        setSelectedProjectPriority("");
         setPrice("");
         setSelectedResponsible([]);
         setSelectedLeader([]);
-        setPriority("");
         setStart("");
         setDue("");
         setDescription("");
@@ -355,7 +373,7 @@ const AddProject = () => {
             </div>
             <div className="col-md-6">
               <div className="form-wrap">
-                <label className="col-form-label">Client <span className="text-danger">*</span></label>
+                <label className="col-form-label">Customer <span className="text-danger">*</span></label>
                 <select className="form-select" name="customer" value={selectedCustomer} onChange={(e) => setSelectedCustomer(e.target.value)}>
                   <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                   {
@@ -368,7 +386,7 @@ const AddProject = () => {
             </div>
             <div className="col-md-6">
               <div className="form-wrap">
-                <label className="col-form-label">Category <span className="text-danger">*</span></label>
+                <label className="col-form-label">Project Category <span className="text-danger">*</span></label>
                 <select className="form-select" name="category" value={selectedProjectCategory} onChange={(e) => setSelectedProjectCategory(e.target.value)}>
                   <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                   {
@@ -400,18 +418,20 @@ const AddProject = () => {
             </div>
             <div className="col-md-6">
               <div className="form-wrap">
-                <label className="col-form-label">Priority <span className="text-danger">*</span></label>
-                <select className="form-select" name="status" value={priority} onChange={(e) => setPriority(e.target.value)}>
+                <label className="col-form-label">Project Priority <span className="text-danger">*</span></label>
+                <select className="form-select" name="priority" value={selectedProjectPriority} onChange={(e) => setSelectedProjectPriority(e.target.value)}>
                   <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                  <option>High</option>
-                  <option>Medium</option>
-                  <option>Low</option>
+                  {
+                    projectPriority?.map((p) => (
+                      <option key={p?._id} value={p?._id}>{p?.name}</option>
+                    ))
+                  }
                 </select>
               </div>
             </div>
             <div className="col-md-6">
               <div className="form-wrap">
-                <label className="col-form-label">Status <span className="text-danger">*</span></label>
+                <label className="col-form-label">Project Status <span className="text-danger">*</span></label>
                 <select className="form-select" name="status" value={selectedProjectStatus} onChange={(e) => setSelectedProjectStatus(e.target.value)}>
                   <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                   {

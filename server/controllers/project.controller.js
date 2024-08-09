@@ -92,13 +92,13 @@ export const fetchAllProject = async (req, res) => {
         { price: { $regex: searchRegex } },
         { start: { $regex: searchRegex } },
         { due: { $regex: searchRegex } },
-        { priority: { $regex: searchRegex } },
         { description: { $regex: searchRegex } },
         { type: await findObjectIdByString('ProjectType', 'name', req.query.search) },
         { customer: await findObjectIdByString('Customer', 'name', req.query.search) },
         { category: await findObjectIdByString('ProjectCategory', 'name', req.query.search) },
         { timing: await findObjectIdByString('ProjectTiming', 'name', req.query.search) },
         { status: await findObjectIdByString('ProjectStatus', 'status', req.query.search) },
+        { priority: await findObjectIdByString('ProjectPriority', 'name', req.query.search) },
         { responsible: { $in: await findObjectIdArrayByString('Team', 'name', req.query.search) } },
         { leader: { $in: await findObjectIdArrayByString('Team', 'name', req.query.search) } },
       ];
@@ -159,6 +159,7 @@ export const fetchAllProject = async (req, res) => {
       .populate("responsible")
       .populate("leader")
       .populate("timing")
+      .populate("priority")
       .exec();
 
     if (!project) {
@@ -190,6 +191,7 @@ export const fetchSingleProject = async (req, res) => {
       .populate("responsible")
       .populate("leader")
       .populate("timing")
+      .populate("priority")
       .exec();
 
     if (!project) {

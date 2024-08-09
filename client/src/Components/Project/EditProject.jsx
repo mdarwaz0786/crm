@@ -18,6 +18,7 @@ const EditProject = () => {
   const [projectCategory, setProjectCategory] = useState([]);
   const [teamMember, setTeamMember] = useState([]);
   const [projectTiming, setProjectTiming] = useState([]);
+  const [projectPriority, setProjectPriority] = useState([]);
 
   const [name, setName] = useState("");
   const [projectId, setProjectId] = useState("");
@@ -26,12 +27,12 @@ const EditProject = () => {
   const [selectedProjectStatus, setSelectedProjectStatus] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState("");
   const [selectedProjectTiming, setSelectedProjectTiming] = useState("");
+  const [selectedProjectPriority, setSelectedProjectPriority] = useState("");
   const [price, setPrice] = useState("");
   const [selectedResponsible, setSelectedResponsible] = useState([]);
   const [selectedLeader, setSelectedLeader] = useState([]);
   const [start, setStart] = useState("");
   const [due, setDue] = useState("");
-  const [priority, setPriority] = useState("");
   const [description, setDescription] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
@@ -135,6 +136,22 @@ const EditProject = () => {
     };
   };
 
+  const fetchAllProjectPriority = async () => {
+    try {
+      const response = await axios.get("/api/v1/projectPriority/all-projectPriority", {
+        headers: {
+          Authorization: `${validToken}`,
+        },
+      });
+
+      if (response?.data?.success) {
+        setProjectPriority(response?.data?.projectPriority);
+      };
+    } catch (error) {
+      console.log(error.message);
+    };
+  };
+
   const fetchAllData = async () => {
     try {
       const response = await axios.get("/api/v1/project/all-project", {
@@ -159,6 +176,7 @@ const EditProject = () => {
       fetchAllProjectStatus();
       fetchAllTeamMember();
       fetchAllProjectTiming();
+      fetchAllProjectPriority();
       fetchAllData()
     };
   }, [isLoading, team, permissions]);
@@ -179,12 +197,12 @@ const EditProject = () => {
         setSelectedCustomer(response?.data?.project?.customer?._id);
         setSelectedProjectCategory(response?.data?.project?.category?._id);
         setSelectedProjectTiming(response?.data?.project?.timing?._id);
+        setSelectedProjectPriority(response?.data?.project?.priority?._id);
         setPrice(response?.data?.project?.price);
         setSelectedResponsible(response?.data?.project?.responsible?.map((r) => r?._id));
         setSelectedLeader(response?.data?.project?.leader?.map((l) => l?._id));
         setStart(response?.data?.project?.start);
         setDue(response?.data?.project?.due);
-        setPriority(response?.data?.project?.priority);
         setSelectedProjectStatus(response?.data?.project?.status?._id);
         setDescription(response?.data?.project?.description);
       };
@@ -251,7 +269,7 @@ const EditProject = () => {
     };
 
     if (fieldPermissions?.priority?.show && !fieldPermissions?.priority?.read) {
-      updateData.priority = priority;
+      updateData.priority = selectedProjectPriority;
     };
 
     if (fieldPermissions?.status?.show && !fieldPermissions?.status?.read) {
@@ -278,7 +296,7 @@ const EditProject = () => {
         setSelectedCustomer("");
         setDescription("");
         setSelectedProjectTiming("");
-        setPriority("");
+        setSelectedProjectPriority("");
         setPrice("");
         setSelectedResponsible([]);
         setSelectedLeader([]);
@@ -404,7 +422,7 @@ const EditProject = () => {
               (fieldPermissions?.category?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
-                    <label className="col-form-label">Category <span className="text-danger">*</span></label>
+                    <label className="col-form-label">Project Category <span className="text-danger">*</span></label>
                     <select className={`form-select ${fieldPermissions?.category?.read ? "readonly-style" : ""}`} name="category" value={selectedProjectCategory} onChange={(e) => fieldPermissions?.category?.read ? null : setSelectedProjectCategory(e.target.value)} >
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {
@@ -448,12 +466,14 @@ const EditProject = () => {
               (fieldPermissions?.priority?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
-                    <label className="col-form-label">Priority <span className="text-danger">*</span></label>
-                    <select className={`form-select ${fieldPermissions?.priority?.read ? "readonly-style" : ""}`} name="status" value={priority} onChange={(e) => fieldPermissions?.priority?.read ? null : setPriority(e.target.value)} >
+                    <label className="col-form-label">Project Priority <span className="text-danger">*</span></label>
+                    <select className={`form-select ${fieldPermissions?.priority?.read ? "readonly-style" : ""}`} name="priority" value={selectedProjectPriority} onChange={(e) => fieldPermissions?.priority?.read ? null : setSelectedProjectPriority(e.target.value)}>
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
-                      <option>High</option>
-                      <option>Medium</option>
-                      <option>Low</option>
+                      {
+                        projectPriority?.map((p) => (
+                          <option key={p?._id} value={p?._id}>{p?.name}</option>
+                        ))
+                      }
                     </select>
                   </div>
                 </div>
@@ -463,7 +483,7 @@ const EditProject = () => {
               (fieldPermissions?.status?.show) && (
                 <div className="col-md-6">
                   <div className="form-wrap">
-                    <label className="col-form-label">Status <span className="text-danger">*</span></label>
+                    <label className="col-form-label">Project Status <span className="text-danger">*</span></label>
                     <select className={`form-select ${fieldPermissions?.status?.read ? "readonly-style" : ""}`} name="status" value={selectedProjectStatus} onChange={(e) => fieldPermissions?.status?.read ? null : setSelectedProjectStatus(e.target.value)} >
                       <option value="" style={{ color: "rgb(120, 120, 120)" }}>Select</option>
                       {

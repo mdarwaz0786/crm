@@ -581,7 +581,7 @@ const Project = () => {
                               }
                               {
                                 (fieldPermissions?.priority?.show) && (
-                                  <td>{p?.priority}</td>
+                                  <td>{p?.priority?.name}</td>
                                 )
                               }
                               {

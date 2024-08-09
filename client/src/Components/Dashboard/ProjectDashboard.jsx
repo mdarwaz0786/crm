@@ -241,12 +241,12 @@ const ProjectDashboard = () => {
                                 }
                                 {
                                   (fieldPermissions?.priority?.show) && (
-                                    <th>Priority</th>
+                                    <th>Project Priority</th>
                                   )
                                 }
                                 {
                                   (fieldPermissions?.status?.show) && (
-                                    <th>Status</th>
+                                    <th>Project Status</th>
                                   )
                                 }
                               </tr>
@@ -274,7 +274,7 @@ const ProjectDashboard = () => {
                                     }
                                     {
                                       (fieldPermissions?.priority?.show) && (
-                                        <td>{p?.priority}</td>
+                                        <td>{p?.priority?.name}</td>
                                       )
                                     }
                                     {

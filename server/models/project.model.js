@@ -43,7 +43,8 @@ const projectSchema = new mongoose.Schema(
       type: String,
     },
     priority: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProjectPriority",
     },
     status: {
       type: mongoose.Schema.Types.ObjectId,
